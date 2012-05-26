@@ -385,17 +385,17 @@ public class UI extends JFrame {
 		tableWeek.getSelectionModel().addListSelectionListener(new RowListenerWeek());
 		tableMonth.getSelectionModel().addListSelectionListener(new RowListenerMonth());
 				
-		tableWeek.getColumnModel().getColumn(0).setMaxWidth(0);
-		tableWeek.getColumnModel().getColumn(1).setMinWidth(50);
-		tableWeek.getColumnModel().getColumn(2).setMinWidth(100);
-		tableWeek.getColumnModel().getColumn(3).setMinWidth(50);
-		tableWeek.getColumnModel().getColumn(4).setMinWidth(50);
+		tableWeek.getColumnModel().getColumn(0).setMinWidth(50);
+		tableWeek.getColumnModel().getColumn(1).setMinWidth(180);
+		tableWeek.getColumnModel().getColumn(2).setMaxWidth(50);
+		tableWeek.getColumnModel().getColumn(3).setMaxWidth(50);
+		tableWeek.getColumnModel().getColumn(4).setMaxWidth(0);
 		
-		tableMonth.getColumnModel().getColumn(0).setMaxWidth(0);
-		tableMonth.getColumnModel().getColumn(1).setMinWidth(50);
-		tableMonth.getColumnModel().getColumn(2).setMinWidth(100);
-		tableMonth.getColumnModel().getColumn(3).setMinWidth(50);
-		tableMonth.getColumnModel().getColumn(4).setMinWidth(50);		
+		tableMonth.getColumnModel().getColumn(0).setMinWidth(50);
+		tableMonth.getColumnModel().getColumn(1).setMinWidth(180);
+		tableMonth.getColumnModel().getColumn(2).setMaxWidth(50);
+		tableMonth.getColumnModel().getColumn(3).setMaxWidth(50);
+		tableMonth.getColumnModel().getColumn(4).setMaxWidth(0);		
 		
 		scrollPane = new JScrollPane(tableDay);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -536,7 +536,7 @@ public class UI extends JFrame {
     	
         for (int c : tableWeek.getSelectedRows()) {
             
-        	Object o = tableWeek.getValueAt(c, 0);
+        	Object o = tableWeek.getValueAt(c, 4);
             id = o.toString();
         }
         
@@ -546,7 +546,7 @@ public class UI extends JFrame {
        
        for (int c : tableMonth.getSelectedRows()) {
            
-       	Object o = tableMonth.getValueAt(c, 0);
+       	Object o = tableMonth.getValueAt(c, 4);
            id = o.toString();
        } 
     

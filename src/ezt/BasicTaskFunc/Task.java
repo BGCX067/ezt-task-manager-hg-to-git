@@ -303,7 +303,7 @@ public class Task {
 		
 		StringTokenizer st;
 		
-		Object[][] alltask = new Object[lastID][7]; 
+		Object[][] alltask = new Object[lastID][8]; 
 		
 		for(int i=1;i<=lastID;i++){			
 			
@@ -344,13 +344,30 @@ public class Task {
 			}catch(Exception ex){System.out.println(ex);}
 			
 			if((!this.time.equalsIgnoreCase("nil")) && ((td.getMonth()>=startDate.getMonth() && td.getMonth()<=endDate.getMonth()) && (weekCurrent == weekStart))){	
-				alltask [g][0]= this.id;
-				alltask [g][1]= this.time;
-				alltask [g][2]= this.desc;			
-				alltask [g][3]= this.priority;			
-				alltask [g][4]= this.onAlert;
+				
+				if(startDate.getDay()==0){
+					alltask [g][0]="Sunday";
+				}else if(startDate.getDay()==1){
+					alltask [g][0]="Monday";
+				}else if(startDate.getDay()==2){
+					alltask [g][0]="Tuesday";
+				}else if(startDate.getDay()==3){
+					alltask [g][0]="Wednesday";
+				}else if(startDate.getDay()==4){
+					alltask [g][0]="Thursday";
+				}else if(startDate.getDay()==5){
+					alltask [g][0]="Friday";
+				}else{
+					alltask [g][0]="Saturday";
+				}
+				
+				alltask [g][1]= this.desc;			
+				alltask [g][2]= this.priority;			
+				alltask [g][3]= this.onAlert;
+				alltask [g][4]= this.id;
 				alltask [g][5]= this.date;
 				alltask [g][6]= this.status;
+				alltask [g][7]= this.time;
 				
 				g++;
 			}
@@ -365,8 +382,8 @@ public class Task {
 		
 		int lastID = 0, g=0;
 
-		DateFormat formatter ; 
-		Date td=null, startDate=null, endDate=null;
+		DateFormat formatter , formatter2 ; 
+		Date td=null, startDate=null, endDate=null,startDate2=null;
 		Calendar todayDate;
 		
 		GetLastID fileIO = new GetLastID();
@@ -376,7 +393,7 @@ public class Task {
 		
 		StringTokenizer st;
 		
-		Object[][] alltask = new Object[lastID][7]; 
+		Object[][] alltask = new Object[lastID][8]; 
 		
 		for(int i=1;i<=lastID;i++){			
 			
@@ -407,15 +424,22 @@ public class Task {
 			}catch(Exception ex){System.out.println(ex);}
 			
 			if((!this.time.equalsIgnoreCase("nil")) && ((td.getMonth()>=startDate.getMonth() && td.getMonth()<=endDate.getMonth()))){	
-				alltask [g][0]= this.id;
-				alltask [g][1]= this.time;
-				alltask [g][2]= this.desc;			
-				alltask [g][3]= this.priority;			
-				alltask [g][4]= this.onAlert;
-				alltask [g][5]= this.date;
-				alltask [g][6]= this.status;
+
+				try{
+					
+					formatter2 = new SimpleDateFormat("dd-MMM-yy");
+					startDate2 = (Date)formatter2.parse(this.date.substring(5,14)); 
+					
+					alltask [g][0]= startDate2;
+					alltask [g][1]= this.desc;			
+					alltask [g][2]= this.priority;			
+					alltask [g][3]= this.onAlert;
+					alltask [g][4]= this.id;
+					alltask [g][5]= this.date;
+					alltask [g][6]= this.status;
+					alltask [g][7]= this.time;
 				
-				g++;
+				}catch(Exception ex){System.out.println(ex);}
 			}
 			
 		}
