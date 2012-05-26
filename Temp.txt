@@ -1,0 +1,5 @@
+1/meeting/from 03-Oct-12 to 03-Nov-12/5-6pm/medium/true/Active/
+2/dreaming/from 02-Apr-12 to 03-Nov-12/4-5pm/high/true/Active/
+3/swimming/from 23-May-12 to 23-May-12/3-4pm/low/true/Active/
+4/meeting/from 01-Nov-12 to 03-Mar-12/7-9am/medium/true/Active/
+5/Angelines Birtday/from 24-May-12 to 23-Jun-12/nil/medium/true/Active/
