@@ -139,7 +139,7 @@ public class UI extends JFrame {
 			
 			@Override//Print the update status command in the textbox if update status button clicked
 			public void mouseClicked(MouseEvent e) {
-				commandBox.setText("status,"+id+",Non-Active");
+				commandBox.setText("status,"+id+",Non Active");
 				internalFrame.setVisible(false);
 			}
 		});
@@ -349,7 +349,8 @@ public class UI extends JFrame {
 		});		
 		
 	}
-	
+
+
 	//method to construct the task display pane
 	public void initPane(){
 		
@@ -378,6 +379,8 @@ public class UI extends JFrame {
 		tableWeek.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		tableMonth.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 			
+		//tableDay.getColumnModel().getColumn(0).setCellRenderer(new VariableRowHeightRenderer()); 
+		
 		tableDay.setRowHeight(25);
 		tableWeek.setRowHeight(25);
 		tableMonth.setRowHeight(25);

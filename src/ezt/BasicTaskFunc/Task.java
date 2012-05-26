@@ -240,6 +240,8 @@ public class Task {
 						
 			}catch(Exception ex){System.out.println(ex);}
 			
+			if(!this.status.equalsIgnoreCase("non active")){
+				
 			//check whether the tasks is today
 			if((!this.time.equalsIgnoreCase("nil")) && ((td.after(startDate) && td.before(endDate)) || td.equals(startDate) || td.equals(endDate))){				
 			
@@ -282,6 +284,7 @@ public class Task {
 						
 					}
 				}
+			}
 
 			}
 			
@@ -350,37 +353,71 @@ public class Task {
 						
 			}catch(Exception ex){System.out.println(ex);}
 			
+			if(!this.status.equalsIgnoreCase("non active")){
+				
 			//check whether the tasks is this week
-			if((!this.time.equalsIgnoreCase("nil")) && ((td.getMonth()>=startDate.getMonth() && td.getMonth()<=endDate.getMonth()) && (weekCurrent == weekStart))){	
+			if((!this.time.equalsIgnoreCase("nil")) && 
+					((td.getMonth()>=startDate.getMonth() && td.getMonth()<=endDate.getMonth()))){	
 				
-				//assign day of the week
-				if(startDate.getDay()==0){
-					alltask [g][0]="Sunday";
-				}else if(startDate.getDay()==1){
-					alltask [g][0]="Monday";
-				}else if(startDate.getDay()==2){
-					alltask [g][0]="Tuesday";
-				}else if(startDate.getDay()==3){
-					alltask [g][0]="Wednesday";
-				}else if(startDate.getDay()==4){
-					alltask [g][0]="Thursday";
-				}else if(startDate.getDay()==5){
-					alltask [g][0]="Friday";
-				}else{
-					alltask [g][0]="Saturday";
+				if(weekCurrent == weekStart){
+					//assign day of the week
+					if(startDate.getDay()==0){
+						alltask [g][0]="Sunday";
+					}else if(startDate.getDay()==1){
+						alltask [g][0]="Monday";
+					}else if(startDate.getDay()==2){
+						alltask [g][0]="Tuesday";
+					}else if(startDate.getDay()==3){
+						alltask [g][0]="Wednesday";
+					}else if(startDate.getDay()==4){
+						alltask [g][0]="Thursday";
+					}else if(startDate.getDay()==5){
+						alltask [g][0]="Friday";
+					}else{
+						alltask [g][0]="Saturday";
+					}
+					
+					alltask [g][1]= this.desc;			
+					alltask [g][2]= this.priority;			
+					alltask [g][3]= this.onAlert;
+					alltask [g][4]= this.id;
+					alltask [g][5]= this.date;
+					alltask [g][6]= this.status;
+					alltask [g][7]= this.time;
+					
+					g++;
+					}if(weekCurrent != weekStart){
+						if(td.before(endDate)){
+							//assign day of the week
+							if(startDate.getDay()==0){
+								alltask [g][0]="Sunday";
+							}else if(startDate.getDay()==1){
+								alltask [g][0]="Monday";
+							}else if(startDate.getDay()==2){
+								alltask [g][0]="Tuesday";
+							}else if(startDate.getDay()==3){
+								alltask [g][0]="Wednesday";
+							}else if(startDate.getDay()==4){
+								alltask [g][0]="Thursday";
+							}else if(startDate.getDay()==5){
+								alltask [g][0]="Friday";
+							}else{
+								alltask [g][0]="Saturday";
+							}
+							
+							alltask [g][1]= this.desc;			
+							alltask [g][2]= this.priority;			
+							alltask [g][3]= this.onAlert;
+							alltask [g][4]= this.id;
+							alltask [g][5]= this.date;
+							alltask [g][6]= this.status;
+							alltask [g][7]= this.time;
+							
+							g++;	
+						}
+					}
 				}
-				
-				alltask [g][1]= this.desc;			
-				alltask [g][2]= this.priority;			
-				alltask [g][3]= this.onAlert;
-				alltask [g][4]= this.id;
-				alltask [g][5]= this.date;
-				alltask [g][6]= this.status;
-				alltask [g][7]= this.time;
-				
-				g++;
 			}
-			
 		}
 		
 		return alltask;
@@ -406,6 +443,8 @@ public class Task {
 		Object[][] alltask = new Object[lastID][8]; 
 		
 		for(int i=1;i<=lastID;i++){			
+			
+			//count = 1;
 			
 			st = new StringTokenizer(readTask.read(Integer.toString(i)), ".");
 			
@@ -433,26 +472,34 @@ public class Task {
 				
 			}catch(Exception ex){System.out.println(ex);}
 			
-			//check whether the tasks is this month
-			if((!this.time.equalsIgnoreCase("nil")) && ((td.getMonth()>=startDate.getMonth() && td.getMonth()<=endDate.getMonth()))){	
-
-				try{
-					
-					formatter2 = new SimpleDateFormat("dd-MMM-yy");
-					startDate2 = (Date)formatter2.parse(this.date.substring(5,14)); 
-					
-					alltask [g][0]= startDate2;
-					alltask [g][1]= this.desc;			
-					alltask [g][2]= this.priority;			
-					alltask [g][3]= this.onAlert;
-					alltask [g][4]= this.id;
-					alltask [g][5]= this.date;
-					alltask [g][6]= this.status;
-					alltask [g][7]= this.time;
-				
-				}catch(Exception ex){System.out.println(ex);}
-			}
+			if(!this.status.equalsIgnoreCase("non active")){
 			
+			//check whether the tasks is this month
+			if((!this.time.equalsIgnoreCase("nil"))){	
+
+					try{
+						
+						formatter2 = new SimpleDateFormat("dd-MMM-yy");
+						startDate2 = (Date)formatter2.parse(this.date.substring(5,14)); 
+						
+					}catch(Exception ex){System.out.println(ex);}
+				
+					if((td.getMonth()>startDate.getMonth() && td.getMonth()<endDate.getMonth()) ||(td.getMonth()==startDate.getMonth() && td.getMonth()==endDate.getMonth())){
+						alltask [g][0]= startDate2;
+						alltask [g][1]= this.desc;			
+						alltask [g][2]= this.priority;			
+						alltask [g][3]= this.onAlert;
+						alltask [g][4]= this.id;
+						alltask [g][5]= this.date;
+						alltask [g][6]= this.status;
+						alltask [g][7]= this.time;					
+						g++;
+					}				
+				
+
+				
+			}
+			}
 		}
 		
 		return alltask;
@@ -504,6 +551,8 @@ public class Task {
 						
 			}catch(Exception ex){System.out.println(ex);}
 			
+			if(!this.status.equalsIgnoreCase("non active")){
+				
 			//check the task whether is today & with time attribute of 'nil'
 			if((this.time.equalsIgnoreCase("nil")) && ((td.after(startDate) && td.before(endDate)) || td.equals(startDate) || td.equals(endDate))){				
 				
@@ -511,6 +560,7 @@ public class Task {
 				alltask [g][1]= this.desc;
 				
 				g++;
+			}
 			}
 			
 		}

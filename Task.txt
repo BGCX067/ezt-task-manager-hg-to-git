@@ -3,3 +3,4 @@
 3/swimming/from 23-May-12 to 23-May-12/03-04/low/true/Active/
 4/meeting/from 01-Nov-12 to 03-Mar-12/07-09/medium/true/Active/
 5/Angelines Birtday/from 24-May-12 to 23-Jun-12/nil/medium/true/Active/
+6/Clean house2/from 03-May-12 to 03-May-12/10-11/high/true/Active/
