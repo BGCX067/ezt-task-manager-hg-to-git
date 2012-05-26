@@ -2,6 +2,7 @@ package ezt.FileIO;
 
 import java.io.*;
 
+//this class is to write/append the task into task.txt
 public class WriteToText {
 
 	private static final String fileName = "Task.txt";	

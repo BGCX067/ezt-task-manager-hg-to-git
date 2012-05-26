@@ -3,13 +3,16 @@ package ezt.DetectInput;
 import ezt.BasicTaskFunc.*;
 import java.util.StringTokenizer;
 
+//this is the Facade class which act as a wall btn the UI and internal components
 public class DetectInput {
 	
+	//detect the input whether is create, update or delete task
 	public boolean detect(String input){
 
 		String id = "", desc = "", date = "", time = "", priority = "", status = "Active";
 		Boolean onAlert = false;
 		
+		//create task command
 		if(input.substring(0,3).equalsIgnoreCase("add")){
 																	
 			StringTokenizer st = new StringTokenizer(input, ",");
@@ -33,7 +36,7 @@ public class DetectInput {
 				CreateTask createTask = new CreateTask();
 				return createTask.create(desc, date, time, priority, onAlert, status);
 				 
-			
+				//update task command	
 		}else if(input.substring(0,6).equalsIgnoreCase("update")){
 															
 			StringTokenizer st = new StringTokenizer(input, ",");
@@ -57,6 +60,7 @@ public class DetectInput {
 				
 				return updateTask.update(id,desc, date, time, priority, onAlert, status);
 			
+				//delete task command
 		}else if(input.substring(0,6).equalsIgnoreCase("delete")){
 																	
 			StringTokenizer st = new StringTokenizer(input, ",");
@@ -73,6 +77,7 @@ public class DetectInput {
 				
 				return deleteTask.delete(Integer.parseInt(id));
 			
+				//change status of task command
 		}else if(input.substring(0,6).equalsIgnoreCase("status")){
 																		
 			StringTokenizer st = new StringTokenizer(input, ",");
@@ -100,6 +105,7 @@ public class DetectInput {
 		
 	}
 	
+	//get all today tasks object and send to UI
 	public Object[][] allTaskDay(){
 		
 		GetAllTask getAllTask = new GetAllTask();
@@ -107,12 +113,15 @@ public class DetectInput {
 		
 	}
 
+	//get all this wekk tasks object and send to UI
 	public Object[][] allTaskWeek(){
 		
 		GetAllTask getAllTask = new GetAllTask();
 		return getAllTask.allTaskWeek();
 		
 	}
+	
+	//get all this month tasks object and send to UI
 	public Object[][] allTaskMonth(){
 		
 		GetAllTask getAllTask = new GetAllTask();
@@ -120,6 +129,7 @@ public class DetectInput {
 		
 	}
 	
+	//get all today events object and send to UI
 	public Object[][] allEventToday(){
 		
 		GetAllTask getAllTask = new GetAllTask();

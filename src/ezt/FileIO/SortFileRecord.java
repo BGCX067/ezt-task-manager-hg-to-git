@@ -3,6 +3,7 @@ package ezt.FileIO;
 import java.io.*;
 import java.util.*;
 
+//this class is to the temp task file and write back to the task.txt
 public class SortFileRecord {
 
 	private static final String fileName = "Task.txt";	
@@ -11,6 +12,7 @@ public class SortFileRecord {
 
 		try{
 			
+			//sorting the tasks by task ID
 			BufferedReader reader = new BufferedReader(new FileReader(fileName));
 	        Map<String, String> map=new TreeMap<String, String>();
 	        String line="";
@@ -18,8 +20,11 @@ public class SortFileRecord {
 	                map.put(getField(line),line);
 	        }
 	        reader.close();
+	        
 	        FileWriter writer = new FileWriter(fileName);
 	        for(String val : map.values()){
+	        	
+	        		//write back to the task.txt
 	                writer.write(val);      
 	                writer.write('\n');
 	        }

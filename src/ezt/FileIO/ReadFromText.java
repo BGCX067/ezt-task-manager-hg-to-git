@@ -3,6 +3,7 @@ package ezt.FileIO;
 import java.io.*;
 import java.util.StringTokenizer;
 
+//this class is to read the task from task.txt by task ID
 public class ReadFromText {
 
 	private static final String fileName = "Task.txt";	

@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
 import java.text.*;
-import java.util.*;
 
 public class Task {
 
@@ -104,6 +103,7 @@ public class Task {
 		this.time = time;
 	}
 	
+	//search task by id
 	public String getTask(String idSearch){
 		
 		ReadFromText readTask = new ReadFromText();		
@@ -143,11 +143,11 @@ public class Task {
 		this.onAlert = onAlert;
 		this.date = date;
 		this.time = time;
-		this.status = status;
-		
+		this.status = status;	
+			
 		WriteToText writeTask = new WriteToText();
 		writeTask.write(this);
-		
+			
 		success = true;
 		
 		return success;
@@ -181,6 +181,9 @@ public class Task {
 		
 	}
 
+	/*get all today tasks, a two dimensionals object array, 1st dimension is the row of tasks, 
+	 * 2nd dimension store the attributes of each task 
+	 */
 	public Object[][] getAllTaskDay(){
 		
 		int lastID = 0, g = 0;
@@ -196,6 +199,7 @@ public class Task {
 		
 		StringTokenizer st;
 		
+		//store the available timeslot for today
 		String timesInDay [] = {"01:00 - 02:00", "02:00 - 03:00","03:00 - 04:00","04:00 - 05:00","05:00 - 06:00","06:00 - 07:00",
 				"07:00 - 08:00","08:00 - 09:00","09:00 - 10:00","10:00 - 11:00","11:00 - 12:00", "12:00 - 13:00", "13:00 - 14:00",
 				"14:00 - 15:00", "15:00 - 16:00", "16:00 - 17:00", "17:00 - 18:00", "18:00 - 19:00", "19:00 - 20:00", 
@@ -225,8 +229,8 @@ public class Task {
 			try{
 				
 				formatter = new SimpleDateFormat("dd-MMM-yy");
-				startDate = (Date)formatter.parse(this.date.substring(5,14));  
-				endDate = (Date)formatter.parse(this.date.substring(18,27));
+				startDate = (Date)formatter.parse(this.date.substring(5,14));//parse the start date in string to date object  
+				endDate = (Date)formatter.parse(this.date.substring(18,27));//parse the end date in string to date object
 				todayDate = Calendar.getInstance();
 				todayDate.set(Calendar.HOUR_OF_DAY, 0);
 				todayDate.set(Calendar.MINUTE, 0);
@@ -236,6 +240,7 @@ public class Task {
 						
 			}catch(Exception ex){System.out.println(ex);}
 			
+			//check whether the tasks is today
 			if((!this.time.equalsIgnoreCase("nil")) && ((td.after(startDate) && td.before(endDate)) || td.equals(startDate) || td.equals(endDate))){				
 			
 				if(this.time.substring(0,1).equalsIgnoreCase("0")){
@@ -251,6 +256,7 @@ public class Task {
 				
 				for(int c=0;c<timesInDay.length;c++){
 					
+					//assign the tasks to each corresponding timeslot
 					if(startTime==(Integer.parseInt(alltask [c][0].toString().substring(0,1))) || startTime==(Integer.parseInt(alltask [c][0].toString().substring(0,2)))){
 						
 						alltask [c][1]= this.desc;			
@@ -285,6 +291,7 @@ public class Task {
 		
 	}
 	
+	//get all this week tasks
 	public Object[][] getAllTaskWeek(){
 		
 		int lastID = 0, g = 0;
@@ -343,8 +350,10 @@ public class Task {
 						
 			}catch(Exception ex){System.out.println(ex);}
 			
+			//check whether the tasks is this week
 			if((!this.time.equalsIgnoreCase("nil")) && ((td.getMonth()>=startDate.getMonth() && td.getMonth()<=endDate.getMonth()) && (weekCurrent == weekStart))){	
 				
+				//assign day of the week
 				if(startDate.getDay()==0){
 					alltask [g][0]="Sunday";
 				}else if(startDate.getDay()==1){
@@ -378,6 +387,7 @@ public class Task {
 		
 	}	
 	
+	//get all this month tasks
 	public Object[][] getAllTaskMonth(){
 		
 		int lastID = 0, g=0;
@@ -423,6 +433,7 @@ public class Task {
 				
 			}catch(Exception ex){System.out.println(ex);}
 			
+			//check whether the tasks is this month
 			if((!this.time.equalsIgnoreCase("nil")) && ((td.getMonth()>=startDate.getMonth() && td.getMonth()<=endDate.getMonth()))){	
 
 				try{
@@ -448,6 +459,7 @@ public class Task {
 		
 	}	
 	
+	//get all today event
 	public Object[][] getAllEventDay(){
 		
 		int lastID = 0, g = 0;
@@ -492,6 +504,7 @@ public class Task {
 						
 			}catch(Exception ex){System.out.println(ex);}
 			
+			//check the task whether is today & with time attribute of 'nil'
 			if((this.time.equalsIgnoreCase("nil")) && ((td.after(startDate) && td.before(endDate)) || td.equals(startDate) || td.equals(endDate))){				
 				
 				alltask [g][0]= this.id;		

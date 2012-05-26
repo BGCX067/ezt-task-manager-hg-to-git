@@ -3,6 +3,7 @@ package ezt.FileIO;
 import java.io.*;
 import java.util.StringTokenizer;
 
+//this class is to get the last added task ID
 public class GetLastID {
 
 	private static final String fileName = "Task.txt";

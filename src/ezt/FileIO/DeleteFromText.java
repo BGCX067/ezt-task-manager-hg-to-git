@@ -3,6 +3,7 @@ package ezt.FileIO;
 import java.io.*;
 import java.util.StringTokenizer;
 
+//This class is to delete task from task.txt by task ID
 public class DeleteFromText {
 
 	private static final String fileName = "Task.txt";	
@@ -23,7 +24,7 @@ public class DeleteFromText {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));   		 		
 			BufferedWriter bw = new BufferedWriter(new FileWriter(fileNameTemp));
 			
-  			//Read File Line By Line
+  			//save the wanted tasks from task.txt and discard the unwanted one
   			while ((strLine = br.readLine()) != null)   {
   				
   				StringTokenizer st = new StringTokenizer(strLine, "/");
@@ -55,9 +56,11 @@ public class DeleteFromText {
 		    bw.flush();
 		    bw.close();
 		    
+		    //copy wanted task to temp file
 		    CopyFile c = new CopyFile();
 		    c.copy(srcFile, destFile);
 		    
+		    //sort the temp file contents by id
 		    SortFileRecord s = new SortFileRecord();
 			s.sort();
 		    

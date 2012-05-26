@@ -108,7 +108,8 @@ public class UI extends JFrame {
 		
 		JButton btnNewButton_3 = new JButton("Update");
 		btnNewButton_3.addMouseListener(new MouseAdapter() {
-			@Override
+			
+			@Override//Print the update command in the textbox if update button clicked 
 			public void mouseClicked(MouseEvent arg0) {				
 				
 				detectInput = new DetectInput();
@@ -123,7 +124,8 @@ public class UI extends JFrame {
 		
 		JButton btnNewButton_4 = new JButton("Delete");
 		btnNewButton_4.addMouseListener(new MouseAdapter() {
-			@Override
+			
+			@Override//Print the delete command in the textbox if delete button clicked
 			public void mouseClicked(MouseEvent e) {
 				commandBox.setText("delete,"+id);
 				internalFrame.setVisible(false);
@@ -134,7 +136,8 @@ public class UI extends JFrame {
 		
 		JButton btnNewButton_5 = new JButton("Status");
 		btnNewButton_5.addMouseListener(new MouseAdapter() {
-			@Override
+			
+			@Override//Print the update status command in the textbox if update status button clicked
 			public void mouseClicked(MouseEvent e) {
 				commandBox.setText("status,"+id+",Non-Active");
 				internalFrame.setVisible(false);
@@ -144,7 +147,7 @@ public class UI extends JFrame {
 		internalFrame.getContentPane().add(btnNewButton_5);
 		
 		JLabel label = new JLabel("");
-		label.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/logo.png")));
+		label.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/logo.png")));//program logo
 		label.setBounds(10, 11, 277, 50);
 		contentPane.add(label);
 		
@@ -185,14 +188,14 @@ public class UI extends JFrame {
 		commandBox = new JTextField();
 		commandBox.setText("Please enter your command here");
 		commandBox.addFocusListener(new FocusAdapter() {
-			@Override
+			@Override//default text in textbox if it is unfocused
 			public void focusLost(FocusEvent arg0) {
 				commandBox.setText("Please enter your command here.");
 				
 				isAdd = false;
 				noOfInputAdd = 0;
 			}
-			@Override
+			@Override//clear default text in textbox if it is focused
 			public void focusGained(FocusEvent e) {
 				countFocus++;
 				if(commandBox.getText().equalsIgnoreCase("Please enter your command here.") || countFocus ==1){
@@ -206,11 +209,11 @@ public class UI extends JFrame {
 		contentPane.add(commandBox);
 		commandBox.setColumns(10);
 		
-		initPane();
-		callEventPane();
+		initPane();//initiate the task panel
+		callEventPane();//initiate the event panel
 		
 		commandBox.addKeyListener(new KeyAdapter() {
-			@Override//add,jogging,from 23-May-12 to 23-Jun-12,5-6pm,medium,on alert
+			@Override//if enter key pressed, UI will send command to the DetectInput class
 			public void keyPressed(KeyEvent e) {
 					
 				if(e.getKeyChar() == e.VK_ENTER) { 				
@@ -225,6 +228,7 @@ public class UI extends JFrame {
 							
 						}else{
 							
+							//print some default add task command to user
 							if(input.equalsIgnoreCase("add")  || isAdd == true){
 							
 								isAdd = true;
@@ -249,7 +253,7 @@ public class UI extends JFrame {
 									
 								}else if(noOfInputAdd == 4){
 																	
-									
+									//if user enter nil for time of the task, it considers as an event, else a task
 									if(commandBox.getText().substring(5).equalsIgnoreCase("nil")){
 										
 										refreshEvent = true;
@@ -305,6 +309,7 @@ public class UI extends JFrame {
 								
 								JOptionPane.showMessageDialog(null, "Action performed successfully.", "Message", 1);
 								
+								//refresh the task panel after command issue successfully 
 								if(refreshTask == true){
 									
 									tabbedPane.remove(0);
@@ -318,6 +323,7 @@ public class UI extends JFrame {
 									
 								}
 								
+								//refresh the event panel after command issue successfully
 								if(refreshEvent == true){
 									
 									tabbedPane_1.remove(0);									
@@ -344,6 +350,7 @@ public class UI extends JFrame {
 		
 	}
 	
+	//method to construct the task display pane
 	public void initPane(){
 		
 		try{
@@ -400,8 +407,7 @@ public class UI extends JFrame {
 		scrollPane = new JScrollPane(tableDay);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		
-		
+			
 		tabbedPane.addTab("Day", null, scrollPane, null);
 		
 		scrollPane_1 = new JScrollPane(tableWeek);
@@ -419,6 +425,7 @@ public class UI extends JFrame {
 		}catch(Exception ex){System.out.println(ex);}
 	}
 
+	//method to construct the event display pane
 	public void callEventPane(){
 			
 		if(firstEventPane == true){
@@ -449,7 +456,8 @@ public class UI extends JFrame {
 		tabbedPane_1.addTab("Events Today", null, scrollPane_3, null);
 		
 	}
-		
+	
+	//EventListener for each data row in the Day Task Panel
     private class RowListenerDay implements ListSelectionListener {
         public void valueChanged(ListSelectionEvent event) {
         	if((tableDay.getValueAt(tableDay.getSelectedRows()[0], 1)!="")){
@@ -468,6 +476,7 @@ public class UI extends JFrame {
         	}
     }
     
+  //EventListener for each data row in the Week Task Panel
     private class RowListenerWeek implements ListSelectionListener {
         public void valueChanged(ListSelectionEvent event) {
         	if((tableWeek.getValueAt(tableWeek.getSelectedRows()[0], 0)!=null)){
@@ -486,6 +495,7 @@ public class UI extends JFrame {
         	}
     }
  
+  //EventListener for each data row in the Month Task Panel
     private class RowListenerMonth implements ListSelectionListener {
         public void valueChanged(ListSelectionEvent event) {
         	if((tableMonth.getValueAt(tableMonth.getSelectedRows()[0], 0)!=null)){
@@ -504,6 +514,7 @@ public class UI extends JFrame {
         	}
     }
     
+    //EventListener for each data row in the Event Panel
     private class RowListenerEvent implements ListSelectionListener {
         public void valueChanged(ListSelectionEvent event) {
         	if((tableEvent.getValueAt(tableEvent.getSelectedRows()[0], 0)!=null)){
@@ -522,6 +533,7 @@ public class UI extends JFrame {
         	}
     }
     
+    //get the task id in day task panel
     private void outputSelectionDay() {
     	
         for (int c : tableDay.getSelectedRows()) {
@@ -532,6 +544,7 @@ public class UI extends JFrame {
                
     }
 
+    //get the task id in week task panel
    private void outputSelectionWeek() {
     	
         for (int c : tableWeek.getSelectedRows()) {
@@ -542,6 +555,7 @@ public class UI extends JFrame {
         
     }
    
+   //get the task id in month task panel
    private void outputSelectionMonth() {
        
        for (int c : tableMonth.getSelectedRows()) {
@@ -552,6 +566,7 @@ public class UI extends JFrame {
     
    }
    
+   //get the task id in event panel
    private void outputSelectionEvent() {
 	   
        for (int c : tableEvent.getSelectedRows()) {
@@ -565,6 +580,6 @@ public class UI extends JFrame {
    
     public void ShowMessageDialog(){
     	
-    	internalFrame.setVisible(true);
+    	internalFrame.setVisible(true);//the frame which contains update, delete and update status button
     }
 }
