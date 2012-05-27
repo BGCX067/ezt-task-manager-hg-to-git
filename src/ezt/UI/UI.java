@@ -1,5 +1,7 @@
 package ezt.UI;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -12,6 +14,7 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import ezt.DetectInput.*;
 
@@ -32,7 +35,6 @@ public class UI extends JFrame {
 	private JLabel lblNewLabel;
 	private JLabel lblMediumhighPriority;
 	private JLabel lblLowPriority;
-	private JLabel lblAllPriority;
 	JInternalFrame internalFrame;
 
 	private boolean success = true;
@@ -178,12 +180,6 @@ public class UI extends JFrame {
 		lblLowPriority.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		lblLowPriority.setBounds(540, 306, 120, 20);
 		contentPane.add(lblLowPriority);
-		
-		lblAllPriority = new JLabel("All Priority");
-		lblAllPriority.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/blue light.png")));
-		lblAllPriority.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblAllPriority.setBounds(540, 326, 120, 20);
-		contentPane.add(lblAllPriority);
 				
 		commandBox = new JTextField();
 		commandBox.setText("Please enter your command here");
@@ -367,19 +363,84 @@ public class UI extends JFrame {
 		}
 		
 		detectInput = new DetectInput();				
+				  
+		//create table day & set some row color corresponding to the priority
+		tableDay = new JTable(detectInput.allTaskDay(),columnNames){
+			  public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
+				  
+				  Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
+				  			  	
+				    //set the row color which corresponding to the task priority
+			  		if(tableDay.getValueAt(Index_row, 2).toString().equalsIgnoreCase("high"))  {
+			  			comp.setBackground(Color.red);
+			  		}else if(tableDay.getValueAt(Index_row, 2).toString().equalsIgnoreCase("medium"))  {
+			  			comp.setBackground(Color.yellow);
+			  		}else if(tableDay.getValueAt(Index_row, 2).toString().equalsIgnoreCase("low"))  {
+			  			comp.setBackground(Color.green);
+			  		}else{
+			  			comp.setBackground(Color.white);
+			  		}
+			  	
+			  		return comp;
+		}};		
 		
-		tableDay = new JTable(detectInput.allTaskDay(),columnNames);
 		tableDay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tableWeek = new JTable(detectInput.allTaskWeek(),columnNames);
+		
+		//create table week & set some row color corresponding to the priority
+		tableWeek = new JTable(detectInput.allTaskWeek(),columnNames){
+			  public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
+				  
+				  Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
+
+				  if(tableWeek.getValueAt(Index_row, 2)!=null){
+				    //set the row color which corresponding to the task priority
+			  		if(tableWeek.getValueAt(Index_row, 2).toString().equalsIgnoreCase("high"))  {
+			  			comp.setBackground(Color.red);
+			  		}else if(tableWeek.getValueAt(Index_row, 2).toString().equalsIgnoreCase("medium"))  {
+			  			comp.setBackground(Color.yellow);
+			  		}else if(tableWeek.getValueAt(Index_row, 2).toString().equalsIgnoreCase("low"))  {
+			  			comp.setBackground(Color.green);
+			  		}else{
+			  			comp.setBackground(Color.white);
+			  		}
+				  }else{
+					  comp.setBackground(Color.white);
+				  }
+				  
+			  		return comp;
+		}};
+		
 		tableWeek.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tableMonth = new JTable(detectInput.allTaskMonth(),columnNames);
+		
+		//create table month & set some row color corresponding to the priority
+		tableMonth = new JTable(detectInput.allTaskMonth(),columnNames){
+			  public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
+				  
+				  Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
+				  			  	
+				  if(tableMonth.getValueAt(Index_row, 2)!=null){
+				    //set the row color which corresponding to the task priority
+			  		if(tableMonth.getValueAt(Index_row, 2).toString().equalsIgnoreCase("high"))  {
+			  			comp.setBackground(Color.red);
+			  		}else if(tableMonth.getValueAt(Index_row, 2).toString().equalsIgnoreCase("medium"))  {
+			  			comp.setBackground(Color.yellow);
+			  		}else if(tableMonth.getValueAt(Index_row, 2).toString().equalsIgnoreCase("low"))  {
+			  			comp.setBackground(Color.green);
+			  		}else{
+			  			comp.setBackground(Color.white);
+			  		}
+				  }else{
+			  			comp.setBackground(Color.white);
+			  		}
+				  
+			  		return comp;
+		}};
+		
 		tableMonth.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		tableDay.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		tableWeek.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		tableMonth.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-			
-		//tableDay.getColumnModel().getColumn(0).setCellRenderer(new VariableRowHeightRenderer()); 
 		
 		tableDay.setRowHeight(25);
 		tableWeek.setRowHeight(25);
@@ -389,7 +450,7 @@ public class UI extends JFrame {
 		tableDay.getColumnModel().getColumn(1).setMinWidth(180);
 		tableDay.getColumnModel().getColumn(2).setMaxWidth(50);
 		tableDay.getColumnModel().getColumn(3).setMaxWidth(50);
-		tableDay.getColumnModel().getColumn(4).setMaxWidth(0);	
+		tableDay.getColumnModel().getColumn(4).setMaxWidth(0);		
 		
 		tableDay.getSelectionModel().addListSelectionListener(new RowListenerDay());
 		tableWeek.getSelectionModel().addListSelectionListener(new RowListenerWeek());
@@ -400,7 +461,7 @@ public class UI extends JFrame {
 		tableWeek.getColumnModel().getColumn(2).setMaxWidth(50);
 		tableWeek.getColumnModel().getColumn(3).setMaxWidth(50);
 		tableWeek.getColumnModel().getColumn(4).setMaxWidth(0);
-		
+				
 		tableMonth.getColumnModel().getColumn(0).setMinWidth(50);
 		tableMonth.getColumnModel().getColumn(1).setMinWidth(180);
 		tableMonth.getColumnModel().getColumn(2).setMaxWidth(50);
@@ -460,9 +521,12 @@ public class UI extends JFrame {
 		
 	}
 	
+	
+	
 	//EventListener for each data row in the Day Task Panel
     private class RowListenerDay implements ListSelectionListener {
         public void valueChanged(ListSelectionEvent event) {
+        	
         	if((tableDay.getValueAt(tableDay.getSelectedRows()[0], 1)!="")){
         		
         		if (event.getValueIsAdjusting()) {
