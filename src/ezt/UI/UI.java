@@ -3,7 +3,7 @@ package ezt.UI;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
-
+import com.melloware.jintellitype.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -15,9 +15,8 @@ import java.awt.Font;
 import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-
+import java.awt.Event;
 import ezt.DetectInput.*;
-
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
@@ -27,7 +26,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.*;
 
-public class UI extends JFrame {
+public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 
 	private JPanel contentPane;
 	private JTextField commandBox;
@@ -36,18 +35,18 @@ public class UI extends JFrame {
 	private JLabel lblMediumhighPriority;
 	private JLabel lblLowPriority;
 	JInternalFrame internalFrame;
-
 	private boolean success = true;
 	private boolean firstInitPane = true;
-	private boolean firstEventPane = true;
-	
+	private boolean firstEventPane = true;	
 	private String[] columnNames = {"", "Description", "Priority", "Alert","ID"};
 	private String[] columnNamesEvent = {"ID",""};
 	private int countFocus=0;
 	private boolean isAdd = false, refreshTask = false, refreshEvent = false;
 	private int noOfInputAdd = 0;
 	private String concateAddInput = "";
-
+	private static final int CTRL_D = 90;
+	private static final int CTRL_F = 89;
+	private static UI frame, frame2;
 	JTable tableDay;
 	JTable tableWeek;
 	JTable tableMonth;
@@ -72,8 +71,16 @@ public class UI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UI frame = new UI();
-					frame.setVisible(true);
+					
+					JIntellitype.getInstance().registerSwingHotKey(CTRL_D, Event.CTRL_MASK, (int) 'D');
+				    JIntellitype.getInstance().registerSwingHotKey(CTRL_F, Event.CTRL_MASK, (int) 'F');     
+				      				      
+					frame = new UI();
+					frame.setVisible(false);
+					
+					frame2 = new UI();
+					frame2.initJIntellitype();
+					frame2.setVisible(false);
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -82,6 +89,42 @@ public class UI extends JFrame {
 		});
 	}
 
+	   public void onHotKey(int aIdentifier) {
+		   
+		      if(Integer.toString(aIdentifier).equalsIgnoreCase("90")){
+		    	  try{
+		    	  
+		    		  frame.setVisible(true);
+		    		  
+		    	  }catch(Exception ex){}
+		      }
+		      if(Integer.toString(aIdentifier).equalsIgnoreCase("89")){
+		    	  try{
+		    	 
+		    		  frame.setVisible(false);
+		    		  
+		    	  }catch(Exception ex){}
+		      }
+		   }
+	   
+	   public void onIntellitype(int aCommand) {
+
+	      
+	   }
+
+	   public void initJIntellitype() {
+	      try {
+
+	         // initialize JIntellitype with the frame so all windows commands can
+	         // be attached to this window
+	         JIntellitype.getInstance().addHotKeyListener(this);
+	         JIntellitype.getInstance().addIntellitypeListener(this);
+	         
+	      } catch (RuntimeException ex) {
+	         System.out.println(ex);
+	      }
+	   }
+	   
 	/**
 	 * Create the frame.
 	 */
