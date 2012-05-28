@@ -106,34 +106,34 @@ public class DetectInput {
 	}
 	
 	//get all today tasks object and send to UI
-	public Object[][] allTaskDay(){
+	public Object[][] allTaskDay(String todayDate){
 		
 		GetAllTask getAllTask = new GetAllTask();
-		return getAllTask.allTaskDay();
+		return getAllTask.allTaskDay(todayDate);
 		
 	}
 
 	//get all this wekk tasks object and send to UI
-	public Object[][] allTaskWeek(){
+	public Object[][] allTaskWeek(String todayDate){
 		
 		GetAllTask getAllTask = new GetAllTask();
-		return getAllTask.allTaskWeek();
+		return getAllTask.allTaskWeek(todayDate);
 		
 	}
 	
 	//get all this month tasks object and send to UI
-	public Object[][] allTaskMonth(){
+	public Object[][] allTaskMonth(String todayDate){
 		
 		GetAllTask getAllTask = new GetAllTask();
-		return getAllTask.allTaskMonth();
+		return getAllTask.allTaskMonth(todayDate);
 		
 	}
 	
 	//get all today events object and send to UI
-	public Object[][] allEventToday(){
+	public Object[][] allEventToday(String todayDate){
 		
 		GetAllTask getAllTask = new GetAllTask();
-		return getAllTask.allEventToday();
+		return getAllTask.allEventToday(todayDate);
 		
 	}
 	

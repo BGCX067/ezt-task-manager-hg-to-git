@@ -4,35 +4,35 @@ import ezt.FileIO.*;
 
 public class GetAllTask {
 	
-	public Object[][] allTaskDay(){
+	public Object[][] allTaskDay(String date){
 		
 		Task task = new Task();
 		
-		return task.getAllTaskDay();
+		return task.getAllTaskDay(date);
 		
 	}
 
-	public Object[][] allTaskWeek(){
+	public Object[][] allTaskWeek(String date){
 		
 		Task task = new Task();
 		
-		return task.getAllTaskWeek();
+		return task.getAllTaskWeek(date);
 		
 	}
 	
-	public Object[][] allTaskMonth(){
+	public Object[][] allTaskMonth(String date){
 		
 		Task task = new Task();
 		
-		return task.getAllTaskMonth();
+		return task.getAllTaskMonth(date);
 		
 	}
 	
-	public Object[][] allEventToday(){
+	public Object[][] allEventToday(String date){
 		
 		Task task = new Task();
 		
-		return task.getAllEventDay();
+		return task.getAllEventDay(date);
 		
 	}	
 

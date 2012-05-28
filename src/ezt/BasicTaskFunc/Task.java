@@ -184,7 +184,7 @@ public class Task {
 	/*get all today tasks, a two dimensionals object array, 1st dimension is the row of tasks, 
 	 * 2nd dimension store the attributes of each task 
 	 */
-	public Object[][] getAllTaskDay(){
+	public Object[][] getAllTaskDay(String todayDates){
 		
 		int lastID = 0, g = 0;
 		int startTime = 0;
@@ -231,13 +231,20 @@ public class Task {
 				formatter = new SimpleDateFormat("dd-MMM-yy");
 				startDate = (Date)formatter.parse(this.date.substring(5,14));//parse the start date in string to date object  
 				endDate = (Date)formatter.parse(this.date.substring(18,27));//parse the end date in string to date object
-				todayDate = Calendar.getInstance();
-				todayDate.set(Calendar.HOUR_OF_DAY, 0);
-				todayDate.set(Calendar.MINUTE, 0);
-				todayDate.set(Calendar.SECOND, 0);
-				todayDate.set(Calendar.MILLISECOND, 0);
-				td = todayDate.getTime();			
-						
+				
+				if(todayDates.equalsIgnoreCase("")){
+					
+					todayDate = Calendar.getInstance();
+					todayDate.set(Calendar.HOUR_OF_DAY, 0);
+					todayDate.set(Calendar.MINUTE, 0);
+					todayDate.set(Calendar.SECOND, 0);
+					todayDate.set(Calendar.MILLISECOND, 0);
+					td = todayDate.getTime();
+					
+				}else{
+					
+					td = (Date)formatter.parse(todayDates);
+				}
 			}catch(Exception ex){System.out.println(ex);}
 			
 			if(!this.status.equalsIgnoreCase("non active")){
@@ -295,13 +302,18 @@ public class Task {
 	}
 	
 	//get all this week tasks
-	public Object[][] getAllTaskWeek(){
+	public Object[][] getAllTaskWeek(String todayDates){
 		
+		String changedTodayDates = "", changedTodayMonth = "", changedTodayYear = "", concate="",sample="";
+		SimpleDateFormat sdf;
+        Calendar cal;
+        Date date;
+                
 		int lastID = 0, g = 0;
 		
 		DateFormat formatter ; 
 		Date td=null, startDate=null, endDate=null;
-		Calendar todayDate;
+		Calendar todayDate = null;
 		
 		int weekCurrent=0, weekStart=0, weekEnd=0;
 		Calendar weekStartCal=null, weekEndCal=null;
@@ -343,23 +355,61 @@ public class Task {
 				weekEndCal.setTime(endDate);
 				weekEnd = weekEndCal.get(Calendar.WEEK_OF_MONTH);
 				
-				todayDate = Calendar.getInstance();	
-				todayDate.set(Calendar.HOUR_OF_DAY, 0);
-				todayDate.set(Calendar.MINUTE, 0);
-				todayDate.set(Calendar.SECOND, 0);
-				todayDate.set(Calendar.MILLISECOND, 0);
-				td = todayDate.getTime();	
-				weekCurrent = todayDate.get(Calendar.WEEK_OF_MONTH);
+				if(todayDates.equalsIgnoreCase("")){
+					
+					todayDate = Calendar.getInstance();
+					todayDate.set(Calendar.HOUR_OF_DAY, 0);
+					todayDate.set(Calendar.MINUTE, 0);
+					todayDate.set(Calendar.SECOND, 0);
+					todayDate.set(Calendar.MILLISECOND, 0);
+					td = todayDate.getTime();
+					
+				}else{
+					
+					 
+			         StringTokenizer sts = new StringTokenizer(todayDates,"-");
+			         while(sts.hasMoreTokens()) {
+			        	 changedTodayDates = sts.nextToken();
+			        	 changedTodayMonth = sts.nextToken();
+			        	 changedTodayYear = sts.nextToken();
+			        	 
+				        
+			         }
+			        
+		                if(changedTodayMonth.equalsIgnoreCase("Jan")) changedTodayMonth="1";
+		                else if(changedTodayMonth.equalsIgnoreCase("Feb")) changedTodayMonth="2";
+		                else if(changedTodayMonth.equalsIgnoreCase("Mar")) changedTodayMonth="3";
+		                else if(changedTodayMonth.equalsIgnoreCase("Apr")) changedTodayMonth="4";
+		                else if(changedTodayMonth.equalsIgnoreCase("May")) changedTodayMonth="5";
+		                else if(changedTodayMonth.equalsIgnoreCase("Jun")) changedTodayMonth="6";
+		                else if(changedTodayMonth.equalsIgnoreCase("Jul")) changedTodayMonth="7";
+		                else if(changedTodayMonth.equalsIgnoreCase("Aug")) changedTodayMonth="8";
+		                else if(changedTodayMonth.equalsIgnoreCase("Sep")) changedTodayMonth="9";
+		                else if(changedTodayMonth.equalsIgnoreCase("Oct")) changedTodayMonth="10";
+		                else if(changedTodayMonth.equalsIgnoreCase("Nov")) changedTodayMonth="11";
+		                else changedTodayMonth="12";
+		                
+			         concate = changedTodayMonth+"/"+changedTodayDates+"/"+("20"+changedTodayYear);
+			         sample = concate;			         
+			         sdf = new SimpleDateFormat("MM/dd/yyyy");
+			         date = sdf.parse(sample);
+			         cal = Calendar.getInstance();
+			         cal.setTime(date);
+			         weekCurrent = cal.get(Calendar.WEEK_OF_MONTH);
+			         td = (Date)formatter.parse(todayDates);
+				}	
+	
 						
 			}catch(Exception ex){System.out.println(ex);}
 			
 			if(!this.status.equalsIgnoreCase("non active")){
-				
+			
 			//check whether the tasks is this week
 			if((!this.time.equalsIgnoreCase("nil")) && 
 					((td.getMonth()>=startDate.getMonth() && td.getMonth()<=endDate.getMonth()))){	
 				
 				if(weekCurrent == weekStart){
+					
 					//assign day of the week
 					if(startDate.getDay()==0){
 						alltask [g][0]="Sunday";
@@ -386,7 +436,9 @@ public class Task {
 					alltask [g][7]= this.time;
 					
 					g++;
+					
 					}if(weekCurrent != weekStart){
+									
 						if(td.before(endDate)){
 							//assign day of the week
 							if(startDate.getDay()==0){
@@ -415,6 +467,7 @@ public class Task {
 							
 							g++;	
 						}
+						
 					}
 				}
 			}
@@ -425,7 +478,7 @@ public class Task {
 	}	
 	
 	//get all this month tasks
-	public Object[][] getAllTaskMonth(){
+	public Object[][] getAllTaskMonth(String todayDates){
 		
 		int lastID = 0, g=0;
 
@@ -463,12 +516,20 @@ public class Task {
 				formatter = new SimpleDateFormat("dd-MMM-yy");
 				startDate = (Date)formatter.parse(this.date.substring(5,14));  
 				endDate = (Date)formatter.parse(this.date.substring(18,27));
-				todayDate = Calendar.getInstance();
-				todayDate.set(Calendar.HOUR_OF_DAY, 0);
-				todayDate.set(Calendar.MINUTE, 0);
-				todayDate.set(Calendar.SECOND, 0);
-				todayDate.set(Calendar.MILLISECOND, 0);
-				td = todayDate.getTime();			
+
+				if(todayDates.equalsIgnoreCase("")){
+					
+					todayDate = Calendar.getInstance();
+					todayDate.set(Calendar.HOUR_OF_DAY, 0);
+					todayDate.set(Calendar.MINUTE, 0);
+					todayDate.set(Calendar.SECOND, 0);
+					todayDate.set(Calendar.MILLISECOND, 0);
+					td = todayDate.getTime();
+					
+				}else{
+					
+					td = (Date)formatter.parse(todayDates);
+				}		
 				
 			}catch(Exception ex){System.out.println(ex);}
 			
@@ -507,7 +568,7 @@ public class Task {
 	}	
 	
 	//get all today event
-	public Object[][] getAllEventDay(){
+	public Object[][] getAllEventDay(String todayDates){
 		
 		int lastID = 0, g = 0;
 		DateFormat formatter ; 
@@ -542,12 +603,20 @@ public class Task {
 				formatter = new SimpleDateFormat("dd-MMM-yy");
 				startDate = (Date)formatter.parse(this.date.substring(5,14));  
 				endDate = (Date)formatter.parse(this.date.substring(18,27));
-				todayDate = Calendar.getInstance();
-				todayDate.set(Calendar.HOUR_OF_DAY, 0);
-				todayDate.set(Calendar.MINUTE, 0);
-				todayDate.set(Calendar.SECOND, 0);
-				todayDate.set(Calendar.MILLISECOND, 0);
-				td = todayDate.getTime();			
+				
+				if(todayDates.equalsIgnoreCase("")){
+					
+					todayDate = Calendar.getInstance();
+					todayDate.set(Calendar.HOUR_OF_DAY, 0);
+					todayDate.set(Calendar.MINUTE, 0);
+					todayDate.set(Calendar.SECOND, 0);
+					todayDate.set(Calendar.MILLISECOND, 0);
+					td = todayDate.getTime();
+					
+				}else{
+					
+					td = (Date)formatter.parse(todayDates);
+				}			
 						
 			}catch(Exception ex){System.out.println(ex);}
 			
