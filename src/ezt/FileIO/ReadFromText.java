@@ -52,5 +52,60 @@ public class ReadFromText {
 		}
 	}	
 
+	public Object[][] readByDesc(String desc){
+		
+		String concateTask = "", taskDetails, strLine;
+		String id = "", date="", time="", priority="", alert="", status="";
+		Object [][] searchResult= new Object [2][7];
+		int i=0;
+		
+		try{
+			
+			FileInputStream fstream = new FileInputStream(fileName);
+
+			// Get the object of DataInputStream
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));   		
+
+  			//Read File Line By Line
+  			while ((strLine = br.readLine()) != null)   {
+  				
+  				StringTokenizer st = new StringTokenizer(strLine, "/");
+  				
+  				while(st.hasMoreTokens()) {
+  					
+  					id = st.nextToken();  					
+  					taskDetails = st.nextToken();
+  					date = st.nextToken();
+  					time = st.nextToken();
+  					priority = st.nextToken();
+  					alert = st.nextToken();
+  					status = st.nextToken();
+  					
+  					if(taskDetails.contains(desc)){
+					
+  						searchResult[i][0] = date;
+  					    searchResult[i][1] = taskDetails;
+  					    searchResult[i][2] = priority;
+  					    searchResult[i][3] = alert;
+  					    searchResult[i][4] = id;
+  					    searchResult[i][5] = time;
+  					    searchResult[i][6] = status;
+  					      				
+  					    i++;
+  					    
+  					}
+  				}  				
+  				  				
+  			}
+  			
+		}catch (Exception e) {
+			
+            System.out.println("Error: " + e.getMessage());
+        }   	
+    
+		return searchResult;
+	
+	}
 	
 }

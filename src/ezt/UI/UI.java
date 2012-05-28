@@ -37,32 +37,31 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	JInternalFrame internalFrame;
 	private boolean success = true;
 	private boolean firstInitPane = true;
-	private boolean firstEventPane = true;	
+	private boolean firstEventPane = true, isSearch = false, noSearch=false;	
 	private String[] columnNames = {"", "Description", "Priority", "Alert","ID"};
 	private String[] columnNamesEvent = {"ID",""};
 	private int countFocus=0;
 	private boolean isAdd = false, refreshTask = false, refreshEvent = false;
-	private int noOfInputAdd = 0;
-	private String concateAddInput = "";
+	private int noOfInputAdd = 0, noOfInputSearch=0, shortCut=1, countSearch =1;
+	private String concateAddInput = "", searchVar="";
 	private static final int CTRL_D = 90;
-	private static final int CTRL_F = 89;
 	private static UI frame, frame2;
 	JTable tableDay;
 	JTable tableWeek;
 	JTable tableMonth;
+	JTable tableSearch;
 	JTable tableEvent, tableEvent2;
 	JTabbedPane tabbedPane;
 	JTabbedPane tabbedPane_1;
 	JScrollPane scrollPane;
 	JScrollPane scrollPane_1;
 	JScrollPane scrollPane_2;
+	JScrollPane scrollPane_3;
 	DefaultTableModel tableModel;
 	
 	DetectInput detectInput;
 	
 	String id="", eventID="";
-	
-	private JScrollPane scrollPane_3;
 
 	/**
 	 * Launch the application.
@@ -72,13 +71,13 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			public void run() {
 				try {
 					
+					//initiate ctrl+d to show the program
 					JIntellitype.getInstance().registerSwingHotKey(CTRL_D, Event.CTRL_MASK, (int) 'D');
-				    JIntellitype.getInstance().registerSwingHotKey(CTRL_F, Event.CTRL_MASK, (int) 'F');     
-				      				      
-					frame = new UI();
+				     				      
+					frame = new UI();//frame which hold the task UI
 					frame.setVisible(false);
 					
-					frame2 = new UI();
+					frame2 = new UI();//frame which hold the shortcut key command
 					frame2.initJIntellitype();
 					frame2.setVisible(false);
 					
@@ -91,19 +90,23 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 
 	   public void onHotKey(int aIdentifier) {
 		   
-		      if(Integer.toString(aIdentifier).equalsIgnoreCase("90")){
+		      if(Integer.toString(aIdentifier).equalsIgnoreCase("90") && shortCut == 1){
 		    	  try{
 		    	  
-		    		  frame.setVisible(true);
+		    		  frame.setVisible(true);//show the task UI if ctrl+d pressed
 		    		  
-		    	  }catch(Exception ex){}
-		      }
-		      if(Integer.toString(aIdentifier).equalsIgnoreCase("89")){
+		    		  shortCut +=1;
+		    		  
+		    	  }catch(Exception ex){System.out.println(ex);}
+		    	  
+		      }else if(Integer.toString(aIdentifier).equalsIgnoreCase("90") && shortCut == 2){
 		    	  try{
 		    	 
-		    		  frame.setVisible(false);
+		    		  frame.setVisible(false);//hide the task UI if ctrl+D pressed again
 		    		  
-		    	  }catch(Exception ex){}
+		    		  shortCut -=1;
+		    		  
+		    	  }catch(Exception ex){System.out.println(ex);}
 		      }
 		   }
 	   
@@ -125,9 +128,6 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	      }
 	   }
 	   
-	/**
-	 * Create the frame.
-	 */
 	public UI() {
 				
 		setTitle("EZ Task Manager");
@@ -265,10 +265,44 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 							
 							JOptionPane.showMessageDialog(null, "No command received, please enter command in the command box.", "Message", 1);
 							
+						}else if(input.replaceAll(" ", "").equalsIgnoreCase("s") || 
+								input.replaceAll(" ", "").equalsIgnoreCase("search") || countSearch ==2){
+						
+							if(countSearch==2){noOfInputSearch++;}
+							
+							if(countSearch==1){
+								commandBox.setText("Description:");
+								countSearch++;
+							}
+							
+							if(noOfInputSearch == 1 && countSearch == 2){
+									
+								searchVar = commandBox.getText().substring(12);
+								
+								tabbedPane.remove(0);
+								tabbedPane.remove(0);
+								tabbedPane.remove(0);
+							
+								initPane();
+								
+								//auto open the search result pane if a search word is entered by user
+								tabbedPane.setSelectedIndex(3);
+										
+								success = true;
+							
+								noSearch = true;
+								
+								countSearch --;
+								
+								commandBox.setText("");
+								
+								noOfInputSearch --;
+							}
+							
 						}else{
 							
 							//print some default add task command to user
-							if(input.equalsIgnoreCase("add")  || isAdd == true){
+							if(input.equalsIgnoreCase("a") || input.equalsIgnoreCase("add")  || isAdd == true){
 							
 								isAdd = true;
 								
@@ -528,6 +562,61 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		scrollPane_2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		tabbedPane.addTab("Month", null, scrollPane_2, null);
+
+		if(!searchVar.equalsIgnoreCase("")){			
+			
+		//create table day & set some row color corresponding to the priority
+		tableSearch = new JTable(detectInput.searchTask(searchVar),columnNames){
+			  public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
+				  
+				  Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
+				  			  	
+				    //set the row color which corresponding to the task priority
+			  		if(tableSearch.getValueAt(Index_row, 2).toString().equalsIgnoreCase("high"))  {
+			  			comp.setBackground(Color.red);
+			  		}else if(tableSearch.getValueAt(Index_row, 2).toString().equalsIgnoreCase("medium"))  {
+			  			comp.setBackground(Color.yellow);
+			  		}else if(tableSearch.getValueAt(Index_row, 2).toString().equalsIgnoreCase("low"))  {
+			  			comp.setBackground(Color.green);
+			  		}else{
+			  			comp.setBackground(Color.white);
+			  		}
+			  	
+			  		return comp;
+			}};		
+			
+			tableSearch.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			tableSearch.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		
+			
+			tableSearch.setRowHeight(25);
+			
+			//tableSearch.getColumnModel().getColumn(0).setMinWidth(50);
+			
+			tableSearch.getSelectionModel().addListSelectionListener(new RowListenerSearch());
+					
+			tableSearch.getColumnModel().getColumn(0).setMinWidth(50);
+			tableSearch.getColumnModel().getColumn(1).setMinWidth(180);
+			tableSearch.getColumnModel().getColumn(2).setMaxWidth(50);
+			tableSearch.getColumnModel().getColumn(3).setMaxWidth(50);
+			tableSearch.getColumnModel().getColumn(4).setMaxWidth(0);
+					
+			scrollPane_3 = new JScrollPane(tableSearch);
+			scrollPane_3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+			scrollPane_3.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+				
+			tabbedPane.addTab("Search", null, scrollPane_3, null);
+			
+			
+		}
+		
+		if(searchVar.equalsIgnoreCase("") && noSearch == true){
+			tabbedPane.remove(0);
+			tabbedPane.setSelectedIndex(0);			
+			noSearch = false;
+			
+		}
+		searchVar="";
 		
 		}catch(Exception ex){System.out.println(ex);}
 	}
@@ -565,7 +654,26 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	}
 	
 	
-	
+	//EventListener for each data row in the Search Task Panel
+    private class RowListenerSearch implements ListSelectionListener {
+        public void valueChanged(ListSelectionEvent event) {
+        	
+        	if((tableSearch.getValueAt(tableSearch.getSelectedRows()[0], 1)!="")){
+        		
+        		if (event.getValueIsAdjusting()) {
+        			return;
+        		}
+           
+        		outputSelectionSearch();
+            
+        		countFocus+=2;
+            
+        		ShowMessageDialog();
+           
+        		}
+        	}
+    }
+    
 	//EventListener for each data row in the Day Task Panel
     private class RowListenerDay implements ListSelectionListener {
         public void valueChanged(ListSelectionEvent event) {
@@ -641,6 +749,17 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
            
         		}
         	}
+    }
+
+    //get the task id in search task panel
+    private void outputSelectionSearch() {
+    	
+        for (int c : tableSearch.getSelectedRows()) {
+        	
+        	Object o = tableSearch.getValueAt(c, 4);
+            id = o.toString();
+        }    	
+               
     }
     
     //get the task id in day task panel

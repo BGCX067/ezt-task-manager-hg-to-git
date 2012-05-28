@@ -153,4 +153,12 @@ public class DetectInput {
 		return concateUpdateString;
 		
 	}
+	
+	public Object[][] searchTask(String desc){
+					
+		SearchTask read = new SearchTask();
+
+		return read.searchByDesc(desc);
+		
+	}
 }
