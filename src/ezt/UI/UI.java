@@ -55,7 +55,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	private String[] columnNames = {"", "Description", "Priority", "Alert","ID"};
 	private String[] columnNamesEvent = {"ID",""};
 	private int countFocus=0;
-	private boolean isAdd = false, refreshTask = false, refreshEvent = false;
+	private boolean isAdd = false, refreshTask = false, refreshEvent = false, isPrioritySearch = false, isNormalSearch=false, isStatusSearch = false;
 	private int noOfInputAdd = 0, noOfInputSearch=0, shortCut=1, countSearch =1;
 	private static String concateAddInput = "", searchVar="", todayDate="";
 	private static final int CTRL_D = 90;
@@ -161,7 +161,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 				
 		setTitle("EZ Task Manager");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 760, 650);
+		setBounds(250, 80, 760, 650);
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.activeCaption);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -348,7 +348,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		mtblCalendar.setColumnCount(7);
 		mtblCalendar.setRowCount(6);
 		
-		//Populate table ////sdsdsdasdasd Orange
+		//Populate table// put color
 		for (int i=realYear-100; i<=realYear+100; i++){
 			cmbYear.addItem(String.valueOf(i));
 		}
@@ -373,9 +373,54 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 							
 							JOptionPane.showMessageDialog(null, "No command received, please enter command in the command box.", "Message", 1);
 							
-						}else if(input.replaceAll(" ", "").equalsIgnoreCase("s") || 
-								input.replaceAll(" ", "").equalsIgnoreCase("search") || countSearch ==2){
+						}else if((isStatusSearch != true && isNormalSearch != true) && (input.replaceAll(" ", "").equalsIgnoreCase("s-p") || countSearch ==2)){
 						
+							isPrioritySearch = true;
+							
+							if(countSearch==2){noOfInputSearch++;}
+							
+							if(countSearch==1){
+								commandBox.setText("Priority:");
+								countSearch++;
+							}
+							
+							if(noOfInputSearch == 1 && countSearch == 2){
+									
+								searchVar = "p"+commandBox.getText().substring(9);
+								
+															
+								initPane(todayDate);
+								
+								int w =0;
+								w = tabbedPane.getTabCount();
+								
+								for(;w>4;w--){
+								
+									tabbedPane.remove(0);
+								}								
+
+								//auto open the search result pane if a search word is entered by user
+								tabbedPane.setSelectedIndex(3);
+										
+								isPrioritySearch = false;
+								
+								success = true;
+							
+								noSearch = true;
+								
+								countSearch --;
+								
+								commandBox.setText("");
+								
+								noOfInputSearch --;
+								
+								searchVar="";
+							}
+							
+						}else if((isPrioritySearch != true && isStatusSearch!=true) && (input.replaceAll(" ", "").equalsIgnoreCase("s") || countSearch ==2)){
+						
+							isNormalSearch = true;
+							
 							if(countSearch==2){noOfInputSearch++;}
 							
 							if(countSearch==1){
@@ -386,16 +431,22 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 							if(noOfInputSearch == 1 && countSearch == 2){
 									
 								searchVar = commandBox.getText().substring(12);
-								
-								tabbedPane.remove(0);
-								tabbedPane.remove(0);
-								tabbedPane.remove(0);
 							
 								initPane(todayDate);
 								
+								int w =0;
+								w = tabbedPane.getTabCount();
+								
+								for(;w>4;w--){
+								
+									tabbedPane.remove(0);
+								}	
+								
 								//auto open the search result pane if a search word is entered by user
 								tabbedPane.setSelectedIndex(3);
-										
+								
+								isNormalSearch = false;
+								
 								success = true;
 							
 								noSearch = true;
@@ -405,6 +456,51 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 								commandBox.setText("");
 								
 								noOfInputSearch --;
+								
+								searchVar="";
+							}
+							
+						}else if((isPrioritySearch != true && isNormalSearch != true) && input.replaceAll(" ", "").equalsIgnoreCase("s-s") || countSearch ==2){
+						
+							isStatusSearch = true;
+							
+							if(countSearch==2){noOfInputSearch++;}
+							
+							if(countSearch==1){
+								commandBox.setText("Status:");
+								countSearch++;
+							}
+							
+							if(noOfInputSearch == 1 && countSearch == 2){
+									
+								searchVar = "s"+commandBox.getText().substring(7);
+							
+								initPane(todayDate);
+								
+								int w =0;
+								w = tabbedPane.getTabCount();
+								
+								for(;w>4;w--){
+								
+									tabbedPane.remove(0);
+								}	
+								
+								//auto open the search result pane if a search word is entered by user
+								tabbedPane.setSelectedIndex(3);
+								
+								isStatusSearch = false;
+								
+								success = true;
+							
+								noSearch = true;
+								
+								countSearch --;
+								
+								commandBox.setText("");
+								
+								noOfInputSearch --;
+								
+								searchVar="";
 							}
 							
 						}else{
@@ -573,7 +669,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		public Component getTableCellRendererComponent (JTable table, Object value, boolean selected, boolean focused, int row, int column){
 			super.getTableCellRendererComponent(table, value, selected, focused, row, column);
 			if (column == 0 || column == 6){ //Week-end
-				setBackground(new Color(255, 220, 220));
+				setBackground(new Color(184, 148, 127));
 			}
 			else{ //Week
 				setBackground(new Color(255, 255, 255));
@@ -672,6 +768,8 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	public void initPane(String todayDate){
 		
 		try{
+			
+			
 		if(firstInitPane == true){
 			
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -806,29 +904,11 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		scrollPane_2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		tabbedPane.addTab("Month", null, scrollPane_2, null);
-
+		
 		if(!searchVar.equalsIgnoreCase("")){			
 			
-		//create table day & set some row color corresponding to the priority
-		tableSearch = new JTable(detectInput.searchTask(searchVar),columnNames){
-			  public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
-				  
-				  Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
-				  			  	
-				    //set the row color which corresponding to the task priority
-			  		if(tableSearch.getValueAt(Index_row, 2).toString().equalsIgnoreCase("high"))  {
-			  			comp.setBackground(Color.red);
-			  		}else if(tableSearch.getValueAt(Index_row, 2).toString().equalsIgnoreCase("medium"))  {
-			  			comp.setBackground(Color.yellow);
-			  		}else if(tableSearch.getValueAt(Index_row, 2).toString().equalsIgnoreCase("low"))  {
-			  			comp.setBackground(Color.green);
-			  		}else{
-			  			comp.setBackground(Color.white);
-			  		}
-			  	
-			  		return comp;
-			}};		
-			
+			//create table search & set some row color corresponding to the priority
+			tableSearch = new JTable(detectInput.searchTask(searchVar),columnNames);
 			tableSearch.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			tableSearch.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		

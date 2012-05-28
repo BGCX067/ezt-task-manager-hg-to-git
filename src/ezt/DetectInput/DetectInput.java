@@ -1,6 +1,7 @@
 package ezt.DetectInput;
 
 import ezt.BasicTaskFunc.*;
+
 import java.util.StringTokenizer;
 
 //this is the Facade class which act as a wall btn the UI and internal components
@@ -155,10 +156,13 @@ public class DetectInput {
 	}
 	
 	public Object[][] searchTask(String desc){
-					
+		
 		SearchTask read = new SearchTask();
 
-		return read.searchByDesc(desc);
+		if(desc.substring(0,1).equalsIgnoreCase("p")) return read.searchByPriority(desc.substring(1));
+		else if (desc.substring(0,1).equalsIgnoreCase("s")) return read.searchByStatus(desc.substring(1));
+		else return read.searchByDesc(desc);
 		
 	}
+
 }
