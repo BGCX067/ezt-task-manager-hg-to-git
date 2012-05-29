@@ -170,9 +170,13 @@ public class Task {
 		
 		boolean success = false;
 		
+		GetLastID getLast = new GetLastID();
 		WriteToText writeTask = new WriteToText();
 		DeleteFromText deleteTask = new DeleteFromText();
 		deleteTask.delete(this.id);
+		
+		this.id = getLast.getLastID() + 1;
+		
 		writeTask.write(this);
 		
 		success = true;

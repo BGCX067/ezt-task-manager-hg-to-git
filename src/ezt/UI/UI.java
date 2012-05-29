@@ -96,7 +96,9 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	 */
 	public static void main(String[] args) {
 		
-		/*DetectInput di = new DetectInput();
+		/* Method under construction for Reminder
+		 * 
+		 * DetectInput di = new DetectInput();
 		
 		try{
 
