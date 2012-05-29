@@ -6,6 +6,8 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.GridLayout;
 
 import com.melloware.jintellitype.*;
@@ -26,6 +28,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.Event;
 import ezt.DetectInput.*;
+import ezt.Reminder.runReminder;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -52,12 +55,12 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	private boolean success = true;
 	private boolean firstInitPane = true;
 	private boolean firstEventPane = true, isSearch = false, noSearch=false;	
-	private String[] columnNames = {"", "Description", "Priority", "Alert","ID"};
-	private String[] columnNamesEvent = {"ID",""};
-	private int countFocus=0;
 	private boolean isAdd = false, refreshTask = false, refreshEvent = false, isPrioritySearch = false, isNormalSearch=false, isStatusSearch = false;
 	private int noOfInputAdd = 0, noOfInputSearch=0, shortCut=1, countSearch =1;
 	private static String concateAddInput = "", searchVar="", todayDate="";
+	private String[] columnNames = {"", "Description", "Priority", "Alert","ID"};
+	private String[] columnNamesEvent = {"ID",""};
+	private int countFocus=0;
 	private static final int CTRL_D = 90;
 	private static UI frame, frame2;
 	JTable tableDay;
@@ -76,13 +79,6 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	DetectInput detectInput;
 	
 	String id="", eventID="";
-	private JPanel panel;
-	private JLabel label_1;
-	private JLabel label_2;
-	private JComboBox comboBox;
-	private JButton button_1;
-	private JButton button_2;
-	private JScrollPane scrollPane_4;
 	static JLabel lblMonth, lblYear;
 	static JButton btnPrev, btnNext;
 	static JTable tblCalendar;
@@ -93,11 +89,29 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	static JScrollPane stblCalendar; //The scrollpane
 	static JPanel pnlCalendar;
 	static int realYear, realMonth, realDay, currentYear, currentMonth;
+
 	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
+		/*DetectInput di = new DetectInput();
+		
+		try{
+
+			//while (true) {
+            
+				//if(di.runReminder()) {new frameReminder();}
+            
+				//Thread.sleep(100 * 1000);
+				
+			//}
+			
+		} catch (Exception e) {
+	        System.out.println("Error in UI: "+e);
+	    }*/		
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -108,10 +122,10 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 					frame = new UI();//frame which hold the task UI
 					frame.setVisible(false);
 					frame.initJIntellitype();
-					
+										
 				} catch (Exception e) {
-					e.printStackTrace();
-				}		
+			        System.out.println("Error in UI: "+e);
+			    }		
 				
 			}
 		});
@@ -156,7 +170,30 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	         System.out.println(ex);
 	      }
 	   }
-	   
+	
+	public void resetVar(){
+		
+		success = true;
+		firstInitPane = true;
+		firstEventPane = true;
+		isSearch = false;
+		noSearch=false;	
+		isAdd = false;
+		refreshTask = false;
+		refreshEvent = false;
+		isPrioritySearch = false;
+		isNormalSearch=false;
+		isStatusSearch = false;
+		noOfInputAdd = 0;
+		noOfInputSearch=0;
+		shortCut=1;
+		countSearch =1;
+		concateAddInput = "";
+		searchVar="";
+		todayDate="";
+
+	}   
+	
 	public UI() {
 				
 		setTitle("EZ Task Manager");
@@ -265,6 +302,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			}
 			@Override//clear default text in textbox if it is focused
 			public void focusGained(FocusEvent e) {
+				
 				countFocus++;
 				if(commandBox.getText().equalsIgnoreCase("Please enter your command here.") || countFocus ==1){
 				commandBox.setText("");
@@ -602,7 +640,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 								
 								//refresh the event panel after command issue successfully
 								if(refreshEvent == true){
-									
+								
 									tabbedPane_1.remove(0);									
 									
 									callEventPane();
@@ -614,6 +652,8 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 								
 								JOptionPane.showMessageDialog(null, "Action performed failed.", "Message", 1);
 								
+								
+								
 							}
 							
 						}
@@ -622,6 +662,8 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 					
 				} 
 				}
+			
+				
 			
 		});		
 		
@@ -940,6 +982,8 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		}
 		searchVar="";
 		
+		//resetVar();
+		
 		}catch(Exception ex){System.out.println(ex);}
 	}
 
@@ -972,6 +1016,8 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		scrollPane_3.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		tabbedPane_1.addTab("Events Today", null, scrollPane_3, null);
+		
+		//resetVar();
 		
 	}
 	
@@ -1132,6 +1178,34 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
     	
     	internalFrame.setVisible(true);//the frame which contains update, delete and update status button
     }
-    
    
 }
+
+
+class  frameReminder extends JFrame {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public frameReminder() {
+		setTitle("EZ Task Manager");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(960, 610, 290, 116);
+		JPanel contentPaneReminder = new JPanel();
+		contentPaneReminder.setBackground(SystemColor.activeCaption);
+		contentPaneReminder.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPaneReminder);
+		contentPaneReminder.setLayout(null);
+		getContentPane().setLayout(null);					
+		JLabel lblNewLabelReminder = new JLabel("New label");
+		lblNewLabelReminder.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabelReminder.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/Crystal_Project_bell.png")));
+		lblNewLabelReminder.setBounds(0, 0, 304, 91);
+		getContentPane().add(lblNewLabelReminder);
+		setVisible(true);
+		
+    } //-- ends constructor
+    
+} //-- ends SecondFrame
+

@@ -1,6 +1,7 @@
 package ezt.DetectInput;
 
 import ezt.BasicTaskFunc.*;
+import ezt.Reminder.*;
 
 import java.util.StringTokenizer;
 
@@ -163,6 +164,19 @@ public class DetectInput {
 		else if (desc.substring(0,1).equalsIgnoreCase("s")) return read.searchByStatus(desc.substring(1));
 		else return read.searchByDesc(desc);
 		
+	}
+	
+	public static boolean runReminder(){
+		
+		boolean r=false;
+		
+		try{
+			runReminder reminder = new runReminder();
+            
+			r = reminder.reminder("29-May-12");
+		}catch(Exception ex){System.out.println("Error in DetectInput: "+ex);}
+	
+		return r;
 	}
 
 }

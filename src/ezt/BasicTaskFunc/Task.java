@@ -186,6 +186,7 @@ public class Task {
 	 */
 	public Object[][] getAllTaskDay(String todayDates){
 		
+		
 		int lastID = 0, g = 0;
 		int startTime = 0;
 		DateFormat formatter ; 
@@ -217,6 +218,7 @@ public class Task {
 			st = new StringTokenizer(readTask.read(Integer.toString(i)), ".");
 			
 			while(st.hasMoreTokens()) {
+				
 				this.id = Integer.parseInt(st.nextToken());
 				this.desc = st.nextToken();
 				this.date = st.nextToken();
@@ -545,7 +547,7 @@ public class Task {
 						
 					}catch(Exception ex){System.out.println(ex);}
 				
-					if((td.getMonth()>startDate.getMonth() && td.getMonth()<endDate.getMonth()) ||(td.getMonth()==startDate.getMonth() && td.getMonth()==endDate.getMonth())){
+					if((td.getMonth()>startDate.getMonth() && td.getMonth()<endDate.getMonth()) ||(td.getMonth()==startDate.getMonth() && td.getMonth()<=endDate.getMonth())){
 						alltask [g][0]= startDate2;
 						alltask [g][1]= this.desc;			
 						alltask [g][2]= this.priority;			

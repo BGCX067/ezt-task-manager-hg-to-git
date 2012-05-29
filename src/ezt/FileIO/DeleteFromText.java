@@ -13,11 +13,14 @@ public class DeleteFromText {
 
 		try{
 			
-			String strLine = "", taskDetails="", concateTask="", taskID = "";
+			String strLine = "", taskDetails="", concateTask="", taskID = "", lastID = "";
 			FileInputStream fstream = new FileInputStream(fileName);
 			File srcFile = new File(fileNameTemp);
 			File destFile = new File(fileName);
 			taskID = Integer.toString(searhTaskID);
+			boolean deleted=false;
+			int increID=0;
+			
 			
 			// Get the object of DataInputStream
 			DataInputStream in = new DataInputStream(fstream);
@@ -35,11 +38,22 @@ public class DeleteFromText {
   					
   					if(!taskDetails.equalsIgnoreCase(taskID)){
   						
-  						concateTask += taskDetails + "/";
+  						if(deleted==true){
+  							
+  							concateTask +=lastID + "/";
+  							increID = Integer.parseInt(lastID)+1;
+  							lastID = Integer.toString(increID);
+							}else{
+								concateTask += taskDetails + "/";	
+							}
   						
   						while(st.hasMoreTokens()) {
 
-  							concateTask += st.nextToken() + "/";
+  							
+  								
+  								concateTask += st.nextToken() + "/";
+  								
+  							
   							
   						}
   						
@@ -47,7 +61,12 @@ public class DeleteFromText {
   						bw.newLine();
   						concateTask = "";
   						    
-  					}else{break;}
+  					}else{
+  						deleted = true;
+  						lastID = taskID;
+  						break;
+  						
+  					}
   			      
   				} 				
   				  				
