@@ -1,6 +1,4 @@
 1/meeting/from 03-Oct-12 to 03-Nov-12/05-06/medium/true/Active/
-2/swimming/from 23-May-12 to 23-May-12/03-04/low/true/Active/
-3/Alibaba Concert/from 23-May-12 to 01-Jun-12/nil/medium/true/Active/
-4/meeting/from 01-Nov-12 to 03-Mar-12/07-09/medium/true/Active/
-5/Chris Birthday/from 25-Jun-12 to 25-Jun-12/nil/high/true/Active/
-6/jogging/from 29-May-12 to 25-Jun-12/12-13/low/true/Non Active/
+2/Clean house/from 02-Apr-12 to 03-Nov-12/05-06/high/true/Active/
+3/meeting/from 01-Nov-12 to 03-Mar-12/07-09/medium/true/Active/
+4/Chris Birthday/from 25-Jun-12 to 25-Jun-12/nil/high/true/Active/
