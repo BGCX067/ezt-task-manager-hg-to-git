@@ -26,6 +26,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
 import java.awt.Event;
 import ezt.DetectInput.*;
 import ezt.Reminder.runReminder;
@@ -88,6 +91,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	static DefaultTableModel mtblCalendar; //Table model
 	static JScrollPane stblCalendar; //The scrollpane
 	static JPanel pnlCalendar;
+	static JLabel hintlbl;
 	static int realYear, realMonth, realDay, currentYear, currentMonth;
 
 	
@@ -200,7 +204,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 				
 		setTitle("EZ Task Manager");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(250, 80, 760, 650);
+		setBounds(250, 80, 760, 680);
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.activeCaption);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -269,27 +273,49 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		lblCommand.setBounds(26, 550, 89, 14);
 		contentPane.add(lblCommand);
 		
-		lblFilterBy = new JLabel("Filter By:");
+		lblFilterBy = new JLabel("Search By:");
 		lblFilterBy.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblFilterBy.setBounds(459, 380, 65, 20);
+		lblFilterBy.setBounds(459, 380, 81, 20);
 		contentPane.add(lblFilterBy);
 		
 		lblNewLabel = new JLabel("High Priority");
+		lblNewLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+
+				searchClick("phigh");
+				
+			}
+		});
 		lblNewLabel.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/red light.png")));
 		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblNewLabel.setBounds(534, 380, 106, 20);
+		lblNewLabel.setBounds(537, 380, 106, 20);
 		contentPane.add(lblNewLabel);
 		
 		lblMediumhighPriority = new JLabel("Medium Priority");
+		lblMediumhighPriority.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				searchClick("pmedium");
+			}
+		});
 		lblMediumhighPriority.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/yellow light.png")));
 		lblMediumhighPriority.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblMediumhighPriority.setBounds(534, 399, 120, 20);
+		lblMediumhighPriority.setBounds(537, 399, 120, 20);
 		contentPane.add(lblMediumhighPriority);
 		
 		lblLowPriority = new JLabel("Low Priority");
+		lblLowPriority.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				searchClick("plow");
+			}
+		});
 		lblLowPriority.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/green light.png")));
 		lblLowPriority.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblLowPriority.setBounds(534, 418, 120, 20);
+		lblLowPriority.setBounds(537, 418, 120, 20);
 		contentPane.add(lblLowPriority);
 				
 		commandBox = new JTextField();
@@ -385,6 +411,10 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 
 		//Set row/column count
 		tblCalendar.setRowHeight(20);
+		
+		hintlbl = new JLabel("");
+		hintlbl.setBounds(26, 604, 416, 20);
+		contentPane.add(hintlbl);
 		mtblCalendar.setColumnCount(7);
 		mtblCalendar.setRowCount(6);
 		
@@ -560,13 +590,15 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 									
 									concateAddInput += "add," + (commandBox.getText()).substring(12);
 								
-									commandBox.setText("Date:from DD-MMM-YY to DD-MMM-YY");
+									commandBox.setText("Date:");
+									hintlbl.setText("Hints: from DD-MMM-YY to DD-MMM-YY");
 									
 								}else if(noOfInputAdd == 3){
 								
 									concateAddInput += "," + (commandBox.getText()).substring(5);
 									
-									commandBox.setText("Time:nil/hh-hh");
+									commandBox.setText("Time:");
+									hintlbl.setText("Hints: nil/hh-hh");
 									
 								}else if(noOfInputAdd == 4){
 																	
@@ -583,17 +615,21 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 										
 									concateAddInput += "," + (commandBox.getText()).substring(5);
 									
-									commandBox.setText("Priority:high/medium/low");
+									commandBox.setText("Priority:");
+									hintlbl.setText("Hints: high/medium/low");
 									
 								}else if(noOfInputAdd == 5){
 									
 									concateAddInput += "," + (commandBox.getText()).substring(9);
 									
-									commandBox.setText("Alert:yes/no");
+									commandBox.setText("Alert:");
+									hintlbl.setText("Hints: yes/no");
 									
 								}else if(noOfInputAdd == 6){
 									
 									concateAddInput += "," + (commandBox.getText()).replace(" ", "").substring(6);
+									
+									hintlbl.setText("");
 									
 									noOfInputAdd = 0;
 																	
@@ -652,8 +688,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 									
 							}else if(success == false && isAdd == false){
 								
-								JOptionPane.showMessageDialog(null, "Action performed failed.", "Message", 1);
-								
+								JOptionPane.showMessageDialog(null, "Action performed failed.", "Message", 1);					
 								
 								
 							}
@@ -671,6 +706,25 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		
 	}
 
+	public void searchClick(String input){
+		
+		searchVar = input;		
+		
+		initPane(todayDate);
+		
+		int w =0;
+		w = tabbedPane.getTabCount();
+		
+		for(;w>4;w--){
+		
+			tabbedPane.remove(0);
+		}								
+
+		//auto open the search result pane if a search word is entered by user
+		tabbedPane.setSelectedIndex(3);
+		
+	}
+	
 	public void refreshCalendar(int month, int year){		
 		
 		//Variables
@@ -826,7 +880,8 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		}
 		
 		detectInput = new DetectInput();				
-				  
+				 
+		//System.out.println("sd"+(detectInput.allTaskDay(todayDate))[0][1].toString());
 		//create table day & set some row color corresponding to the priority
 		tableDay = new JTable(detectInput.allTaskDay(todayDate),columnNames){
 			  public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
@@ -840,10 +895,15 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			  			comp.setBackground(Color.yellow);
 			  		}else if(tableDay.getValueAt(Index_row, 2).toString().equalsIgnoreCase("low"))  {
 			  			comp.setBackground(Color.green);
+			  		}else if(tableDay.getValueAt(Index_row, 2).toString().equalsIgnoreCase(" "))  {
+			  			comp.setBackground(Color.white);
+			  		}else if(tableDay.getValueAt(Index_row, 2).toString().equalsIgnoreCase("non active"))  {
+			  			comp.setBackground(Color.gray);
 			  		}else{
 			  			comp.setBackground(Color.white);
 			  		}
 			  	
+			  		System.out.println(tableDay.getValueAt(Index_row, 2).toString());
 			  		return comp;
 		}};		
 		
@@ -863,6 +923,8 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			  			comp.setBackground(Color.yellow);
 			  		}else if(tableWeek.getValueAt(Index_row, 2).toString().equalsIgnoreCase("low"))  {
 			  			comp.setBackground(Color.green);
+			  		}else if(tableWeek.getValueAt(Index_row, 2).toString().equalsIgnoreCase("non active"))  {
+			  			comp.setBackground(Color.gray);
 			  		}else{
 			  			comp.setBackground(Color.white);
 			  		}
@@ -874,7 +936,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		}};
 		
 		tableWeek.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+
 		//create table month & set some row color corresponding to the priority
 		tableMonth = new JTable(detectInput.allTaskMonth(todayDate),columnNames){
 			  public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
@@ -889,6 +951,8 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			  			comp.setBackground(Color.yellow);
 			  		}else if(tableMonth.getValueAt(Index_row, 2).toString().equalsIgnoreCase("low"))  {
 			  			comp.setBackground(Color.green);
+			  		}else if(tableMonth.getValueAt(Index_row, 2).toString().equalsIgnoreCase("non active"))  {
+			  			comp.setBackground(Color.gray);
 			  		}else{
 			  			comp.setBackground(Color.white);
 			  		}
@@ -930,7 +994,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		tableMonth.getColumnModel().getColumn(2).setMaxWidth(50);
 		tableMonth.getColumnModel().getColumn(3).setMaxWidth(50);
 		tableMonth.getColumnModel().getColumn(4).setMaxWidth(0);		
-		
+		    
 		scrollPane = new JScrollPane(tableDay);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -953,10 +1017,10 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			
 			//create table search & set some row color corresponding to the priority
 			tableSearch = new JTable(detectInput.searchTask(searchVar),columnNames);
+			
 			tableSearch.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			tableSearch.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		
-			
 			tableSearch.setRowHeight(25);
 			
 			tableSearch.getSelectionModel().addListSelectionListener(new RowListenerSearch());
@@ -1180,7 +1244,6 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
     	
     	internalFrame.setVisible(true);//the frame which contains update, delete and update status button
     }
-   
 }
 
 

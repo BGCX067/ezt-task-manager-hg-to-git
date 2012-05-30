@@ -215,6 +215,13 @@ public class Task {
 		for(int c=0;c<timesInDay.length;c++){
 			
 			alltask [c][0]= timesInDay[c];
+			alltask [c][1]= " ";
+			alltask [c][2]= " ";
+			alltask [c][3]= " ";
+			alltask [c][4]= " ";
+			alltask [c][5]= " ";
+			alltask [c][6]= " ";
+			alltask [c][7]= " ";
 		}
 		
 		for(int i=1;i<=lastID;i++){			
@@ -253,7 +260,7 @@ public class Task {
 				}
 			}catch(Exception ex){System.out.println(ex);}
 			
-			if(!this.status.equalsIgnoreCase("non active")){
+			//if(this.status.equalsIgnoreCase("non active")){
 				
 			//check whether the tasks is today
 			if((!this.time.equalsIgnoreCase("nil")) && ((td.after(startDate) && td.before(endDate)) || td.equals(startDate) || td.equals(endDate))){				
@@ -281,6 +288,13 @@ public class Task {
 						alltask [c][5]= this.date;
 						alltask [c][6]= this.status;
 						alltask [c][7]= this.time;
+						
+						if(this.status.replace(" ", "").equalsIgnoreCase("nonactive")){
+							
+							alltask [c][2]= this.status;			
+							
+						}
+						
 					}else{
 						
 						if(alltask [c][1] == null){
@@ -299,7 +313,7 @@ public class Task {
 				}
 			}
 
-			}
+			//}
 			
 		}
 		
@@ -312,6 +326,7 @@ public class Task {
 		
 		String changedTodayDates = "", changedTodayMonth = "", changedTodayYear = "", concate="",sample="";
 		SimpleDateFormat sdf;
+		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         Calendar cal;
         Date date;
                 
@@ -321,8 +336,9 @@ public class Task {
 		Date td=null, startDate=null, endDate=null;
 		Calendar todayDate = null;
 		
-		int weekCurrent=0, weekStart=0, weekEnd=0;
+		int weekCurrent=0;
 		Calendar weekStartCal=null, weekEndCal=null;
+		Calendar selectedStartCal = null, selectedEndCal = null;
 		
 		GetLastID fileIO = new GetLastID();
 		lastID = fileIO.getLastID();
@@ -332,7 +348,18 @@ public class Task {
 		StringTokenizer st;
 		
 		Object[][] alltask = new Object[lastID][8]; 
-		
+		/*
+		for(int i=0;i<alltask.length;i++){
+			alltask[i][0] = " ";
+			alltask[i][1] = " ";
+			alltask[i][2] = " ";
+			alltask[i][3] = " ";
+			alltask[i][4] = " ";
+			alltask[i][5] = " ";
+			alltask[i][6] = " ";
+			alltask[i][7] = " ";
+		}
+		*/
 		for(int i=1;i<=lastID;i++){			
 			
 			st = new StringTokenizer(readTask.read(Integer.toString(i)), ".");
@@ -354,12 +381,10 @@ public class Task {
 				startDate = (Date)formatter.parse(this.date.substring(5,14));
 				weekStartCal = Calendar.getInstance();
 				weekStartCal.setTime(startDate);
-				weekStart = weekStartCal.get(Calendar.WEEK_OF_MONTH);
 								
 				endDate = (Date)formatter.parse(this.date.substring(18,27));
 				weekEndCal = Calendar.getInstance();
 				weekEndCal.setTime(endDate);
-				weekEnd = weekEndCal.get(Calendar.WEEK_OF_MONTH);
 				
 				if(todayDates.equalsIgnoreCase("")){
 					
@@ -369,6 +394,15 @@ public class Task {
 					todayDate.set(Calendar.SECOND, 0);
 					todayDate.set(Calendar.MILLISECOND, 0);
 					td = todayDate.getTime();
+					
+					//get the first date of the week selected
+					selectedStartCal = (Calendar) todayDate.clone();
+					selectedStartCal.add(Calendar.DAY_OF_WEEK, 
+							selectedStartCal.getFirstDayOfWeek() - selectedStartCal.get(Calendar.DAY_OF_WEEK));
+					
+					//get the last date of the week selected
+					selectedEndCal = (Calendar) selectedStartCal.clone();
+					selectedEndCal.add(Calendar.DAY_OF_YEAR, 6);
 					
 				}else{
 					
@@ -401,20 +435,25 @@ public class Task {
 			         date = sdf.parse(sample);
 			         cal = Calendar.getInstance();
 			         cal.setTime(date);
-			         weekCurrent = cal.get(Calendar.WEEK_OF_MONTH);
 			         td = (Date)formatter.parse(todayDates);
-				}	
-	
+			         
+			         //get the first date of the week selected
+					 selectedStartCal = (Calendar) cal.clone();
+					 selectedStartCal.add(Calendar.DAY_OF_WEEK, 
+					 selectedStartCal.getFirstDayOfWeek() - selectedStartCal.get(Calendar.DAY_OF_WEEK));
+						
+					 //get the last date of the week selected
+					 selectedEndCal = (Calendar) selectedStartCal.clone();
+					 selectedEndCal.add(Calendar.DAY_OF_YEAR, 6);			         
+				}		
 						
 			}catch(Exception ex){System.out.println(ex);}
-			
-			if(!this.status.equalsIgnoreCase("non active")){
-			
+					
 			//check whether the tasks is this week
-			if((!this.time.equalsIgnoreCase("nil")) && 
-					((td.getMonth()>=startDate.getMonth() && td.getMonth()<=endDate.getMonth()))){	
-				
-				if(weekCurrent == weekStart){
+			if((!this.time.equalsIgnoreCase("nil")) && (!weekEndCal.before(selectedStartCal) && 
+					(!weekStartCal.after(selectedEndCal))))
+					
+					{
 					
 					//assign day of the week
 					if(startDate.getDay()==0){
@@ -441,42 +480,12 @@ public class Task {
 					alltask [g][6]= this.status;
 					alltask [g][7]= this.time;
 					
+
 					g++;
 					
-					}if(weekCurrent != weekStart){
-									
-						if(td.before(endDate)){
-							//assign day of the week
-							if(startDate.getDay()==0){
-								alltask [g][0]="Sunday";
-							}else if(startDate.getDay()==1){
-								alltask [g][0]="Monday";
-							}else if(startDate.getDay()==2){
-								alltask [g][0]="Tuesday";
-							}else if(startDate.getDay()==3){
-								alltask [g][0]="Wednesday";
-							}else if(startDate.getDay()==4){
-								alltask [g][0]="Thursday";
-							}else if(startDate.getDay()==5){
-								alltask [g][0]="Friday";
-							}else{
-								alltask [g][0]="Saturday";
-							}
-							
-							alltask [g][1]= this.desc;			
-							alltask [g][2]= this.priority;			
-							alltask [g][3]= this.onAlert;
-							alltask [g][4]= this.id;
-							alltask [g][5]= this.date;
-							alltask [g][6]= this.status;
-							alltask [g][7]= this.time;
-							
-							g++;	
-						}
-						
-					}
+					
 				}
-			}
+			
 		}
 		
 		return alltask;
@@ -492,6 +501,10 @@ public class Task {
 		Date td=null, startDate=null, endDate=null,startDate2=null;
 		Calendar todayDate;
 		
+		Calendar mthStartCal = null, mthEndCal = null;
+		Calendar selectedStartCal = null, selectedEndCal = null;
+		Calendar cal=null;
+		
 		GetLastID fileIO = new GetLastID();
 		lastID = fileIO.getLastID();
 		
@@ -499,11 +512,20 @@ public class Task {
 		
 		StringTokenizer st;
 		
-		Object[][] alltask = new Object[lastID][8]; 
-		
+		Object[][] alltask = new Object[lastID][8];
+/*		
+		for(int i=0;i<alltask.length;i++){
+			alltask[i][0] = " ";
+			alltask[i][1] = " ";
+			alltask[i][2] = " ";
+			alltask[i][3] = " ";
+			alltask[i][4] = " ";
+			alltask[i][5] = " ";
+			alltask[i][6] = " ";
+			alltask[i][7] = " ";
+		}
+	*/	
 		for(int i=1;i<=lastID;i++){			
-			
-			//count = 1;
 			
 			st = new StringTokenizer(readTask.read(Integer.toString(i)), ".");
 			
@@ -521,7 +543,12 @@ public class Task {
 				
 				formatter = new SimpleDateFormat("dd-MMM-yy");
 				startDate = (Date)formatter.parse(this.date.substring(5,14));  
+				mthStartCal = Calendar.getInstance();
+				mthStartCal.setTime(startDate);
+				
 				endDate = (Date)formatter.parse(this.date.substring(18,27));
+				mthEndCal = Calendar.getInstance();
+				mthEndCal.setTime(endDate);
 
 				if(todayDates.equalsIgnoreCase("")){
 					
@@ -532,14 +559,36 @@ public class Task {
 					todayDate.set(Calendar.MILLISECOND, 0);
 					td = todayDate.getTime();
 					
+					//get the first date of the mth selected
+					selectedStartCal = (Calendar) todayDate.clone();
+					selectedStartCal.set(Calendar.DAY_OF_MONTH, 1);
+						
+					//get the last date of the mth selected
+					selectedEndCal = (Calendar) selectedStartCal.clone();
+					selectedEndCal.add(Calendar.DAY_OF_MONTH, selectedStartCal.getActualMaximum(Calendar.DAY_OF_MONTH)-1);	
+					
 				}else{
 					
 					td = (Date)formatter.parse(todayDates);
+					cal = Calendar.getInstance();
+					cal.setTime(td);
+					
+					//get the first date of the mth selected
+					selectedStartCal = (Calendar) cal.clone();
+					selectedStartCal.set(Calendar.DAY_OF_MONTH, 1);
+						
+					//get the last date of the mth selected
+					selectedEndCal = (Calendar) selectedStartCal.clone();
+					selectedEndCal.add(Calendar.DAY_OF_MONTH, selectedStartCal.getActualMaximum(Calendar.DAY_OF_MONTH)-1);	
+					
+					SimpleDateFormat adf = new SimpleDateFormat("dd-MMM-yy");
+					System.out.println(adf.format(selectedStartCal.getTime()) + " " + adf.format(selectedEndCal.getTime()) );
+					
 				}		
 				
 			}catch(Exception ex){System.out.println(ex);}
 			
-			if(!this.status.equalsIgnoreCase("non active")){
+			
 			
 			//check whether the tasks is this month
 			if((!this.time.equalsIgnoreCase("nil"))){	
@@ -551,7 +600,8 @@ public class Task {
 						
 					}catch(Exception ex){System.out.println(ex);}
 				
-					if((td.getMonth()>startDate.getMonth() && td.getMonth()<endDate.getMonth()) ||(td.getMonth()==startDate.getMonth() && td.getMonth()<=endDate.getMonth())){
+					if((!mthEndCal.before(selectedStartCal) && 
+							(!mthStartCal.after(selectedEndCal)))){
 						alltask [g][0]= startDate2;
 						alltask [g][1]= this.desc;			
 						alltask [g][2]= this.priority;			
@@ -559,20 +609,26 @@ public class Task {
 						alltask [g][4]= this.id;
 						alltask [g][5]= this.date;
 						alltask [g][6]= this.status;
-						alltask [g][7]= this.time;					
+						alltask [g][7]= this.time;
+						
+						if(this.status.replace(" ", "").equalsIgnoreCase("nonactive")){
+							
+							alltask [g][2]= this.status;			
+							
+						}
+						
 						g++;
 					}				
 				
 
 				
 			}
-			}
+			
 		}
 		
 		return alltask;
 		
 	}	
-	
 	//get all today event
 	public Object[][] getAllEventDay(String todayDates){
 		
