@@ -44,6 +44,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.*;
 import java.awt.LayoutManager;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 
 public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
@@ -881,7 +882,6 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		
 		detectInput = new DetectInput();				
 				 
-		//System.out.println("sd"+(detectInput.allTaskDay(todayDate))[0][1].toString());
 		//create table day & set some row color corresponding to the priority
 		tableDay = new JTable(detectInput.allTaskDay(todayDate),columnNames){
 			  public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
@@ -903,7 +903,6 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			  			comp.setBackground(Color.white);
 			  		}
 			  	
-			  		System.out.println(tableDay.getValueAt(Index_row, 2).toString());
 			  		return comp;
 		}};		
 		
@@ -994,7 +993,42 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		tableMonth.getColumnModel().getColumn(2).setMaxWidth(50);
 		tableMonth.getColumnModel().getColumn(3).setMaxWidth(50);
 		tableMonth.getColumnModel().getColumn(4).setMaxWidth(0);		
-		    
+
+		//own defined comparator for sorting the priority
+		Comparator<String> intComp = new Comparator<String>() {
+            public int compare(String o1, String o2) {
+                
+            	String a="",b="";
+            	
+                if (o1.equalsIgnoreCase("high")) a="1"; 
+                else if (o1.equalsIgnoreCase("medium")) a="2";
+                else if (o1.equalsIgnoreCase("low")) a="3";
+                
+                if (o2.equalsIgnoreCase("high")) b="1"; 
+                else if (o2.equalsIgnoreCase("medium")) b="2";
+                else if (o2.equalsIgnoreCase("low")) b="3";
+                
+                return a.compareTo(b);
+                	                	
+            }
+        };
+        
+        //apply table sort model to each table
+		TableRowSorter<TableModel> sorterDay = new TableRowSorter<TableModel>(tableDay.getModel());
+		TableRowSorter<TableModel> sorterWeek = new TableRowSorter<TableModel>(tableWeek.getModel());
+		TableRowSorter<TableModel> sorterMonth = new TableRowSorter<TableModel>(tableMonth.getModel());
+		
+		//assign the pre-defined priority comparator to each table's column priority, the rest of column will
+		//be using the default sort method
+		sorterDay.setComparator(3, intComp);
+		sorterWeek.setComparator(3, intComp);
+		sorterMonth.setComparator(3, intComp);
+		
+		//assign sort model to each table
+		tableDay.setRowSorter(sorterDay);		
+		tableWeek.setRowSorter(sorterWeek);
+		tableMonth.setRowSorter(sorterMonth);
+			
 		scrollPane = new JScrollPane(tableDay);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);

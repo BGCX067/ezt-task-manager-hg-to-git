@@ -259,8 +259,6 @@ public class Task {
 					td = (Date)formatter.parse(todayDates);
 				}
 			}catch(Exception ex){System.out.println(ex);}
-			
-			//if(this.status.equalsIgnoreCase("non active")){
 				
 			//check whether the tasks is today
 			if((!this.time.equalsIgnoreCase("nil")) && ((td.after(startDate) && td.before(endDate)) || td.equals(startDate) || td.equals(endDate))){				
@@ -313,7 +311,7 @@ public class Task {
 				}
 			}
 
-			//}
+			
 			
 		}
 		
@@ -326,40 +324,26 @@ public class Task {
 		
 		String changedTodayDates = "", changedTodayMonth = "", changedTodayYear = "", concate="",sample="";
 		SimpleDateFormat sdf;
-		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         Calendar cal;
         Date date;
-                
 		int lastID = 0, g = 0;
-		
 		DateFormat formatter ; 
 		Date td=null, startDate=null, endDate=null;
 		Calendar todayDate = null;
-		
-		int weekCurrent=0;
+		Object[][] alltask;
+		Object[][] newAllTask;
 		Calendar weekStartCal=null, weekEndCal=null;
 		Calendar selectedStartCal = null, selectedEndCal = null;
 		
 		GetLastID fileIO = new GetLastID();
 		lastID = fileIO.getLastID();
 		
+		alltask = new Object[lastID][8];
+		
 		ReadFromText readTask = new ReadFromText();
 		
 		StringTokenizer st;
 		
-		Object[][] alltask = new Object[lastID][8]; 
-		/*
-		for(int i=0;i<alltask.length;i++){
-			alltask[i][0] = " ";
-			alltask[i][1] = " ";
-			alltask[i][2] = " ";
-			alltask[i][3] = " ";
-			alltask[i][4] = " ";
-			alltask[i][5] = " ";
-			alltask[i][6] = " ";
-			alltask[i][7] = " ";
-		}
-		*/
 		for(int i=1;i<=lastID;i++){			
 			
 			st = new StringTokenizer(readTask.read(Integer.toString(i)), ".");
@@ -488,7 +472,19 @@ public class Task {
 			
 		}
 		
-		return alltask;
+		// create a new smaller array
+	    newAllTask = new Object[g][8];
+		
+	    for (int i=0;i<g;i++) {	        
+		
+	        	for(int c=0; c<8; c++){
+	        		newAllTask[i][c] = alltask[i][c];
+	        		
+	        	}
+	        
+	    }
+				
+		return newAllTask;
 		
 	}	
 	
@@ -496,11 +492,11 @@ public class Task {
 	public Object[][] getAllTaskMonth(String todayDates){
 		
 		int lastID = 0, g=0;
-
+		Object[][] alltask;
+		Object[][] newAllTask;
 		DateFormat formatter , formatter2 ; 
 		Date td=null, startDate=null, endDate=null,startDate2=null;
 		Calendar todayDate;
-		
 		Calendar mthStartCal = null, mthEndCal = null;
 		Calendar selectedStartCal = null, selectedEndCal = null;
 		Calendar cal=null;
@@ -508,23 +504,12 @@ public class Task {
 		GetLastID fileIO = new GetLastID();
 		lastID = fileIO.getLastID();
 		
+		alltask = new Object[lastID][8];
+		
 		ReadFromText readTask = new ReadFromText();
 		
 		StringTokenizer st;
 		
-		Object[][] alltask = new Object[lastID][8];
-/*		
-		for(int i=0;i<alltask.length;i++){
-			alltask[i][0] = " ";
-			alltask[i][1] = " ";
-			alltask[i][2] = " ";
-			alltask[i][3] = " ";
-			alltask[i][4] = " ";
-			alltask[i][5] = " ";
-			alltask[i][6] = " ";
-			alltask[i][7] = " ";
-		}
-	*/	
 		for(int i=1;i<=lastID;i++){			
 			
 			st = new StringTokenizer(readTask.read(Integer.toString(i)), ".");
@@ -587,9 +572,7 @@ public class Task {
 				}		
 				
 			}catch(Exception ex){System.out.println(ex);}
-			
-			
-			
+				
 			//check whether the tasks is this month
 			if((!this.time.equalsIgnoreCase("nil"))){	
 
@@ -619,14 +602,23 @@ public class Task {
 						
 						g++;
 					}				
-				
-
-				
+		
 			}
 			
 		}
 		
-		return alltask;
+		// create a new smaller array
+	    newAllTask = new Object[g][8];
+		
+	    for (int i=0;i<g;i++) {	        
+		
+	        	for(int c=0; c<8; c++){
+	        		newAllTask[i][c] = alltask[i][c];
+	        	}
+	        
+	    }
+				
+		return newAllTask;
 		
 	}	
 	//get all today event
