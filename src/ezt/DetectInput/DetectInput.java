@@ -1,8 +1,10 @@
 package ezt.DetectInput;
 
 import ezt.BasicTaskFunc.*;
+import ezt.FileIO.*;
 import ezt.Reminder.*;
 
+import java.util.List;
 import java.util.StringTokenizer;
 
 //this is the Facade class which act as a wall btn the UI and internal components
@@ -14,6 +16,7 @@ public class DetectInput {
 		String id = "", desc = "", date = "", time = "", priority = "", status = "Active";
 		Boolean onAlert = false;
 		
+		
 		//create task command
 		if(input.substring(0,3).equalsIgnoreCase("add")){
 																	
@@ -23,9 +26,11 @@ public class DetectInput {
 					
 					st.nextToken();
 					desc = st.nextToken();
+					writeWordList("Description:"+desc);//save user typed word for future autocomplete
 					date = st.nextToken();
 					time = st.nextToken();					
 					priority = st.nextToken();
+					
 					if(st.nextToken().equalsIgnoreCase("yes")){
 						onAlert = true;
 					}else {
@@ -160,9 +165,25 @@ public class DetectInput {
 		
 		SearchTask read = new SearchTask();
 
-		if(desc.substring(0,1).equalsIgnoreCase("p")) return read.searchByPriority(desc.substring(1));
-		else if (desc.substring(0,1).equalsIgnoreCase("s")) return read.searchByStatus(desc.substring(1));
+		if(desc.substring(0,2).equalsIgnoreCase("-p")) return read.searchByPriority(desc.substring(2));
+		else if (desc.substring(0,2).equalsIgnoreCase("-s")) return read.searchByStatus(desc.substring(2));
 		else return read.searchByDesc(desc);
+		
+	}
+	
+	public List<String> readWordList(){
+		
+		ReadFromText read = new ReadFromText();
+		
+		return read.readWordList(); 
+		
+	}
+
+	public void writeWordList(String word){
+		
+		WriteToText write = new WriteToText();
+		
+		write.writeWordList(word); 
 		
 	}
 	

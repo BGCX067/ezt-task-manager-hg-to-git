@@ -5,7 +5,8 @@ import java.io.*;
 //this class is to write/append the task into task.txt
 public class WriteToText {
 
-	private static final String fileName = "Task.txt";	
+	private static final String fileName = "Task.txt";
+	private static final String fileName2 = "wordList.txt";	
 	
 	public void write(Object task){
 
@@ -26,5 +27,22 @@ public class WriteToText {
         }
 		
 	}	
-	
+
+	public void writeWordList(String word){
+
+		try{
+	        
+            OutputStreamWriter writer = new OutputStreamWriter(
+                  new FileOutputStream(fileName2, true), "UTF-8");
+            BufferedWriter fbw = new BufferedWriter(writer);
+            fbw.write(word);
+            fbw.newLine();
+            fbw.close();
+    		
+        }catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+		
+	}	
+
 }

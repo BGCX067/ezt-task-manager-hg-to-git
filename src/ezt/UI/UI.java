@@ -1,23 +1,15 @@
 package ezt.UI;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.GridLayout;
-
 import com.melloware.jintellitype.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.SystemColor;
-
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
@@ -28,11 +20,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-
 import java.awt.Event;
 import ezt.DetectInput.*;
 import ezt.Reminder.runReminder;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -43,14 +33,18 @@ import java.awt.event.FocusEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.*;
-import java.awt.LayoutManager;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
+import java.util.List;
+
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 
 	private static JPanel contentPane;
-	private JTextField commandBox;
+	final JTextField commandBox;
 	private JLabel lblFilterBy;
 	private JLabel lblNewLabel;
 	private JLabel lblMediumhighPriority;
@@ -66,7 +60,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	private String[] columnNamesEvent = {"ID",""};
 	private int countFocus=0;
 	private static final int CTRL_D = 90;
-	private static UI frame, frame2;
+	private static UI frame;
 	JTable tableDay;
 	JTable tableWeek;
 	JTable tableMonth;
@@ -81,7 +75,6 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	DefaultTableModel tableModel;
 	
 	DetectInput detectInput;
-	
 	String id="", eventID="";
 	static JLabel lblMonth, lblYear;
 	static JButton btnPrev, btnNext;
@@ -211,6 +204,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);	
+		DetectInput searchWord = new DetectInput();
 		
 		internalFrame = new JInternalFrame("Actions");
 		internalFrame.setClosable(true);
@@ -318,8 +312,15 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		lblLowPriority.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		lblLowPriority.setBounds(537, 418, 120, 20);
 		contentPane.add(lblLowPriority);
-				
+		
 		commandBox = new JTextField();
+		
+		boolean strictMatching = false;//set command box not only allow user to key in matched keyword in word list  
+		     
+		//create auto complete for command box
+		//the saved word list is in the wordList.txt
+		AutoCompleteDecorator.decorate(commandBox,searchWord.readWordList(),strictMatching);  
+		
 		commandBox.setText("Please enter your command here");
 		commandBox.addFocusListener(new FocusAdapter() {
 			@Override//default text in textbox if it is unfocused
@@ -345,7 +346,6 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		commandBox.setColumns(10);
 		
 		contentPane.setLayout(null); //Apply null layout
-		
 
 		//Create controls
 		lblMonth = new JLabel ("January");
@@ -416,6 +416,8 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		hintlbl = new JLabel("");
 		hintlbl.setBounds(26, 604, 416, 20);
 		contentPane.add(hintlbl);
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{commandBox, tableDay,tblCalendar,  btnPrev, 
+				btnNext, cmbYear,contentPane,internalFrame.getContentPane(), btnNewButton_3, btnNewButton_4, btnNewButton_5}));
 		mtblCalendar.setColumnCount(7);
 		mtblCalendar.setRowCount(6);
 		
@@ -457,7 +459,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 							
 							if(noOfInputSearch == 1 && countSearch == 2){
 									
-								searchVar = "p"+commandBox.getText().substring(9);
+								searchVar = "-p"+commandBox.getText().substring(9);
 								
 															
 								initPane(todayDate);
@@ -502,7 +504,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 							if(noOfInputSearch == 1 && countSearch == 2){
 									
 								searchVar = commandBox.getText().substring(12);
-							
+															
 								initPane(todayDate);
 								
 								int w =0;
@@ -544,7 +546,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 							
 							if(noOfInputSearch == 1 && countSearch == 2){
 									
-								searchVar = "s"+commandBox.getText().substring(7);
+								searchVar = "-s"+commandBox.getText().substring(7);
 							
 								initPane(todayDate);
 								
@@ -591,17 +593,24 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 									
 									concateAddInput += "add," + (commandBox.getText()).substring(12);
 								
-									commandBox.setText("Date:");
-									hintlbl.setText("Hints: from DD-MMM-YY to DD-MMM-YY");
+									commandBox.setText("Date (From):");
+									hintlbl.setText("Hints: DD-MMM-YY");
 									
 								}else if(noOfInputAdd == 3){
+									
+									concateAddInput += ",from " + (commandBox.getText()).substring(12);
 								
-									concateAddInput += "," + (commandBox.getText()).substring(5);
+									commandBox.setText("Date (To):");
+									hintlbl.setText("Hints: DD-MMM-YY");
+									
+								}else if(noOfInputAdd == 4){
+									
+									concateAddInput += " to " + (commandBox.getText()).substring(10) ;
 									
 									commandBox.setText("Time:");
 									hintlbl.setText("Hints: nil/hh-hh");
 									
-								}else if(noOfInputAdd == 4){
+								}else if(noOfInputAdd == 5){
 																	
 									//if user enter nil for time of the task, it considers as an event, else a task
 									if(commandBox.getText().substring(5).equalsIgnoreCase("nil")){
@@ -619,14 +628,14 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 									commandBox.setText("Priority:");
 									hintlbl.setText("Hints: high/medium/low");
 									
-								}else if(noOfInputAdd == 5){
+								}else if(noOfInputAdd == 6){
 									
 									concateAddInput += "," + (commandBox.getText()).substring(9);
 									
 									commandBox.setText("Alert:");
 									hintlbl.setText("Hints: yes/no");
 									
-								}else if(noOfInputAdd == 6){
+								}else if(noOfInputAdd == 7){
 									
 									concateAddInput += "," + (commandBox.getText()).replace(" ", "").substring(6);
 									
@@ -881,30 +890,34 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		}
 		
 		detectInput = new DetectInput();				
-				 
+				
 		//create table day & set some row color corresponding to the priority
 		tableDay = new JTable(detectInput.allTaskDay(todayDate),columnNames){
 			  public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
 				  
 				  Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
-				  			  	
+				 	  	
 				    //set the row color which corresponding to the task priority
-			  		if(tableDay.getValueAt(Index_row, 2).toString().equalsIgnoreCase("high"))  {
+			  		if(tableDay.getValueAt(Index_row, 2).toString().equalsIgnoreCase("high"))  {			  			
 			  			comp.setBackground(Color.red);
 			  		}else if(tableDay.getValueAt(Index_row, 2).toString().equalsIgnoreCase("medium"))  {
 			  			comp.setBackground(Color.yellow);
+			  			
 			  		}else if(tableDay.getValueAt(Index_row, 2).toString().equalsIgnoreCase("low"))  {
 			  			comp.setBackground(Color.green);
-			  		}else if(tableDay.getValueAt(Index_row, 2).toString().equalsIgnoreCase(" "))  {
+			  		}else if(tableDay.getValueAt(Index_row, 2).toString().equalsIgnoreCase("  "))  {
 			  			comp.setBackground(Color.white);
-			  		}else if(tableDay.getValueAt(Index_row, 2).toString().equalsIgnoreCase("non active"))  {
-			  			comp.setBackground(Color.gray);
+			  		}else if(tableDay.getValueAt(Index_row, 2).toString().contains(" "))  {			  			
+			  			comp.setBackground(Color.gray);			  			
 			  		}else{
 			  			comp.setBackground(Color.white);
 			  		}
 			  	
 			  		return comp;
-		}};		
+			  		
+			  }};		
+		
+		
 		
 		tableDay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
@@ -922,8 +935,8 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			  			comp.setBackground(Color.yellow);
 			  		}else if(tableWeek.getValueAt(Index_row, 2).toString().equalsIgnoreCase("low"))  {
 			  			comp.setBackground(Color.green);
-			  		}else if(tableWeek.getValueAt(Index_row, 2).toString().equalsIgnoreCase("non active"))  {
-			  			comp.setBackground(Color.gray);
+			  		}else if(tableDay.getValueAt(Index_row, 2).toString().contains(" "))  {			  			
+			  			comp.setBackground(Color.gray);			  			
 			  		}else{
 			  			comp.setBackground(Color.white);
 			  		}
@@ -950,8 +963,8 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			  			comp.setBackground(Color.yellow);
 			  		}else if(tableMonth.getValueAt(Index_row, 2).toString().equalsIgnoreCase("low"))  {
 			  			comp.setBackground(Color.green);
-			  		}else if(tableMonth.getValueAt(Index_row, 2).toString().equalsIgnoreCase("non active"))  {
-			  			comp.setBackground(Color.gray);
+			  		}else if(tableDay.getValueAt(Index_row, 2).toString().contains(" "))  {			  			
+			  			comp.setBackground(Color.gray);			  			
 			  		}else{
 			  			comp.setBackground(Color.white);
 			  		}
@@ -1146,7 +1159,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
     private class RowListenerDay implements ListSelectionListener {
         public void valueChanged(ListSelectionEvent event) {
         	
-        	if((tableDay.getValueAt(tableDay.getSelectedRows()[0], 1)!="")){
+        	if((tableDay.getValueAt(tableDay.getSelectedRows()[0], 1)!="  ")){
         		
         		if (event.getValueIsAdjusting()) {
         			return;

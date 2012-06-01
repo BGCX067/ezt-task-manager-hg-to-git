@@ -1,12 +1,14 @@
 package ezt.FileIO;
-
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 //this class is to read the task from task.txt by task ID
 public class ReadFromText {
 
 	private static final String fileName = "Task.txt";	
+	private static final String fileName2 = "wordList.txt";
 	
 	public String read(String searhTaskID){
 		
@@ -57,6 +59,7 @@ public class ReadFromText {
 		String concateTask = "", taskDetails, strLine;
 		String id = "", date="", time="", priority="", alert="", status="";
 		Object [][] searchResult= new Object [20][7];
+		Object [][] newAllTask = null;
 		int i=0;
 		
 		try{
@@ -81,10 +84,9 @@ public class ReadFromText {
   					priority = st.nextToken();
   					alert = st.nextToken();
   					status = st.nextToken();
-  					
+  				
   					if(taskDetails.contains(desc)){
-  					
-					
+  										
   						searchResult[i][0] = date;
   					    searchResult[i][1] = taskDetails;
   					    searchResult[i][2] = priority;
@@ -100,16 +102,28 @@ public class ReadFromText {
   				  				
   			}
   			
+  			// create a new smaller array
+  		    newAllTask = new Object[i][8];
+  			
+  		    for (int f=0;f<i;f++) {	        
+  			
+  		        	for(int c=0; c<8; c++){
+  		        		newAllTask[f][c] = searchResult[f][c];
+  		        		
+  		        	}
+  		        
+  		    }
+  		    
 		}catch (Exception e) {
 			
             System.out.println("Error: " + e.getMessage());
         }   	
     
-		return searchResult;
+		return newAllTask;
 	
 	}
 
-public Object[][] readByStatus(String statuss){
+	public Object[][] readByStatus(String statuss){
 		
 		String concateTask = "", taskDetails, strLine;
 		String id = "", date="", time="", priority="", alert="", status="";
@@ -164,58 +178,89 @@ public Object[][] readByStatus(String statuss){
 	
 	}
 
-public Object[][] readByPriority(String Prioritys){
-		
-		String concateTask = "", taskDetails, strLine;
-		String id = "", date="", time="", priority="", alert="", status="";
-		Object [][] searchResult= new Object [20][7];
-		int i=0;
-		
-		try{
+	public Object[][] readByPriority(String Prioritys){
 			
-			FileInputStream fstream = new FileInputStream(fileName);
-
-			// Get the object of DataInputStream
-			DataInputStream in = new DataInputStream(fstream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));   		
-
-  			//Read File Line By Line
-  			while ((strLine = br.readLine()) != null)   {
-  				
-  				StringTokenizer st = new StringTokenizer(strLine, "/");
-  				
-  				while(st.hasMoreTokens()) {
-  					
-  					id = st.nextToken();  					
-  					taskDetails = st.nextToken();
-  					date = st.nextToken();
-  					time = st.nextToken();
-  					priority = st.nextToken();
-  					alert = st.nextToken();
-  					status = st.nextToken();
-  					
-  				 if(priority.equalsIgnoreCase(Prioritys)){
-  					
-  						searchResult[i][0] = date;
-  					    searchResult[i][1] = taskDetails;
-  					    searchResult[i][2] = priority;
-  					    searchResult[i][3] = alert;
-  					    searchResult[i][4] = id;
-  					    searchResult[i][5] = time;
-  					    searchResult[i][6] = status;
-  					    i++;
-  					}
-  					    
-  				}  				
-  				  				
-  			}
-  			
-		}catch (Exception e) {
+			String concateTask = "", taskDetails, strLine;
+			String id = "", date="", time="", priority="", alert="", status="";
+			Object [][] searchResult= new Object [20][7];
+			int i=0;
 			
-            System.out.println("Error: " + e.getMessage());
-        }   	
-    
-		return searchResult;
+			try{
+				
+				FileInputStream fstream = new FileInputStream(fileName);
 	
-	}
+				// Get the object of DataInputStream
+				DataInputStream in = new DataInputStream(fstream);
+				BufferedReader br = new BufferedReader(new InputStreamReader(in));   		
+	
+	  			//Read File Line By Line
+	  			while ((strLine = br.readLine()) != null)   {
+	  				
+	  				StringTokenizer st = new StringTokenizer(strLine, "/");
+	  				
+	  				while(st.hasMoreTokens()) {
+	  					
+	  					id = st.nextToken();  					
+	  					taskDetails = st.nextToken();
+	  					date = st.nextToken();
+	  					time = st.nextToken();
+	  					priority = st.nextToken();
+	  					alert = st.nextToken();
+	  					status = st.nextToken();
+	  					
+	  				 if(priority.equalsIgnoreCase(Prioritys)){
+	  					
+	  						searchResult[i][0] = date;
+	  					    searchResult[i][1] = taskDetails;
+	  					    searchResult[i][2] = priority;
+	  					    searchResult[i][3] = alert;
+	  					    searchResult[i][4] = id;
+	  					    searchResult[i][5] = time;
+	  					    searchResult[i][6] = status;
+	  					    i++;
+	  					}
+	  					    
+	  				}  				
+	  				  				
+	  			}
+	  			
+			}catch (Exception e) {
+				
+	            System.out.println("Error: " + e.getMessage());
+	        }   	
+	    
+			return searchResult;
+		
+		}
+	
+	public List<String> readWordList(){
+	
+	String strLine;
+	
+	List<String> list= new ArrayList<String>();
+	
+	try{
+		
+		FileInputStream fstream = new FileInputStream(fileName2);
+
+		// Get the object of DataInputStream
+		DataInputStream in = new DataInputStream(fstream);
+		BufferedReader br = new BufferedReader(new InputStreamReader(in));   		
+
+			//Read File Line By Line
+			while ((strLine = br.readLine()) != null)   {
+				
+				list.add(strLine);
+								
+			}
+			
+	}catch (Exception e) {
+        System.out.println("Error: " + e.getMessage());
+    }   	
+	
+	return list;
 }
+
+}
+
+

@@ -215,13 +215,13 @@ public class Task {
 		for(int c=0;c<timesInDay.length;c++){
 			
 			alltask [c][0]= timesInDay[c];
-			alltask [c][1]= " ";
-			alltask [c][2]= " ";
-			alltask [c][3]= " ";
-			alltask [c][4]= " ";
-			alltask [c][5]= " ";
-			alltask [c][6]= " ";
-			alltask [c][7]= " ";
+			alltask [c][1]= "  ";
+			alltask [c][2]= "  ";
+			alltask [c][3]= "  ";
+			alltask [c][4]= "  ";
+			alltask [c][5]= "  ";
+			alltask [c][6]= "  ";
+			alltask [c][7]= "  ";
 		}
 		
 		for(int i=1;i<=lastID;i++){			
@@ -289,7 +289,7 @@ public class Task {
 						
 						if(this.status.replace(" ", "").equalsIgnoreCase("nonactive")){
 							
-							alltask [c][2]= this.status;			
+							alltask [c][2]= " "+priority;			
 							
 						}
 						
@@ -464,7 +464,12 @@ public class Task {
 					alltask [g][6]= this.status;
 					alltask [g][7]= this.time;
 					
-
+					if(this.status.replace(" ", "").equalsIgnoreCase("nonactive")){
+						
+						alltask [g][2]=  " "+priority;			
+						
+					}
+					
 					g++;
 					
 					
@@ -565,10 +570,7 @@ public class Task {
 					//get the last date of the mth selected
 					selectedEndCal = (Calendar) selectedStartCal.clone();
 					selectedEndCal.add(Calendar.DAY_OF_MONTH, selectedStartCal.getActualMaximum(Calendar.DAY_OF_MONTH)-1);	
-					
-					SimpleDateFormat adf = new SimpleDateFormat("dd-MMM-yy");
-					System.out.println(adf.format(selectedStartCal.getTime()) + " " + adf.format(selectedEndCal.getTime()) );
-					
+										
 				}		
 				
 			}catch(Exception ex){System.out.println(ex);}
@@ -596,7 +598,7 @@ public class Task {
 						
 						if(this.status.replace(" ", "").equalsIgnoreCase("nonactive")){
 							
-							alltask [g][2]= this.status;			
+							alltask [g][2]=  " "+priority;			
 							
 						}
 						
