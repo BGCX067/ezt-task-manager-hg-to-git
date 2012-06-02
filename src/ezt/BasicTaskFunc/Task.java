@@ -1,6 +1,10 @@
 package ezt.BasicTaskFunc;
 
+import ezt.DetectInput.Global;
 import ezt.FileIO.*;
+import ezt.Reminder.SendReminderEmail;
+import ezt.Reminder.SendSMSmessage;
+import ezt.Reminder.runReminder;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -193,9 +197,9 @@ public class Task {
 		
 		int lastID = 0, g = 0;
 		int startTime = 0;
-		DateFormat formatter ; 
-		Date td=null, startDate=null, endDate=null;
-		Calendar todayDate;
+		DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); 
+		Date td=null, startDate=null, endDate=null, reminderTd=null;
+		Calendar todayDate,reminderTodayDate;
 					
 		GetLastID fileIO = new GetLastID();
 		lastID = fileIO.getLastID();
@@ -241,7 +245,6 @@ public class Task {
 					
 			try{
 				
-				formatter = new SimpleDateFormat("dd-MMM-yy");
 				startDate = (Date)formatter.parse(this.date.substring(5,14));//parse the start date in string to date object  
 				endDate = (Date)formatter.parse(this.date.substring(18,27));//parse the end date in string to date object
 				
@@ -286,7 +289,7 @@ public class Task {
 						alltask [c][5]= this.date;
 						alltask [c][6]= this.status;
 						alltask [c][7]= this.time;
-						
+												
 						if(this.status.replace(" ", "").equalsIgnoreCase("nonactive")){
 							
 							alltask [c][2]= " "+priority;			
@@ -693,4 +696,101 @@ public class Task {
 		return alltask;
 		
 	}	
+	
+	//check the today task & remind one hour before the task due
+	public boolean todayHaveReminder(){		
+		
+		int lastID = 0;
+		DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); 
+		Date td=null, startDate=null, endDate=null, reminderTd=null;
+		Calendar todayDate,reminderTodayDate;
+		boolean haveReminder = false, raiseAlarm=false;
+		Global.reminderDesc = "<html>";
+					
+		GetLastID fileIO = new GetLastID();
+		lastID = fileIO.getLastID();
+		String concateTask="";
+		
+		ReadFromText readTask = new ReadFromText();
+		
+		StringTokenizer st;		
+		
+		for(int i=1;i<=lastID;i++){			
+			
+			st = new StringTokenizer(readTask.read(Integer.toString(i)), ".");
+			
+			while(st.hasMoreTokens()) {
+				
+				this.id = Integer.parseInt(st.nextToken());
+				this.desc = st.nextToken();
+				this.date = st.nextToken();
+				this.time = st.nextToken();
+				this.priority = st.nextToken();
+				this.onAlert = Boolean.parseBoolean(st.nextToken());
+				this.status = st.nextToken();
+				
+			}
+					
+			try{
+				
+				startDate = (Date)formatter.parse(this.date.substring(5,14));//parse the start date in string to date object  
+				endDate = (Date)formatter.parse(this.date.substring(18,27));//parse the end date in string to date object			
+				todayDate = Calendar.getInstance();
+				todayDate.set(Calendar.MINUTE, 0);
+				todayDate.set(Calendar.SECOND, 0);
+				todayDate.set(Calendar.MILLISECOND, 0);
+				td = todayDate.getTime();
+					
+			}catch(Exception ex){System.out.println(ex);}
+				
+			//check whether the tasks is today then raise alarm & send reminder email if on alert is true
+			if(this.onAlert==true && ((td.after(startDate) && td.before(endDate)) || td.equals(startDate) || td.equals(endDate))){				
+			
+				reminderTodayDate = Calendar.getInstance();
+				reminderTodayDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(this.time.substring(0, 2)));
+				reminderTodayDate.add(Calendar.HOUR, -1);//remind one hour before the task due
+				reminderTodayDate.set(Calendar.MINUTE, 0);
+				reminderTodayDate.set(Calendar.SECOND, 0);
+				reminderTodayDate.set(Calendar.MILLISECOND, 0);
+				reminderTd = reminderTodayDate.getTime();
+										
+				Global.reminderDesc += this.desc +"<br>";
+				
+				runReminder reminder = new runReminder();
+			            
+				haveReminder = reminder.reminder(formatter.format(reminderTd));
+				
+				if(haveReminder==true && td.getHours()==reminderTd.getHours()){
+					
+					ReadEmailAddr receiverEmail = new ReadEmailAddr();
+					
+					ReadHpNo receiverHpNo = new ReadHpNo();
+				
+					SendReminderEmail sendEmail = new SendReminderEmail();
+					
+					SendSMSmessage sendsms = new SendSMSmessage();
+				
+					raiseAlarm = true;
+					
+					try{
+						
+						//send sms alert, msg cannot be too long due to free sms server
+						sendsms.sendMessage("65"+receiverHpNo.read(), "Rem: "+ this.desc+ " & Time: "+ this.time, "", "", "", "");
+						
+						//send reminder email
+						sendEmail.sendEmail(receiverEmail.read(),"\n\nTask/Event: " + this.desc + "\nDate: " + this.date+ 
+							"\nTime: " + this.time + "\nPriority: " + this.priority + "\nStatus: " + this.status + "\n\n");
+					
+					}catch(Exception e){System.out.println(e);}
+				}	
+			}
+				
+		}
+		
+		Global.reminderDesc += "</html>";
+		
+		return raiseAlarm;
+		
+	}	
+		
 }

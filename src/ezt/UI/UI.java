@@ -1,9 +1,12 @@
 package ezt.UI;
 
+import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.EventQueue;
+import java.awt.Robot;
+
 import com.melloware.jintellitype.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -21,7 +24,10 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.Event;
+
 import ezt.DetectInput.*;
+import ezt.FileIO.WriteEmailAddr;
+import ezt.Reminder.AePlayWave;
 import ezt.Reminder.runReminder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,7 +40,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -72,8 +80,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	JScrollPane scrollPane_1;
 	JScrollPane scrollPane_2;
 	JScrollPane scrollPane_3;
-	DefaultTableModel tableModel;
-	
+	DefaultTableModel tableModel;	
 	DetectInput detectInput;
 	String id="", eventID="";
 	static JLabel lblMonth, lblYear;
@@ -87,30 +94,35 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	static JPanel pnlCalendar;
 	static JLabel hintlbl;
 	static int realYear, realMonth, realDay, currentYear, currentMonth;
+	
 
 	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+	
+		Calendar todayDate = Calendar.getInstance();
+		todayDate.set(Calendar.HOUR_OF_DAY, 0);
+		todayDate.set(Calendar.MINUTE, 0);
+		todayDate.set(Calendar.SECOND, 0);
+		todayDate.set(Calendar.MILLISECOND, 0);
+		Date td = todayDate.getTime();
 		
-		/* Method under construction for Reminder
-		 * 
-		 * DetectInput di = new DetectInput();
+		new java.util.Timer().schedule( 
+		        new java.util.TimerTask() {
+		            @Override
+		            public void run() {	            	
+		            	
+		            	DetectInput remind = new DetectInput();
+		            	if(remind.runReminder()) {new frameReminder();}		            	
+		            	
+		            }
+		        }, 
+		       td, 3600000
+		);
 		
-		try{
-
-			//while (true) {
-            
-				//if(di.runReminder()) {new frameReminder();}
-            
-				//Thread.sleep(100 * 1000);
-				
-			//}
-			
-		} catch (Exception e) {
-	        System.out.println("Error in UI: "+e);
-	    }*/		
+		//3600000-every hour will check the task today to remind or not remind again
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -421,7 +433,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		mtblCalendar.setColumnCount(7);
 		mtblCalendar.setRowCount(6);
 		
-		//Populate table// put color
+		//Populate table
 		for (int i=realYear-100; i<=realYear+100; i++){
 			cmbYear.addItem(String.valueOf(i));
 		}
@@ -578,8 +590,21 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 							
 						}else{
 							
-							//print some default add task command to user
-							if(input.equalsIgnoreCase("a") || input.equalsIgnoreCase("add")  || isAdd == true){
+							if(input.substring(0,1).equalsIgnoreCase("e")){//set email address to receive email alert
+				  				
+								DetectInput setEmails = new DetectInput();
+													
+								success =  setEmails.setEmail(input.substring(2));
+								
+								   
+							}else if(input.substring(0,1).equalsIgnoreCase("h")){//set hp no to receive sms alert
+				  				
+								DetectInput setHpNo = new DetectInput();
+													
+								success =  setHpNo.setHpNo(input.substring(2));
+								
+								   //print some default add task command to user
+							}else if(input.equalsIgnoreCase("a") || input.equalsIgnoreCase("add")  || isAdd == true){
 							
 								isAdd = true;
 								
@@ -767,6 +792,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			int row = new Integer((i+som-2)/7);
 			int column  =  (i+som-2)%7;
 			mtblCalendar.setValueAt(i, row, column);
+			
 		}
 
 		//Apply renderers
@@ -1296,7 +1322,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 
 class  frameReminder extends JFrame {
     /**
-	 * 
+	 * reminder frame
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -1309,13 +1335,42 @@ class  frameReminder extends JFrame {
 		contentPaneReminder.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPaneReminder);
 		contentPaneReminder.setLayout(null);
-		getContentPane().setLayout(null);					
-		JLabel lblNewLabelReminder = new JLabel("New label");
+		getContentPane().setLayout(null);		
+		
+		JLabel lblNewLabelReminder = new JLabel(Global.reminderDesc);//label for the task desc in reminder frame
+		
+		lblNewLabelReminder.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				setVisible(false);
+				
+				try {
+			        Robot robot = new Robot();
+
+			        // Simulate a key press to activate the task manager
+			        robot.keyPress(KeyEvent.VK_CONTROL);
+			        robot.keyPress(KeyEvent.VK_D);
+			        robot.keyRelease(KeyEvent.VK_D);
+			        robot.keyRelease(KeyEvent.VK_CONTROL);
+
+				} catch (AWTException e) {
+			        e.printStackTrace();
+				}
+				
+			}
+		});
+		
 		lblNewLabelReminder.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblNewLabelReminder.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/Crystal_Project_bell.png")));
 		lblNewLabelReminder.setBounds(0, 0, 304, 91);
 		getContentPane().add(lblNewLabelReminder);
 		setVisible(true);
+		
+		//start the reminder alarm
+		AePlayWave alarm= new AePlayWave("alarmSound.wav");
+		alarm.start();
+		
+		Global.reminderDesc ="";
 		
     } //-- ends constructor
     

@@ -189,15 +189,22 @@ public class DetectInput {
 	
 	public static boolean runReminder(){
 		
-		boolean r=false;
-		
-		try{
-			runReminder reminder = new runReminder();
-            
-			r = reminder.reminder("29-May-12");
-		}catch(Exception ex){System.out.println("Error in DetectInput: "+ex);}
+		Task checkTodayTask = new Task();
+		return checkTodayTask.todayHaveReminder();
+	}
 	
-		return r;
+	public boolean setEmail(String email){
+		
+		WriteEmailAddr setEmail = new WriteEmailAddr();
+		
+		return setEmail.write(email);
+	}
+	
+	public boolean setHpNo(String hpno){
+		
+		WriteHpNo setHpNo = new WriteHpNo();
+		
+		return setHpNo.write(hpno);
 	}
 
 }
