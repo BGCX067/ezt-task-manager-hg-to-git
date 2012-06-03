@@ -744,11 +744,17 @@ public class Task {
 			}catch(Exception ex){System.out.println(ex);}
 				
 			//check whether the tasks is today then raise alarm & send reminder email if on alert is true
-			if(this.onAlert==true && ((td.after(startDate) && td.before(endDate)) || td.equals(startDate) || td.equals(endDate))){				
+			if((this.onAlert==true && ((td.after(startDate) && td.before(endDate)) || td.equals(startDate) || td.equals(endDate)))){				
 			
 				reminderTodayDate = Calendar.getInstance();
-				reminderTodayDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(this.time.substring(0, 2)));
-				reminderTodayDate.add(Calendar.HOUR, -1);//remind one hour before the task due
+				
+				if(!this.time.equalsIgnoreCase("nil")){
+					reminderTodayDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(this.time.substring(0, 2)));
+					reminderTodayDate.add(Calendar.HOUR, -1);//remind one hour before the task due
+				}else{
+					reminderTodayDate.set(Calendar.HOUR_OF_DAY, 0);
+					
+				}				
 				reminderTodayDate.set(Calendar.MINUTE, 0);
 				reminderTodayDate.set(Calendar.SECOND, 0);
 				reminderTodayDate.set(Calendar.MILLISECOND, 0);
@@ -759,8 +765,8 @@ public class Task {
 				runReminder reminder = new runReminder();
 			            
 				haveReminder = reminder.reminder(formatter.format(reminderTd));
-				
-				if(haveReminder==true && td.getHours()==reminderTd.getHours()){
+								
+				if(haveReminder==true && ((td.getHours()==reminderTd.getHours()) || (this.time.equalsIgnoreCase("nil") && td.getDate()==reminderTd.getDate()))){
 					
 					ReadEmailAddr receiverEmail = new ReadEmailAddr();
 					
@@ -773,14 +779,23 @@ public class Task {
 					raiseAlarm = true;
 					
 					try{
-						
-						//send sms alert, msg cannot be too long due to free sms server
-						sendsms.sendMessage("65"+receiverHpNo.read(), "Rem: "+ this.desc+ " & Time: "+ this.time, "", "", "", "");
-						
-						//send reminder email
-						sendEmail.sendEmail(receiverEmail.read(),"\n\nTask/Event: " + this.desc + "\nDate: " + this.date+ 
-							"\nTime: " + this.time + "\nPriority: " + this.priority + "\nStatus: " + this.status + "\n\n");
-					
+						if(!this.time.equalsIgnoreCase("nil")){
+							//send sms alert, msg cannot be too long due to free sms server
+							//sendsms.sendMessage("65"+receiverHpNo.read(), "Rem: "+ this.desc + " | Time: "+ this.time, "", "", "", "");
+							
+							//send reminder email
+							sendEmail.sendEmail(receiverEmail.read(),"\n\nTask/Event: " + this.desc + "\nDate: " + this.date+ 
+								"\nTime: " + this.time + "\nPriority: " + this.priority + "\nStatus: " + this.status + "\n\n");
+							
+						}else{
+							//send sms alert, msg cannot be too long due to free sms server
+							//sendsms.sendMessage("65"+receiverHpNo.read(), "Rem: "+ this.desc, "", "", "", "");
+							
+							//send reminder email
+							sendEmail.sendEmail(receiverEmail.read(),"\n\nTask/Event: " + this.desc + "\nDate: " + this.date+ 
+								"\nPriority: " + this.priority + "\nStatus: " + this.status + "\n\n");
+						}
+											
 					}catch(Exception e){System.out.println(e);}
 				}	
 			}

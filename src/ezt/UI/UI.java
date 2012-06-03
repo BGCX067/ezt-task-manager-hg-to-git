@@ -62,7 +62,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	private boolean firstInitPane = true;
 	private boolean firstEventPane = true, isSearch = false, noSearch=false;	
 	private boolean isAdd = false, refreshTask = false, refreshEvent = false, isPrioritySearch = false, isNormalSearch=false, isStatusSearch = false;
-	private int noOfInputAdd = 0, noOfInputSearch=0, shortCut=1, countSearch =1;
+	private int noOfInputAdd = 0, noOfInputSearch=0, countSearch =1;
 	private static String concateAddInput = "", searchVar="", todayDate="";
 	private String[] columnNames = {"", "Description", "Priority", "Alert","ID"};
 	private String[] columnNamesEvent = {"ID",""};
@@ -145,21 +145,21 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 
 	   public void onHotKey(int aIdentifier) {
 		   
-		      if(Integer.toString(aIdentifier).equalsIgnoreCase("90") && shortCut == 1){
+		      if(Integer.toString(aIdentifier).equalsIgnoreCase("90") && Global.shortCut == 1){
 		    	  try{
 		    	  
 		    		  frame.setVisible(true);//show the task UI if ctrl+d pressed
 		    		  
-		    		  shortCut +=1;
+		    		  Global.shortCut +=1;
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
-		      }else if(Integer.toString(aIdentifier).equalsIgnoreCase("90") && shortCut == 2){
+		      }else if(Integer.toString(aIdentifier).equalsIgnoreCase("90") && Global.shortCut == 2){
 		    	  try{
 		    	 
 		    		  frame.setVisible(false);//hide the task UI if ctrl+D pressed again
 		    		  
-		    		  shortCut -=1;
+		    		  Global.shortCut -=1;
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
 		      }
@@ -198,7 +198,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		isStatusSearch = false;
 		noOfInputAdd = 0;
 		noOfInputSearch=0;
-		shortCut=1;
+		Global.shortCut=1;
 		countSearch =1;
 		concateAddInput = "";
 		searchVar="";
@@ -217,6 +217,31 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		setContentPane(contentPane);
 		contentPane.setLayout(null);	
 		DetectInput searchWord = new DetectInput();
+		
+		Global.lblNewLabel_1 = new JLabel("New label");
+		Global.lblNewLabel_1.setBounds(480, 250, 254, 248);
+		contentPane.add(Global.lblNewLabel_1);
+		Global.lblNewLabel_1.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/arrowkk2.gif")));
+		Global.lblNewLabel_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Global.lblNewLabel_1.setVisible(false);
+			}
+			});
+		Global.lblNewLabel_1.setVisible(false);
+		
+		Global.lblNewLabel_2 = new JLabel("New label");
+		Global.lblNewLabel_2.setBounds(200, 50, 254, 248);
+		contentPane.add(Global.lblNewLabel_2);
+		Global.lblNewLabel_2.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/arrowkk2.gif")));
+		Global.lblNewLabel_2.addMouseListener(new MouseAdapter() {
+			@Override
+			
+			public void mouseClicked(MouseEvent arg0) {
+				Global.lblNewLabel_2.setVisible(false);
+			}
+			});
+		Global.lblNewLabel_2.setVisible(false);
 		
 		internalFrame = new JInternalFrame("Actions");
 		internalFrame.setClosable(true);
@@ -1071,7 +1096,12 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		scrollPane = new JScrollPane(tableDay);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-			
+		scrollPane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Global.lblNewLabel_1.setVisible(false);
+			}
+			});	
 		tabbedPane.addTab("Day", null, scrollPane, null);
 		
 		scrollPane_1 = new JScrollPane(tableWeek);
@@ -1153,10 +1183,22 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		scrollPane_3 = new JScrollPane(tableEvent);
 		scrollPane_3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane_3.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		
+		scrollPane_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Global.lblNewLabel_2.setVisible(false);
+			}
+			});	
 		tabbedPane_1.addTab("Events Today", null, scrollPane_3, null);
 		
-		//resetVar();
+		tabbedPane_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Global.lblNewLabel_1.setVisible(false);	
+				Global.lblNewLabel_2.setVisible(false);
+			}
+		});
+		
 		
 	}
 	
@@ -1345,14 +1387,22 @@ class  frameReminder extends JFrame {
 				setVisible(false);
 				
 				try {
-			        Robot robot = new Robot();
+			        
+			        Global.lblNewLabel_1.setVisible(true);
+			        Global.lblNewLabel_2.setVisible(true);
+			        
+			        if(Global.shortCut==1){
+					
+			        	Robot robot = new Robot();
 
-			        // Simulate a key press to activate the task manager
-			        robot.keyPress(KeyEvent.VK_CONTROL);
-			        robot.keyPress(KeyEvent.VK_D);
-			        robot.keyRelease(KeyEvent.VK_D);
-			        robot.keyRelease(KeyEvent.VK_CONTROL);
-
+				        // Simulate a key press to activate the task manager
+				        robot.keyPress(KeyEvent.VK_CONTROL);
+				        robot.keyPress(KeyEvent.VK_D);
+				        robot.keyRelease(KeyEvent.VK_D);
+				        robot.keyRelease(KeyEvent.VK_CONTROL);
+				        
+			        }
+			        
 				} catch (AWTException e) {
 			        e.printStackTrace();
 				}
