@@ -10,7 +10,7 @@ public class ReadFromText {
 	private static final String fileName = "Task.txt";	
 	private static final String fileName2 = "wordList.txt";
 	
-	public String read(String searhTaskID){
+	public static String read(String searhTaskID){
 		
 		String concateTask = "", taskDetails, strLine;
 		
@@ -54,7 +54,7 @@ public class ReadFromText {
 		}
 	}	
 
-	public Object[][] readByDesc(String desc){
+	public static Object[][] readByDesc(String desc){
 		
 		String concateTask = "", taskDetails, strLine;
 		String id = "", date="", time="", priority="", alert="", status="";
@@ -123,7 +123,7 @@ public class ReadFromText {
 	
 	}
 
-	public Object[][] readByStatus(String statuss){
+	public static Object[][] readByStatus(String statuss){
 		
 		String concateTask = "", taskDetails, strLine;
 		String id = "", date="", time="", priority="", alert="", status="";
@@ -178,7 +178,7 @@ public class ReadFromText {
 	
 	}
 
-	public Object[][] readByPriority(String Prioritys){
+	public static Object[][] readByPriority(String Prioritys){
 			
 			String concateTask = "", taskDetails, strLine;
 			String id = "", date="", time="", priority="", alert="", status="";
@@ -233,7 +233,7 @@ public class ReadFromText {
 		
 		}
 	
-	public List<String> readWordList(){
+	public static List<String> readWordList(){
 	
 	String strLine;
 	

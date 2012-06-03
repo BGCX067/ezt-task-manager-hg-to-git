@@ -11,9 +11,7 @@ public class CreateTask {
 		Task t = new Task();
 				
 		return t.addTask(lastID.getLastID()+1, desc, date, time, priority, onAlert, status);
-		
-		
-		
+				
 	}	
 
 }

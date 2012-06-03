@@ -8,7 +8,7 @@ public class WriteToText {
 	private static final String fileName = "Task.txt";
 	private static final String fileName2 = "wordList.txt";	
 	
-	public void write(Object task){
+	public static void write(Object task){
 
 		try{
 	        

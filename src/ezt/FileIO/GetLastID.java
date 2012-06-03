@@ -8,7 +8,7 @@ public class GetLastID {
 
 	private static final String fileName = "Task.txt";
 	
-	public int getLastID(){
+	public static int getLastID(){
 		
 		String strLine;
 		int currentID = 0;
