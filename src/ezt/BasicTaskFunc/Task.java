@@ -682,7 +682,8 @@ public class Task {
 			if(!this.status.equalsIgnoreCase("non active")){
 				
 			//check the task whether is today & with time attribute of 'nil'
-			if((this.time.equalsIgnoreCase("nil")) && ((td.after(startDate) && td.before(endDate)) || td.equals(startDate) || td.equals(endDate))){				
+			if(((this.time.equalsIgnoreCase("nil")) && ((td.after(startDate) && td.before(endDate)) || td.equals(startDate) || td.equals(endDate)))||
+					this.desc.toLowerCase().contains("birthday") && td.getDate()==startDate.getDate() && td.getMonth()==startDate.getMonth()){				
 				
 				alltask [g][0]= this.id;		
 				alltask [g][1]= this.desc;
