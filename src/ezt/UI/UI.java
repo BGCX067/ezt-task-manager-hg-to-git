@@ -30,8 +30,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.*;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -99,6 +97,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		todayDate.set(Calendar.MILLISECOND, 0);
 		Date td = todayDate.getTime();
 		
+		
 		new java.util.Timer().schedule( 
 		        new java.util.TimerTask() {
 		            @Override
@@ -156,7 +155,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("92")){
 		    	  try{
 		    		  	tabbedPane.setSelectedIndex(0);
-		    		  	Global.lblNewLabel_1.setVisible(false);
+		    		  	
 				        Global.lblNewLabel_2.setVisible(false);
 						tableDay.requestFocusInWindow();    		  
 		    		  
@@ -201,7 +200,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		    	  try{
 		    		  
 		    		    Global.lblNewLabel_1.setVisible(false);
-				        Global.lblNewLabel_2.setVisible(false);
+				        
 						tableEvent.requestFocusInWindow();    		  
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
@@ -913,19 +912,17 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 									
 							}else if(success == false && isAdd == false){
 								
-								JOptionPane.showMessageDialog(null, "Action performed failed.", "Message", 1);					
+								JOptionPane.showMessageDialog(null, "Action performed failed. Syntax error or time conflict with previous tasks.", "Message", 1);					
 								
 								
 							}
 							
 						}
 						
-					}catch(Exception ex){JOptionPane.showMessageDialog(null, "Action performed failed.", "Message", 1);}
+					}catch(Exception ex){JOptionPane.showMessageDialog(null, "Action performed failed. Syntax error or time conflict with previous tasks.", "Message", 1);}
 					
 				} 
 				}
-			
-				
 			
 		});		
 		
@@ -1591,8 +1588,14 @@ class  frameReminder extends JFrame {
 				
 				try {
 			        
-			        Global.lblNewLabel_1.setVisible(true);
-			        Global.lblNewLabel_2.setVisible(true);
+			        if(Global.showEvent == true){
+			        	Global.lblNewLabel_1.setVisible(true);
+			        	Global.showEvent=false;
+			        }
+			        if(Global.showDay == true){
+			        	Global.lblNewLabel_2.setVisible(true);
+			        	Global.showDay=false;
+			        }
 			        
 			        if(Global.shortCut==1){
 					

@@ -148,14 +148,71 @@ public class Task {
 		this.date = date;
 		this.time = time;
 		this.status = status;	
+		
+		if(previousAdded(this.date,this.time) == false){
 			
-		WriteToText writeTask = new WriteToText();
-		writeTask.write(this);
+			WriteToText writeTask = new WriteToText();
+			writeTask.write(this);
 			
-		success = true;
+			success = true;
+		
+		}
 		
 		return success;
 		
+	}
+	
+	public boolean previousAdded(String d, String t){
+		
+		int startTime = 0;
+		DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); 
+		Date td=null, startDate=null, endDate=null, reminderTd=null;
+		Calendar todayDate,reminderTodayDate;
+		boolean previousAdded = false;
+		int lastID=0;
+		String dates="", times="";
+		
+		ReadFromText readTask = new ReadFromText();
+		
+		StringTokenizer st;
+		
+		GetLastID fileIO = new GetLastID();
+		lastID = fileIO.getLastID();
+				
+		for(int i=1;i<=lastID;i++){			
+			
+			st = new StringTokenizer(readTask.read(Integer.toString(i)), ".");
+			
+			while(st.hasMoreTokens()) {
+
+				st.nextToken();
+				st.nextToken();
+				dates = st.nextToken();
+				times = st.nextToken();
+		 	    st.nextToken();
+				st.nextToken();
+				st.nextToken();
+				
+			try{
+				
+				startDate = (Date)formatter.parse(dates.substring(5,14));//parse the start date in string to date object  
+				endDate = (Date)formatter.parse(dates.substring(18,27));//parse the end date in string to date object
+					
+				td = (Date)formatter.parse(d.substring(5,14));	
+					
+				if((td.after(startDate) && td.before(endDate)) || td.equals(startDate) || td.equals(endDate)){
+						
+					if(Integer.parseInt(times.substring(0,2))==Integer.parseInt(t.substring(0,2))){
+						previousAdded = true;
+					}
+				}	
+				
+			}catch(Exception ex){System.out.println(ex);}
+		
+			}
+		}
+		
+		return previousAdded;
 	}
 	
 	public boolean deleteTask(int taskID){
@@ -738,13 +795,14 @@ public class Task {
 				startDate = (Date)formatter.parse(this.date.substring(5,14));//parse the start date in string to date object  
 				endDate = (Date)formatter.parse(this.date.substring(18,27));//parse the end date in string to date object			
 				todayDate = Calendar.getInstance();
+				todayDate.set(Calendar.HOUR_OF_DAY, 0);
 				todayDate.set(Calendar.MINUTE, 0);
 				todayDate.set(Calendar.SECOND, 0);
 				todayDate.set(Calendar.MILLISECOND, 0);
 				td = todayDate.getTime();
 					
 			}catch(Exception ex){System.out.println(ex);}
-				
+							
 			//check whether the tasks is today then raise alarm & send reminder email if on alert is true
 			if((this.onAlert==true && ((td.after(startDate) && td.before(endDate)) || td.equals(startDate) || td.equals(endDate)|| 
 					(this.time.equalsIgnoreCase("nil"))))){				
@@ -752,7 +810,7 @@ public class Task {
 				reminderTodayDate = Calendar.getInstance();
 				
 				if(!this.time.equalsIgnoreCase("nil")){
-					
+				
 					reminderTodayDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(this.time.substring(0, 2)));
 					reminderTodayDate.add(Calendar.HOUR, -1);//remind one hour before the task due
 					
@@ -766,7 +824,7 @@ public class Task {
 				reminderTodayDate.set(Calendar.SECOND, 0);
 				reminderTodayDate.set(Calendar.MILLISECOND, 0);
 				reminderTd = reminderTodayDate.getTime();
-										
+								
 				runReminder reminder = new runReminder();
 			            
 				haveReminder = reminder.reminder(formatter.format(reminderTd));
@@ -781,20 +839,27 @@ public class Task {
 					
 					SendSMSmessage sendsms = new SendSMSmessage();
 				
-										
+					todayDate = Calendar.getInstance();
+					
+					td = todayDate.getTime();
+			
 					try{
 						if(!this.time.equalsIgnoreCase("nil") && ((td.getHours()==reminderTd.getHours()))){
-				
+								
 							Global.reminderDesc += this.desc +"<br>";
 							
 							//send sms alert, msg cannot be too long due to free sms server
-							//sendsms.sendMessage("65"+receiverHpNo.read(), "Rem: "+ this.desc + " | Time: "+ this.time, "", "", "", "");
+						   // sendsms.sendMessage("65"+receiverHpNo.read(), "Rem: "+ this.desc + " | Time: "+ this.time, "", "", "", "");
 							
 							//send reminder email
 							sendEmail.sendEmail(receiverEmail.read(),"\n\nTask/Event: " + this.desc + "\nDate: " + this.date+ 
 								"\nTime: " + this.time + "\nPriority: " + this.priority + "\nStatus: " + this.status + "\n\n");
 							
+							Global.showDay = true;
+							
 							raiseAlarm = true;
+							
+							
 							
 						}else if(this.time.equalsIgnoreCase("nil") && ((td.getDate()==startDate.getDate()))){
 							
@@ -807,7 +872,12 @@ public class Task {
 							sendEmail.sendEmail(receiverEmail.read(),"\n\nTask/Event: " + this.desc + "\nDate: " + this.date+ 
 								"\nPriority: " + this.priority + "\nStatus: " + this.status + "\n\n");
 							
+							Global.showEvent = true;
+							
 							raiseAlarm = true;
+							
+							
+							
 						}
 											
 					}catch(Exception e){System.out.println(e);}
