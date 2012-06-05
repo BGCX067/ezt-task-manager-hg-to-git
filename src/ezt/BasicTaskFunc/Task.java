@@ -664,7 +664,7 @@ public class Task {
 				endDate = (Date)formatter.parse(this.date.substring(18,27));
 				
 				if(todayDates.equalsIgnoreCase("")){
-					
+
 					todayDate = Calendar.getInstance();
 					todayDate.set(Calendar.HOUR_OF_DAY, 0);
 					todayDate.set(Calendar.MINUTE, 0);
@@ -675,6 +675,7 @@ public class Task {
 				}else{
 					
 					td = (Date)formatter.parse(todayDates);
+					
 				}			
 						
 			}catch(Exception ex){System.out.println(ex);}
@@ -745,15 +746,20 @@ public class Task {
 			}catch(Exception ex){System.out.println(ex);}
 				
 			//check whether the tasks is today then raise alarm & send reminder email if on alert is true
-			if((this.onAlert==true && ((td.after(startDate) && td.before(endDate)) || td.equals(startDate) || td.equals(endDate)))){				
-			
+			if((this.onAlert==true && ((td.after(startDate) && td.before(endDate)) || td.equals(startDate) || td.equals(endDate)|| 
+					(this.time.equalsIgnoreCase("nil"))))){				
+				
 				reminderTodayDate = Calendar.getInstance();
 				
 				if(!this.time.equalsIgnoreCase("nil")){
+					
 					reminderTodayDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(this.time.substring(0, 2)));
 					reminderTodayDate.add(Calendar.HOUR, -1);//remind one hour before the task due
+					
 				}else{
+					
 					reminderTodayDate.set(Calendar.HOUR_OF_DAY, 0);
+					
 					
 				}				
 				reminderTodayDate.set(Calendar.MINUTE, 0);
@@ -761,13 +767,11 @@ public class Task {
 				reminderTodayDate.set(Calendar.MILLISECOND, 0);
 				reminderTd = reminderTodayDate.getTime();
 										
-				Global.reminderDesc += this.desc +"<br>";
-				
 				runReminder reminder = new runReminder();
 			            
 				haveReminder = reminder.reminder(formatter.format(reminderTd));
 								
-				if(haveReminder==true && ((td.getHours()==reminderTd.getHours()) || (this.time.equalsIgnoreCase("nil") && td.getDate()==reminderTd.getDate()))){
+				if(haveReminder==true){
 					
 					ReadEmailAddr receiverEmail = new ReadEmailAddr();
 					
@@ -777,10 +781,12 @@ public class Task {
 					
 					SendSMSmessage sendsms = new SendSMSmessage();
 				
-					raiseAlarm = true;
-					
+										
 					try{
-						if(!this.time.equalsIgnoreCase("nil")){
+						if(!this.time.equalsIgnoreCase("nil") && ((td.getHours()==reminderTd.getHours()))){
+				
+							Global.reminderDesc += this.desc +"<br>";
+							
 							//send sms alert, msg cannot be too long due to free sms server
 							//sendsms.sendMessage("65"+receiverHpNo.read(), "Rem: "+ this.desc + " | Time: "+ this.time, "", "", "", "");
 							
@@ -788,13 +794,20 @@ public class Task {
 							sendEmail.sendEmail(receiverEmail.read(),"\n\nTask/Event: " + this.desc + "\nDate: " + this.date+ 
 								"\nTime: " + this.time + "\nPriority: " + this.priority + "\nStatus: " + this.status + "\n\n");
 							
-						}else{
+							raiseAlarm = true;
+							
+						}else if(this.time.equalsIgnoreCase("nil") && ((td.getDate()==startDate.getDate()))){
+							
+							Global.reminderDesc += this.desc +"<br>";
+							
 							//send sms alert, msg cannot be too long due to free sms server
 							//sendsms.sendMessage("65"+receiverHpNo.read(), "Rem: "+ this.desc, "", "", "", "");
 							
 							//send reminder email
 							sendEmail.sendEmail(receiverEmail.read(),"\n\nTask/Event: " + this.desc + "\nDate: " + this.date+ 
 								"\nPriority: " + this.priority + "\nStatus: " + this.status + "\n\n");
+							
+							raiseAlarm = true;
 						}
 											
 					}catch(Exception e){System.out.println(e);}

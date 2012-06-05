@@ -6,7 +6,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.Robot;
-
 import com.melloware.jintellitype.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -24,11 +23,8 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.Event;
-
 import ezt.DetectInput.*;
-import ezt.FileIO.WriteEmailAddr;
 import ezt.Reminder.AePlayWave;
-import ezt.Reminder.runReminder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -36,17 +32,11 @@ import java.awt.event.KeyEvent;
 import javax.swing.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
-
-import org.eclipse.wb.swing.FocusTraversalOnArray;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
@@ -57,24 +47,25 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	private JLabel lblNewLabel;
 	private JLabel lblMediumhighPriority;
 	private JLabel lblLowPriority;
-	JInternalFrame internalFrame;
+	static JInternalFrame internalFrame;
 	private boolean success = true;
 	private boolean firstInitPane = true;
 	private boolean firstEventPane = true, isSearch = false, noSearch=false;	
-	private boolean isAdd = false, refreshTask = false, refreshEvent = false, isPrioritySearch = false, isNormalSearch=false, isStatusSearch = false;
+	private boolean noFocus = false,isAdd = false, refreshTask = false, refreshEvent = false, isPrioritySearch = false, isNormalSearch=false, isStatusSearch = false;
 	private int noOfInputAdd = 0, noOfInputSearch=0, countSearch =1;
 	private static String concateAddInput = "", searchVar="", todayDate="";
 	private String[] columnNames = {"", "Description", "Priority", "Alert","ID"};
 	private String[] columnNamesEvent = {"ID",""};
 	private int countFocus=0;
-	private static final int CTRL_D = 90;
+	private static final int CTRL_D = 90,CTRL_W = 91, CTRL_Q = 92,CTRL_E = 93,CTRL_R = 94,SHIFT_A = 95,SHIFT_S = 96,
+			SHIFT_D = 97,CTRL_T = 98,CTRL_A = 99,CTRL_Y = 100;
 	private static UI frame;
 	JTable tableDay;
-	JTable tableWeek;
+	static JTable tableWeek;
 	JTable tableMonth;
 	JTable tableSearch;
 	JTable tableEvent, tableEvent2;
-	JTabbedPane tabbedPane;
+	static JTabbedPane tabbedPane;
 	JTabbedPane tabbedPane_1;
 	JScrollPane scrollPane;
 	JScrollPane scrollPane_1;
@@ -84,6 +75,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	DetectInput detectInput;
 	String id="", eventID="";
 	static JLabel lblMonth, lblYear;
+	static JButton btnNewButton_3,btnNewButton_4,btnNewButton_5;
 	static JButton btnPrev, btnNext;
 	static JTable tblCalendar;
 	static JComboBox cmbYear;
@@ -94,9 +86,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	static JPanel pnlCalendar;
 	static JLabel hintlbl;
 	static int realYear, realMonth, realDay, currentYear, currentMonth;
-	
-
-	
+		
 	/**
 	 * Launch the application.
 	 */
@@ -128,9 +118,20 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			public void run() {
 				try {
 					
-					//initiate ctrl+d to show the program
+					//initiate shortcut keys
 					JIntellitype.getInstance().registerSwingHotKey(CTRL_D, Event.CTRL_MASK, (int) 'D');
-				     				      
+					JIntellitype.getInstance().registerSwingHotKey(CTRL_W, Event.CTRL_MASK, (int) 'W');
+					JIntellitype.getInstance().registerSwingHotKey(CTRL_Q, Event.CTRL_MASK, (int) 'Q');
+					JIntellitype.getInstance().registerSwingHotKey(CTRL_E, Event.CTRL_MASK, (int) 'E');
+					JIntellitype.getInstance().registerSwingHotKey(CTRL_R, Event.CTRL_MASK, (int) 'R');
+					JIntellitype.getInstance().registerSwingHotKey(SHIFT_A, Event.SHIFT_MASK, (int) 'A');
+					JIntellitype.getInstance().registerSwingHotKey(SHIFT_S, Event.SHIFT_MASK, (int) 'S');
+					JIntellitype.getInstance().registerSwingHotKey(SHIFT_D, Event.SHIFT_MASK, (int) 'D');
+					JIntellitype.getInstance().registerSwingHotKey(CTRL_T, Event.CTRL_MASK, (int) 'T');
+					JIntellitype.getInstance().registerSwingHotKey(CTRL_A, Event.CTRL_MASK, (int) 'A');
+					JIntellitype.getInstance().registerSwingHotKey(CTRL_Y, Event.CTRL_MASK, (int) 'Y');
+					JIntellitype.getInstance().registerSwingHotKey(0,  0, KeyEvent.VK_ESCAPE);
+					
 					frame = new UI();//frame which hold the task UI
 					frame.setVisible(false);
 					frame.initJIntellitype();
@@ -144,6 +145,90 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	}
 
 	   public void onHotKey(int aIdentifier) {
+		   
+		   if(Integer.toString(aIdentifier).equalsIgnoreCase("91")){
+		    	  try{
+		    		  	tabbedPane.setSelectedIndex(1);
+						tableWeek.requestFocusInWindow();    		  
+		    		  
+		    	  }catch(Exception ex){System.out.println(ex);}
+		    	  
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("92")){
+		    	  try{
+		    		  	tabbedPane.setSelectedIndex(0);
+		    		  	Global.lblNewLabel_1.setVisible(false);
+				        Global.lblNewLabel_2.setVisible(false);
+						tableDay.requestFocusInWindow();    		  
+		    		  
+		    	  }catch(Exception ex){System.out.println(ex);}
+		    	  
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("93")){
+		    	  try{
+		    		  	tabbedPane.setSelectedIndex(2);
+						tableMonth.requestFocusInWindow();    		  
+		    		  
+		    	  }catch(Exception ex){System.out.println(ex);}
+		    	  
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("94")){
+		    	  try{
+		    			
+						tblCalendar.requestFocusInWindow();    		  
+		    		  
+		    	  }catch(Exception ex){System.out.println(ex);}
+		    	  
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("95")){
+		    	  try{
+		    			
+						btnPrev.requestFocusInWindow();    		  
+		    		  
+		    	  }catch(Exception ex){System.out.println(ex);}
+		    	  
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("96")){
+		    	  try{
+		    			
+		    		  btnNext.requestFocusInWindow();    		  
+		    		  
+		    	  }catch(Exception ex){System.out.println(ex);}
+		    	  
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("97")){
+		    	  try{
+		    			
+						cmbYear.requestFocusInWindow();    		  
+		    		  
+		    	  }catch(Exception ex){System.out.println(ex);}
+		    	  
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("98")){
+		    	  try{
+		    		  
+		    		    Global.lblNewLabel_1.setVisible(false);
+				        Global.lblNewLabel_2.setVisible(false);
+						tableEvent.requestFocusInWindow();    		  
+		    		  
+		    	  }catch(Exception ex){System.out.println(ex);}
+		    	  
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("99")){
+		    	  try{
+		    			
+						commandBox.requestFocusInWindow();    		  
+		    		  
+		    	  }catch(Exception ex){System.out.println(ex);}
+		    	  
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("0")){
+		    	  try{
+		    			
+						internalFrame.setVisible(false);  		  
+		    		  
+		    	  }catch(Exception ex){System.out.println(ex);}
+		    	  
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("100")){
+		    	  try{
+		    			
+		    		  tableSearch.requestFocusInWindow();		  
+		    		  
+		    	  }catch(Exception ex){System.out.println(ex);}
+		    	  
+		   }
+		   
 		   
 		      if(Integer.toString(aIdentifier).equalsIgnoreCase("90") && Global.shortCut == 1){
 		    	  try{
@@ -255,7 +340,24 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		lblPleaseSelectYour.setBounds(10, 21, 181, 14);
 		internalFrame.getContentPane().add(lblPleaseSelectYour);
 		
-		JButton btnNewButton_3 = new JButton("Update");
+		btnNewButton_3 = new JButton("Update");
+		btnNewButton_3.addKeyListener(new KeyAdapter() {
+			@Override//if enter key pressed, UI will send command to the DetectInput class
+			public void keyPressed(KeyEvent e) {
+					
+				if(e.getKeyChar() == e.VK_ENTER) { 	
+					
+					detectInput = new DetectInput();
+					
+					commandBox.setText(detectInput.concateUpdateString(id));
+					
+					commandBox.requestFocusInWindow();
+					
+					internalFrame.setVisible(false);
+				
+				}
+			}});
+		
 		btnNewButton_3.addMouseListener(new MouseAdapter() {
 			
 			@Override//Print the update command in the textbox if update button clicked 
@@ -265,30 +367,61 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 								
 				commandBox.setText(detectInput.concateUpdateString(id));
 				
+				commandBox.requestFocusInWindow();
+				
 				internalFrame.setVisible(false);
 			}
 		});
 		btnNewButton_3.setBounds(20, 83, 89, 23);
 		internalFrame.getContentPane().add(btnNewButton_3);
 		
-		JButton btnNewButton_4 = new JButton("Delete");
+		btnNewButton_4 = new JButton("Delete");
+		
+		btnNewButton_4.addKeyListener(new KeyAdapter() {
+			@Override//if enter key pressed, UI will send command to the DetectInput class
+			public void keyPressed(KeyEvent e) {
+					
+				if(e.getKeyChar() == e.VK_ENTER) { 	
+					
+					commandBox.setText("delete,"+id);
+					commandBox.requestFocusInWindow();
+					internalFrame.setVisible(false);
+				
+				}
+			}});
+		
 		btnNewButton_4.addMouseListener(new MouseAdapter() {
 			
 			@Override//Print the delete command in the textbox if delete button clicked
 			public void mouseClicked(MouseEvent e) {
 				commandBox.setText("delete,"+id);
+				commandBox.requestFocusInWindow();
 				internalFrame.setVisible(false);
 			}
 		});
 		btnNewButton_4.setBounds(119, 83, 89, 23);
 		internalFrame.getContentPane().add(btnNewButton_4);
 		
-		JButton btnNewButton_5 = new JButton("Status");
+		btnNewButton_5 = new JButton("Status");
+		
+		btnNewButton_5.addKeyListener(new KeyAdapter() {
+			@Override//if enter key pressed, UI will send command to the DetectInput class
+			public void keyPressed(KeyEvent e) {
+					
+				if(e.getKeyChar() == e.VK_ENTER) { 	
+					commandBox.setText("status,"+id+",Non Active");
+					commandBox.requestFocusInWindow();
+					internalFrame.setVisible(false);
+				
+				}
+			}});
+		
 		btnNewButton_5.addMouseListener(new MouseAdapter() {
 			
 			@Override//Print the update status command in the textbox if update status button clicked
 			public void mouseClicked(MouseEvent e) {
 				commandBox.setText("status,"+id+",Non Active");
+				commandBox.requestFocusInWindow();
 				internalFrame.setVisible(false);
 			}
 		});
@@ -315,7 +448,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 
-				searchClick("phigh");
+				searchClick("-phigh");
 				
 			}
 		});
@@ -329,7 +462,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				searchClick("pmedium");
+				searchClick("-pmedium");
 			}
 		});
 		lblMediumhighPriority.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/yellow light.png")));
@@ -342,7 +475,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				searchClick("plow");
+				searchClick("-plow");
 			}
 		});
 		lblLowPriority.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/green light.png")));
@@ -369,6 +502,10 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			}
 			@Override//clear default text in textbox if it is focused
 			public void focusGained(FocusEvent e) {
+				if(commandBox.hasFocus() && noFocus == true){
+					btnNewButton_3.requestFocusInWindow();
+					noFocus=false;
+				}
 				
 				countFocus++;
 				if(commandBox.getText().equalsIgnoreCase("Please enter your command here.") || countFocus ==1){
@@ -400,7 +537,36 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		
 		//Register action listeners
 		btnPrev.addActionListener(new btnPrev_Action());
+		btnPrev.addKeyListener(new KeyAdapter() {
+			@Override//if enter key pressed, UI will send command to the DetectInput class
+			public void keyPressed(KeyEvent e) {
+					
+				if(e.getKeyChar() == e.VK_ENTER) {
+					if (currentMonth == 0){ //Back one year
+						currentMonth = 11;
+						currentYear -= 1;
+					}
+					else{ //Back one month
+						currentMonth -= 1;
+					}
+					refreshCalendar(currentMonth, currentYear);
+				}
+			}});
+				
 		btnNext.addActionListener(new btnNext_Action());
+		btnNext.addKeyListener(new KeyAdapter() {
+			@Override//if enter key pressed, UI will send command to the DetectInput class
+			public void keyPressed(KeyEvent e) {
+					
+				if (currentMonth == 11){ //Foward one year
+					currentMonth = 0;
+					currentYear += 1;
+				}
+				else{ //Foward one month
+					currentMonth += 1;
+				}
+				refreshCalendar(currentMonth, currentYear);
+			}});
 		cmbYear.addActionListener(new cmbYear_Action());
 		
 		//Add controls to pane
@@ -453,8 +619,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		hintlbl = new JLabel("");
 		hintlbl.setBounds(26, 604, 416, 20);
 		contentPane.add(hintlbl);
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{commandBox, tableDay,tblCalendar,  btnPrev, 
-				btnNext, cmbYear,contentPane,internalFrame.getContentPane(), btnNewButton_3, btnNewButton_4, btnNewButton_5}));
+		
 		mtblCalendar.setColumnCount(7);
 		mtblCalendar.setRowCount(6);
 		
@@ -838,40 +1003,35 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 					setBackground(new Color(220, 220, 255));
 				}
 			}
-			//
-			//link the part below with main program for date selection
-			//
-			if (selected == true){
+
+			if (value!=null && selected == true){
                 setBackground(new Color(255,10,0));
                 
                 String month = "", day="";
-                currentMonth++;
-                
-                if(value.toString().length()==1){ 
+                                
+               if(value.toString().length()==1){ 
                 	day = "0" + value.toString();
                 }else{ 
                 	day = value.toString();
                 }
-                
-                if(currentMonth == 1) month="Jan";
-                else if(currentMonth == 2) month="Feb";
-                else if(currentMonth == 3) month="Mar";
-                else if(currentMonth == 4) month="Apr";
-                else if(currentMonth == 5) month="May";
-                else if(currentMonth == 6) month="Jun";
-                else if(currentMonth == 7) month="Jul";
-                else if(currentMonth == 8) month="Aug";
-                else if(currentMonth == 9) month="Sep";
-                else if(currentMonth == 10) month="Oct";
-                else if(currentMonth == 11) month="Nov";
-                else month="Dec";
-                
-                currentMonth--;
-                
+               
+                if(currentMonth+1 == 1) month="Jan";
+                else if(currentMonth+1 == 2) month="Feb";
+                else if(currentMonth+1 == 3) month="Mar";
+                else if(currentMonth+1 == 4) month="Apr";
+                else if(currentMonth+1 == 5) month="May";
+                else if(currentMonth+1 == 6) month="Jun";
+                else if(currentMonth+1 == 7) month="Jul";
+                else if(currentMonth+1 == 8) month="Aug";
+                else if(currentMonth+1 == 9) month="Sep";
+                else if(currentMonth+1 == 10) month="Oct";
+                else if(currentMonth+1 == 11) month="Nov";
+                else if(currentMonth+1 == 12) month="Dec";
+                                
                 //the line below should be replaced
                 
                 todayDate = value.toString() + "-" + month + "-" + (currentYear-2000);
-                
+                               
                 tabbedPane.remove(0);
 				tabbedPane.remove(0);
 				tabbedPane.remove(0);
@@ -883,6 +1043,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 				callEventPane();
 				
 			}
+			
 			setBorder(null);
 			setForeground(Color.black);
 			return this;  
@@ -1042,10 +1203,87 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		tableDay.getColumnModel().getColumn(3).setMaxWidth(50);
 		tableDay.getColumnModel().getColumn(4).setMaxWidth(0);		
 		
-		tableDay.getSelectionModel().addListSelectionListener(new RowListenerDay());
-		tableWeek.getSelectionModel().addListSelectionListener(new RowListenerWeek());
-		tableMonth.getSelectionModel().addListSelectionListener(new RowListenerMonth());
-				
+		tableDay.addKeyListener(new KeyAdapter() {
+    		public void keyPressed(KeyEvent e) {
+    		if(e.getKeyChar() == e.VK_SPACE) {
+    			
+    	      	if((tableDay.getValueAt(tableDay.getSelectedRows()[0], 1)!="  ")){          		
+               
+            		outputSelectionDay();
+                
+            		countFocus+=2;	
+    			
+          		    ShowMessageDialog();
+            		
+    	      }}}});
+		
+		tableDay.addMouseListener(new MouseAdapter() {
+    		public void mouseClicked(MouseEvent arg0) {
+    		    			
+    	      	if((tableDay.getValueAt(tableDay.getSelectedRows()[0], 1)!="  ")){
+            		               
+            		outputSelectionDay();
+                
+            		countFocus+=2;	
+            		
+          		    ShowMessageDialog();
+            		
+    	      }}});
+		
+		tableWeek.addKeyListener(new KeyAdapter() {
+    		public void keyPressed(KeyEvent e) {
+    		if(e.getKeyChar() == e.VK_SPACE) {
+    			
+    	      	if((tableWeek.getValueAt(tableWeek.getSelectedRows()[0], 1)!="  ")){
+            		               
+            		outputSelectionWeek();
+                
+            		countFocus+=2;	
+    			
+          		    ShowMessageDialog();
+            		
+    	      }}}});
+		
+		tableWeek.addMouseListener(new MouseAdapter() {
+    		public void mouseClicked(MouseEvent arg0) {
+    		    			
+    	      	if((tableWeek.getValueAt(tableWeek.getSelectedRows()[0], 1)!="  ")){
+            		               
+            		outputSelectionWeek();
+                
+            		countFocus+=2;	
+    			
+          		    ShowMessageDialog();
+            		
+    	      }}});
+		
+		tableMonth.addKeyListener(new KeyAdapter() {
+    		public void keyPressed(KeyEvent e) {
+    		if(e.getKeyChar() == e.VK_SPACE) {
+    			
+    	      	if((tableMonth.getValueAt(tableMonth.getSelectedRows()[0], 1)!="  ")){
+            		               
+            		outputSelectionMonth();
+                
+            		countFocus+=2;	
+    			
+          		    ShowMessageDialog();
+            		
+    	      }}}});
+		
+		tableMonth.addMouseListener(new MouseAdapter() {
+    		public void mouseClicked(MouseEvent arg0) {
+    		    			
+    	      	if((tableMonth.getValueAt(tableMonth.getSelectedRows()[0], 1)!="  ")){
+            		       
+            		outputSelectionMonth();
+                
+            		countFocus+=2;	
+    			
+          		    ShowMessageDialog();
+            		
+    	      }}});		
+						
 		tableWeek.getColumnModel().getColumn(0).setMinWidth(50);
 		tableWeek.getColumnModel().getColumn(1).setMinWidth(180);
 		tableWeek.getColumnModel().getColumn(2).setMaxWidth(50);
@@ -1125,9 +1363,34 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			tableSearch.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		
 			tableSearch.setRowHeight(25);
+
+			tableSearch.addKeyListener(new KeyAdapter() {
+	    		public void keyPressed(KeyEvent e) {
+	    		if(e.getKeyChar() == e.VK_SPACE) {
+	    			
+	    	      	if((tableSearch.getValueAt(tableSearch.getSelectedRows()[0], 1)!="  ")){
+	            			               
+	            		outputSelectionSearch();
+	                
+	            		countFocus+=2;	
+	    			
+	          		    ShowMessageDialog();
+	            		
+	    	      }}}});
 			
-			tableSearch.getSelectionModel().addListSelectionListener(new RowListenerSearch());
-					
+			tableSearch.addMouseListener(new MouseAdapter() {
+	    		public void mouseClicked(MouseEvent arg0) {
+	    		    			
+	    	      	if((tableSearch.getValueAt(tableSearch.getSelectedRows()[0], 1)!="  ")){
+	            		
+	            		outputSelectionSearch();
+	                
+	            		countFocus+=2;	
+	    			
+	          		    ShowMessageDialog();
+	            		
+	    	      }}});		
+								
 			tableSearch.getColumnModel().getColumn(0).setMinWidth(50);
 			tableSearch.getColumnModel().getColumn(1).setMinWidth(180);
 			tableSearch.getColumnModel().getColumn(2).setMaxWidth(50);
@@ -1151,8 +1414,6 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		}
 		searchVar="";
 		
-		//resetVar();
-		
 		}catch(Exception ex){System.out.println(ex);}
 	}
 
@@ -1173,11 +1434,44 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		detectInput = new DetectInput();
 		
 		tableEvent = new JTable(detectInput.allEventToday(todayDate),columnNamesEvent);
+		
+		tableEvent.addKeyListener(new KeyAdapter() {
+    		public void keyPressed(KeyEvent e) {
+    		if(e.getKeyChar() == e.VK_SPACE) {
+    			
+    	      	if((tableEvent.getValueAt(tableEvent.getSelectedRows()[0], 1)!="  ")){
+            		    	      		     
+            		outputSelectionEvent();
+                
+            		countFocus+=2;	
+            		    			
+          		    ShowMessageDialog();
+            		
+    	      }}}});
+		
+		tableEvent.addMouseListener(new MouseAdapter() {
+    		public void mouseClicked(MouseEvent arg0) {
+    		    			
+    	      	if((tableEvent.getValueAt(tableEvent.getSelectedRows()[0], 1)!="  ")){
+            		               
+            		outputSelectionEvent();
+                
+            		countFocus+=2;	
+            		
+          		    ShowMessageDialog();
+          		    
+            		
+    	      }}});	
+		
+		
+		
 		tableEvent.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableEvent.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		tableEvent.setRowHeight(25);
 		tableEvent.getColumnModel().getColumn(0).setMaxWidth(0);		
-		tableEvent.getSelectionModel().addListSelectionListener(new RowListenerEvent());		
+		
+		
+		//tableEvent.getSelectionModel().addListSelectionListener(new RowListenerEvent());		
 		tableEvent.setShowGrid(false);
 		
 		scrollPane_3 = new JScrollPane(tableEvent);
@@ -1201,104 +1495,6 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		
 		
 	}
-	
-	
-	//EventListener for each data row in the Search Task Panel
-    private class RowListenerSearch implements ListSelectionListener {
-        public void valueChanged(ListSelectionEvent event) {
-        	
-        	if((tableSearch.getValueAt(tableSearch.getSelectedRows()[0], 1)!="")){
-        		
-        		if (event.getValueIsAdjusting()) {
-        			return;
-        		}
-           
-        		outputSelectionSearch();
-            
-        		countFocus+=2;
-            
-        		ShowMessageDialog();
-           
-        		}
-        	}
-    }
-    
-	//EventListener for each data row in the Day Task Panel
-    private class RowListenerDay implements ListSelectionListener {
-        public void valueChanged(ListSelectionEvent event) {
-        	
-        	if((tableDay.getValueAt(tableDay.getSelectedRows()[0], 1)!="  ")){
-        		
-        		if (event.getValueIsAdjusting()) {
-        			return;
-        		}
-           
-        		outputSelectionDay();
-            
-        		countFocus+=2;
-            
-        		ShowMessageDialog();
-           
-        		}
-        	}
-    }
-    
-  //EventListener for each data row in the Week Task Panel
-    private class RowListenerWeek implements ListSelectionListener {
-        public void valueChanged(ListSelectionEvent event) {
-        	if((tableWeek.getValueAt(tableWeek.getSelectedRows()[0], 0)!=null)){
-        		
-        		if (event.getValueIsAdjusting()) {
-        			return;
-        		}
-           
-        		outputSelectionWeek();
-            
-        		countFocus+=2;
-            
-        		ShowMessageDialog();
-           
-        		}
-        	}
-    }
- 
-  //EventListener for each data row in the Month Task Panel
-    private class RowListenerMonth implements ListSelectionListener {
-        public void valueChanged(ListSelectionEvent event) {
-        	if((tableMonth.getValueAt(tableMonth.getSelectedRows()[0], 0)!=null)){
-        		
-        		if (event.getValueIsAdjusting()) {
-        			return;
-        		}
-           
-        		outputSelectionMonth();
-            
-        		countFocus+=2;
-            
-        		ShowMessageDialog();
-           
-        		}
-        	}
-    }
-    
-    //EventListener for each data row in the Event Panel
-    private class RowListenerEvent implements ListSelectionListener {
-        public void valueChanged(ListSelectionEvent event) {
-        	if((tableEvent.getValueAt(tableEvent.getSelectedRows()[0], 0)!=null)){
-        		
-        		if (event.getValueIsAdjusting()) {
-        			return;
-        		}
-           
-        		outputSelectionEvent();
-            
-        		countFocus+=2;
-            
-        		ShowMessageDialog();
-           
-        		}
-        	}
-    }
 
     //get the task id in search task panel
     private void outputSelectionSearch() {
@@ -1358,7 +1554,14 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
     public void ShowMessageDialog(){
     	
     	internalFrame.setVisible(true);//the frame which contains update, delete and update status button
+    	
+    	
+    	if(frame.getFocusOwner().getName()==null){btnNewButton_3.requestFocusInWindow();}
+    	
+    	noFocus = true;
     }
+    
+    
 }
 
 

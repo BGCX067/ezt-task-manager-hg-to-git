@@ -2,6 +2,7 @@
 2/swimming/from 23-May-12 to 23-May-12/03-04/low/true/Active/
 3/meeting/from 01-Nov-12 to 03-Mar-12/07-09/medium/true/Active/
 4/jack's birthday/from 04-Jun-12 to 04-Jun-12/nil/medium/true/Active/
-5/Clean House/from 03-May-12 to 03-Nov-12/15-16/high/true/Active/
-6/Amin's birthday/from 04-Jul-12 to 04-July-12/nil/medium/true/Active/
-7/Party/from 04-Jul-12 to 04-July-12/nil/medium/true/Active/
+5/Clean House/from 03-May-12 to 03-Nov-12/12-13/high/true/Active/
+6/Amin's birthday/from 06-Jun-12 to 06-Jun-12/nil/medium/true/Active/
+7/Party/from 04-Jul-12 to 04-Jul-12/nil/medium/true/Active/
+
