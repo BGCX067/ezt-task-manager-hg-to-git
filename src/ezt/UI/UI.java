@@ -55,8 +55,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	private String[] columnNames = {"", "Description", "Priority", "Alert","ID"};
 	private String[] columnNamesEvent = {"ID",""};
 	private int countFocus=0;
-	private static final int CTRL_D = 90,CTRL_W = 91, CTRL_Q = 92,CTRL_E = 93,CTRL_R = 94,SHIFT_A = 95,SHIFT_S = 96,
-			SHIFT_D = 97,CTRL_T = 98,CTRL_A = 99,CTRL_Y = 100;
+	private static final int CTRL_D = 90,CTRL_W = 91, CTRL_Q = 92,CTRL_E = 93,CTRL_R = 94,CTRL_T = 98,CTRL_A = 99,CTRL_Y = 100;
 	private static UI frame;
 	JTable tableDay;
 	static JTable tableWeek;
@@ -108,7 +107,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		            	
 		            }
 		        }, 
-		       td, 10000 //every 10 sec 
+		       td, 10000 //refresh in every 10 secs for demonstration purpose, 10000 
 		);
 		
 		//3600000-every hour will check the task today to remind or not remind again
@@ -123,9 +122,9 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 					JIntellitype.getInstance().registerSwingHotKey(CTRL_Q, Event.CTRL_MASK, (int) 'Q');
 					JIntellitype.getInstance().registerSwingHotKey(CTRL_E, Event.CTRL_MASK, (int) 'E');
 					JIntellitype.getInstance().registerSwingHotKey(CTRL_R, Event.CTRL_MASK, (int) 'R');
-					JIntellitype.getInstance().registerSwingHotKey(SHIFT_A, Event.SHIFT_MASK, (int) 'A');
-					JIntellitype.getInstance().registerSwingHotKey(SHIFT_S, Event.SHIFT_MASK, (int) 'S');
-					JIntellitype.getInstance().registerSwingHotKey(SHIFT_D, Event.SHIFT_MASK, (int) 'D');
+					JIntellitype.getInstance().registerSwingHotKey(95,  0, KeyEvent.VK_PAGE_UP);
+					JIntellitype.getInstance().registerSwingHotKey(96,  0, KeyEvent.VK_PAGE_DOWN);
+					JIntellitype.getInstance().registerSwingHotKey(97,  0, KeyEvent.VK_HOME);
 					JIntellitype.getInstance().registerSwingHotKey(CTRL_T, Event.CTRL_MASK, (int) 'T');
 					JIntellitype.getInstance().registerSwingHotKey(CTRL_A, Event.CTRL_MASK, (int) 'A');
 					JIntellitype.getInstance().registerSwingHotKey(CTRL_Y, Event.CTRL_MASK, (int) 'Y');
@@ -1319,14 +1318,13 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		
 		//assign the pre-defined priority comparator to each table's column priority, the rest of column will
 		//be using the default sort method
-		sorterDay.setComparator(3, intComp);
-		sorterWeek.setComparator(3, intComp);
-		sorterMonth.setComparator(3, intComp);
+		
+		sorterDay.setComparator(2, intComp);
+		sorterWeek.setComparator(2, intComp);
+		sorterMonth.setComparator(2, intComp);
 		
 		//assign sort model to each table
-		tableDay.setRowSorter(sorterDay);		
-		tableWeek.setRowSorter(sorterWeek);
-		tableMonth.setRowSorter(sorterMonth);
+		
 			
 		scrollPane = new JScrollPane(tableDay);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
