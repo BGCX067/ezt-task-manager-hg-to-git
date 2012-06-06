@@ -759,20 +759,24 @@ public class Task {
 	//check the today task & remind one hour before the task due
 	public boolean todayHaveReminder(){		
 		
-		int lastID = 0;
+		int lastID = 0, count=0;
 		DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); 
 		Date td=null, startDate=null, endDate=null, reminderTd=null;
 		Calendar todayDate,reminderTodayDate;
 		boolean haveReminder = false, raiseAlarm=false;
 		Global.reminderDesc = "<html>";
-					
+							
 		GetLastID fileIO = new GetLastID();
 		lastID = fileIO.getLastID();
-		String concateTask="";
+		String concateTask="", frm = "", til="";
 		
 		ReadFromText readTask = new ReadFromText();
 		
 		StringTokenizer st;		
+		
+		ReadEmailAddr receiverEmail = new ReadEmailAddr();
+		
+		SendReminderEmail sendEmail = new SendReminderEmail();
 		
 		for(int i=1;i<=lastID;i++){			
 			
@@ -817,6 +821,7 @@ public class Task {
 				}else{
 					
 					reminderTodayDate.set(Calendar.HOUR_OF_DAY, 0);
+					//reminderTodayDate.set(Calendar.MONTH, Integer.parseInt(this.date.substring(5,14)));
 					
 					
 				}				
@@ -827,64 +832,93 @@ public class Task {
 								
 				runReminder reminder = new runReminder();
 			            
-				haveReminder = reminder.reminder(formatter.format(reminderTd));
-								
-				if(haveReminder==true){
-					
-					ReadEmailAddr receiverEmail = new ReadEmailAddr();
-					
-					ReadHpNo receiverHpNo = new ReadHpNo();
+				haveReminder = reminder.reminder(formatter.format(reminderTd));			
 				
-					SendReminderEmail sendEmail = new SendReminderEmail();
-					
+				
+				if(haveReminder==true){
+										
+					ReadHpNo receiverHpNo = new ReadHpNo();
+													
 					SendSMSmessage sendsms = new SendSMSmessage();
 				
 					todayDate = Calendar.getInstance();
 					
 					td = todayDate.getTime();
+					
 			
 					try{
 						if(!this.time.equalsIgnoreCase("nil") && ((td.getHours()==reminderTd.getHours()))){
 								
-							Global.reminderDesc += this.desc +"<br>";
+							count ++;
+							
+							if(Integer.parseInt(this.time.substring(0,2))<12){
+								frm = "AM";
+							}else{
+								frm="PM";
+							}
+							
+							if(Integer.parseInt(this.time.substring(3))<12){
+								til = "AM";
+							}else{
+								til="PM";
+							}
+																				
+							Global.reminderDesc += count + ". " + this.desc + " from " + this.time.substring(0,2) + " " + frm + 
+									" till " + this.time.substring(3) + " "+ til+"<br><br>";
 							
 							//send sms alert, msg cannot be too long due to free sms server
 						   // sendsms.sendMessage("65"+receiverHpNo.read(), "Rem: "+ this.desc + " | Time: "+ this.time, "", "", "", "");
 							
-							//send reminder email
-							sendEmail.sendEmail(receiverEmail.read(),"\n\nTask/Event: " + this.desc + "\nDate: " + this.date+ 
-								"\nTime: " + this.time + "\nPriority: " + this.priority + "\nStatus: " + this.status + "\n\n");
+							concateTask += "\n\n" + count + ". " + "Task/Event: " + this.desc + "\nDate: " + this.date+ 
+									"\nTime: " + " from " + this.time.substring(0,2) + " " + frm + 
+									" till " + this.time.substring(3) + " "+ til + "\nPriority: " + this.priority + "\n\n";
+																				
+							//Global.showDay = true;
 							
-							Global.showDay = true;
-							
-							raiseAlarm = true;
+							raiseAlarm = true;						
 							
 							
+						}
+						
+						if(this.time.equalsIgnoreCase("nil") && ((td.getMonth()+1>=startDate.getMonth()+1)) && ((td.getDate()+1==startDate.getDate()+1))){
 							
-						}else if(this.time.equalsIgnoreCase("nil") && ((td.getDate()==startDate.getDate()))){
+							count++;
 							
-							Global.reminderDesc += this.desc +"<br>";
+							Global.reminderDesc += count + ". " + this.desc +"<br><br>";
 							
 							//send sms alert, msg cannot be too long due to free sms server
 							//sendsms.sendMessage("65"+receiverHpNo.read(), "Rem: "+ this.desc, "", "", "", "");
 							
 							//send reminder email
-							sendEmail.sendEmail(receiverEmail.read(),"\n\nTask/Event: " + this.desc + "\nDate: " + this.date+ 
-								"\nPriority: " + this.priority + "\nStatus: " + this.status + "\n\n");
+							concateTask += "\n\n" + count + ". " + "Task/Event: " + this.desc + "\nDate: " + this.date+ 
+								"\nPriority: " + this.priority + "\n\n";
 							
-							Global.showEvent = true;
+							//Global.showEvent = true;
 							
-							raiseAlarm = true;
-							
+							raiseAlarm = true;						
 							
 							
 						}
-											
+			
+						
+						
 					}catch(Exception e){System.out.println(e);}
-				}	
+					
+					
+				}
+				
 			}
+			
 				
 		}
+		
+		try{
+			if(raiseAlarm == true){
+			
+				//send reminder email
+				sendEmail.sendEmail(receiverEmail.read(),concateTask);
+			}
+		}catch(Exception e){System.out.println(e);}
 		
 		Global.reminderDesc += "</html>";
 		

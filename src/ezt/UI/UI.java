@@ -108,7 +108,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		            	
 		            }
 		        }, 
-		       td, 3600000
+		       td, 10000 //every 10 sec 
 		);
 		
 		//3600000-every hour will check the task today to remind or not remind again
@@ -1569,9 +1569,9 @@ class  frameReminder extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	public frameReminder() {
-		setTitle("EZ Task Manager");
+		setTitle("EZ Task Manager Reminder");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(960, 610, 290, 116);
+		setBounds(850, 500, 400, 200);
 		JPanel contentPaneReminder = new JPanel();
 		contentPaneReminder.setBackground(SystemColor.activeCaption);
 		contentPaneReminder.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -1579,9 +1579,16 @@ class  frameReminder extends JFrame {
 		contentPaneReminder.setLayout(null);
 		getContentPane().setLayout(null);		
 		
+		
+		JScrollPane scrollPaneRem = new JScrollPane();
+		scrollPaneRem.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPaneRem.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPaneRem.setBounds(0, 0, 385, 165);
+		contentPaneReminder.add(scrollPaneRem);
+		
 		JLabel lblNewLabelReminder = new JLabel(Global.reminderDesc);//label for the task desc in reminder frame
 		
-		lblNewLabelReminder.addMouseListener(new MouseAdapter() {
+	/*	lblNewLabelReminder.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				setVisible(false);
@@ -1615,11 +1622,13 @@ class  frameReminder extends JFrame {
 				
 			}
 		});
-		
+		*/
 		lblNewLabelReminder.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblNewLabelReminder.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/Crystal_Project_bell.png")));
-		lblNewLabelReminder.setBounds(0, 0, 304, 91);
-		getContentPane().add(lblNewLabelReminder);
+		scrollPaneRem.setViewportView(lblNewLabelReminder);
+		
+		//lblNewLabelReminder.setBounds(0, 0, 350, 250);
+		//getContentPane().add(lblNewLabelReminder);
 		setVisible(true);
 		
 		//start the reminder alarm
