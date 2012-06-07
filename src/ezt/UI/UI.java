@@ -1,11 +1,14 @@
 package ezt.UI;
 
+import java.awt.*;
+import java.awt.event.*;
+import java.net.URL;
+import javax.swing.*;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.EventQueue;
-import java.awt.Robot;
 import com.melloware.jintellitype.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -107,7 +110,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		            	
 		            }
 		        }, 
-		       td, 10000 //refresh in every 10 secs for demonstration purpose, 10000 
+		       td, 3600000 //refresh in every 10 secs for demonstration purpose, 10000 
 		);
 		
 		//3600000-every hour will check the task today to remind or not remind again
@@ -1576,8 +1579,7 @@ class  frameReminder extends JFrame {
 		setContentPane(contentPaneReminder);
 		contentPaneReminder.setLayout(null);
 		getContentPane().setLayout(null);		
-		
-		
+				
 		JScrollPane scrollPaneRem = new JScrollPane();
 		scrollPaneRem.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPaneRem.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -1586,47 +1588,10 @@ class  frameReminder extends JFrame {
 		
 		JLabel lblNewLabelReminder = new JLabel(Global.reminderDesc);//label for the task desc in reminder frame
 		
-	/*	lblNewLabelReminder.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				setVisible(false);
-				
-				try {
-			        
-			        if(Global.showEvent == true){
-			        	Global.lblNewLabel_1.setVisible(true);
-			        	Global.showEvent=false;
-			        }
-			        if(Global.showDay == true){
-			        	Global.lblNewLabel_2.setVisible(true);
-			        	Global.showDay=false;
-			        }
-			        
-			        if(Global.shortCut==1){
-					
-			        	Robot robot = new Robot();
-
-				        // Simulate a key press to activate the task manager
-				        robot.keyPress(KeyEvent.VK_CONTROL);
-				        robot.keyPress(KeyEvent.VK_D);
-				        robot.keyRelease(KeyEvent.VK_D);
-				        robot.keyRelease(KeyEvent.VK_CONTROL);
-				        
-			        }
-			        
-				} catch (AWTException e) {
-			        e.printStackTrace();
-				}
-				
-			}
-		});
-		*/
 		lblNewLabelReminder.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblNewLabelReminder.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/Crystal_Project_bell.png")));
 		scrollPaneRem.setViewportView(lblNewLabelReminder);
 		
-		//lblNewLabelReminder.setBounds(0, 0, 350, 250);
-		//getContentPane().add(lblNewLabelReminder);
 		setVisible(true);
 		
 		//start the reminder alarm
@@ -1638,4 +1603,5 @@ class  frameReminder extends JFrame {
     } //-- ends constructor
     
 } //-- ends SecondFrame
+
 
