@@ -13,7 +13,7 @@ public class DetectInput {
 	//detect the input whether is create, update or delete task
 	public boolean detect(String input){
 
-		String id = "", desc = "", date = "", time = "", priority = "", status = "Active";
+		String id = "", desc = "", date = "", time = "", priority = "", status = "Active", tempAlert="";
 		Boolean onAlert = false;
 		
 		
@@ -53,11 +53,33 @@ public class DetectInput {
 					st.nextToken();
 					id = st.nextToken();
 					desc = st.nextToken();
-					date = st.nextToken();
-					time = st.nextToken();
-					priority = st.nextToken();
-					if(st.nextToken().equalsIgnoreCase("on alert")){
+					if(st.hasMoreTokens()==false){
+						date = Global.dateTemp;
+					}else{
+						date = st.nextToken();
+					}
+					if(st.hasMoreTokens()==false){
+						time= Global.timeTemp;
+					}else{
+						time = st.nextToken();
+					}
+					if(st.hasMoreTokens()==false){
+						priority= Global.priorityTemp;
+					}else{
+						priority = st.nextToken();
+					}
+					if(st.hasMoreTokens()==false){
+						tempAlert = Global.alertTemp;
+					}else{
+						tempAlert = st.nextToken();
+					}
+					
+					if(tempAlert.equalsIgnoreCase("alert true")){						
 						onAlert = true;
+					}else if(tempAlert.equalsIgnoreCase("alert false")){						
+						onAlert = false;
+					}else{
+						onAlert = false;
 					}
 					
 					break;
@@ -120,7 +142,7 @@ public class DetectInput {
 		
 	}
 
-	//get all this wekk tasks object and send to UI
+	//get all this week tasks object and send to UI
 	public Object[][] allTaskWeek(String todayDate){
 		
 		GetAllTask getAllTask = new GetAllTask();
@@ -150,9 +172,14 @@ public class DetectInput {
 		
 		Task task = new Task(id);
 		
-		if(task.isOnAlert()) alert = "on alert";
-		else alert = "no alert";
-		
+		if(task.isOnAlert()) alert = "alert true";
+		else alert = "alert false";
+			
+		Global.dateTemp=task.getDate();
+		Global.timeTemp=task.getTime();
+		Global.priorityTemp=task.getPriority();
+		Global.alertTemp=alert;				
+				
 		concateUpdateString += "update,"+id+","+task.getDesc()+","+task.getDate()+
 		","+task.getTime()+","+task.getPriority()+
 		","+alert+","+task.getStatus();

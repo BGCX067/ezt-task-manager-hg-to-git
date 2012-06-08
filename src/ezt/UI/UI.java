@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.EventQueue;
+import java.awt.Robot;
+
 import com.melloware.jintellitype.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -28,6 +30,8 @@ import javax.swing.table.TableRowSorter;
 import java.awt.Event;
 import ezt.DetectInput.*;
 import ezt.Reminder.AePlayWave;
+import ezt.keyConfig.KeyConfig;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -86,6 +90,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	static JPanel pnlCalendar;
 	static JLabel hintlbl;
 	static int realYear, realMonth, realDay, currentYear, currentMonth;
+
 		
 	/**
 	 * Launch the application.
@@ -119,18 +124,21 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 			public void run() {
 				try {
 					
+					KeyConfig keyConfig = new KeyConfig();
+					keyConfig.getKey();
+					
 					//initiate shortcut keys
-					JIntellitype.getInstance().registerSwingHotKey(CTRL_D, Event.CTRL_MASK, (int) 'D');
-					JIntellitype.getInstance().registerSwingHotKey(CTRL_W, Event.CTRL_MASK, (int) 'W');
-					JIntellitype.getInstance().registerSwingHotKey(CTRL_Q, Event.CTRL_MASK, (int) 'Q');
-					JIntellitype.getInstance().registerSwingHotKey(CTRL_E, Event.CTRL_MASK, (int) 'E');
-					JIntellitype.getInstance().registerSwingHotKey(CTRL_R, Event.CTRL_MASK, (int) 'R');
-					JIntellitype.getInstance().registerSwingHotKey(95,  0, KeyEvent.VK_PAGE_UP);
-					JIntellitype.getInstance().registerSwingHotKey(96,  0, KeyEvent.VK_PAGE_DOWN);
-					JIntellitype.getInstance().registerSwingHotKey(97,  0, KeyEvent.VK_HOME);
-					JIntellitype.getInstance().registerSwingHotKey(CTRL_T, Event.CTRL_MASK, (int) 'T');
-					JIntellitype.getInstance().registerSwingHotKey(CTRL_A, Event.CTRL_MASK, (int) 'A');
-					JIntellitype.getInstance().registerSwingHotKey(CTRL_Y, Event.CTRL_MASK, (int) 'Y');
+					JIntellitype.getInstance().registerSwingHotKey(CTRL_D, Event.CTRL_MASK, (int) Global.activateKey);
+					JIntellitype.getInstance().registerSwingHotKey(CTRL_W, Event.CTRL_MASK, (int) Global.weekPanelKey);
+					JIntellitype.getInstance().registerSwingHotKey(CTRL_Q, Event.CTRL_MASK, (int) Global.dayPanelKey);
+					JIntellitype.getInstance().registerSwingHotKey(CTRL_E, Event.CTRL_MASK, (int) Global.monthPanelKey);
+					JIntellitype.getInstance().registerSwingHotKey(CTRL_R, Event.CTRL_MASK, (int) Global.calendarDateKey);
+					JIntellitype.getInstance().registerSwingHotKey(CTRL_T, Event.CTRL_MASK, (int) Global.eventPanelKey);
+					JIntellitype.getInstance().registerSwingHotKey(CTRL_A, Event.CTRL_MASK, (int) Global.commandKey);
+					JIntellitype.getInstance().registerSwingHotKey(CTRL_Y, Event.CTRL_MASK, (int) Global.searchPanelKey);
+					JIntellitype.getInstance().registerSwingHotKey(95,  0, Global.calendarPrevMKey);
+					JIntellitype.getInstance().registerSwingHotKey(96,  0, Global.calendarNextMKey);
+					JIntellitype.getInstance().registerSwingHotKey(97,  0, Global.calendarYrKey);
 					JIntellitype.getInstance().registerSwingHotKey(0,  0, KeyEvent.VK_ESCAPE);
 					
 					frame = new UI();//frame which hold the task UI
@@ -146,7 +154,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	}
 
 	   public void onHotKey(int aIdentifier) {
-		   
+		   		   
 		   if(Integer.toString(aIdentifier).equalsIgnoreCase("91")){
 		    	  try{
 		    		  	tabbedPane.setSelectedIndex(1);
@@ -179,8 +187,13 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		    	  
 		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("95")){
 		    	  try{
-		    			
-						btnPrev.requestFocusInWindow();    		  
+		    		  		btnPrev.requestFocusInWindow();
+		    		  		
+		    			  	Robot robot;
+		    			  	robot = new Robot();			
+
+			                // Simulate a key press to choose previous month
+			                robot.keyPress(KeyEvent.VK_ENTER);	    		  
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
@@ -189,6 +202,12 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		    			
 		    		  btnNext.requestFocusInWindow();    		  
 		    		  
+	    			  Robot robot;
+	    			  robot = new Robot();			
+
+		              // Simulate a key press to choose next month
+		              robot.keyPress(KeyEvent.VK_ENTER);	    
+		                
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
 		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("97")){
@@ -214,10 +233,18 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("101")){
+		    	  try{
+		    			
+						//help   		  
+		    		  
+		    	  }catch(Exception ex){System.out.println(ex);}
+		    	  
 		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("0")){
 		    	  try{
 		    			
-						internalFrame.setVisible(false);  		  
+						internalFrame.setVisible(false);  	
+						//fc.setVisible(false); 
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
@@ -229,7 +256,6 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
 		   }
-		   
 		   
 		      if(Integer.toString(aIdentifier).equalsIgnoreCase("90") && Global.shortCut == 1){
 		    	  try{
@@ -303,32 +329,6 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		setContentPane(contentPane);
 		contentPane.setLayout(null);	
 		DetectInput searchWord = new DetectInput();
-		
-		Global.lblNewLabel_1 = new JLabel("New label");
-		Global.lblNewLabel_1.setBounds(480, 250, 254, 248);
-		contentPane.add(Global.lblNewLabel_1);
-		Global.lblNewLabel_1.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/arrowkk2.gif")));
-		Global.lblNewLabel_1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				Global.lblNewLabel_1.setVisible(false);
-			}
-			});
-		Global.lblNewLabel_1.setVisible(false);
-		
-		Global.lblNewLabel_2 = new JLabel("New label");
-		Global.lblNewLabel_2.setBounds(200, 50, 254, 248);
-		contentPane.add(Global.lblNewLabel_2);
-		Global.lblNewLabel_2.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/arrowkk2.gif")));
-		Global.lblNewLabel_2.addMouseListener(new MouseAdapter() {
-			@Override
-			
-			public void mouseClicked(MouseEvent arg0) {
-				Global.lblNewLabel_2.setVisible(false);
-			}
-			});
-		Global.lblNewLabel_2.setVisible(false);
-		
 		internalFrame = new JInternalFrame("Actions");
 		internalFrame.setClosable(true);
 		

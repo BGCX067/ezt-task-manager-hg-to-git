@@ -5,7 +5,7 @@ import ezt.FileIO.*;
 public class GetAllTask {
 	
 	public Object[][] allTaskDay(String date){
-		
+	
 		Task task = new Task();
 		
 		return task.getAllTaskDay(date);

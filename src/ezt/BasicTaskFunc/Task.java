@@ -230,14 +230,14 @@ public class Task {
 	public boolean updateTask(){
 		
 		boolean success = false;
-		
+			
 		GetLastID getLast = new GetLastID();
 		WriteToText writeTask = new WriteToText();
 		DeleteFromText deleteTask = new DeleteFromText();
 		deleteTask.delete(this.id);
-		
+			
 		this.id = getLast.getLastID() + 1;
-		
+			
 		writeTask.write(this);
 		
 		success = true;
@@ -245,7 +245,7 @@ public class Task {
 		return success;
 		
 	}
-
+	
 	/*get all today tasks, a two dimensionals object array, 1st dimension is the row of tasks, 
 	 * 2nd dimension store the attributes of each task 
 	 */
