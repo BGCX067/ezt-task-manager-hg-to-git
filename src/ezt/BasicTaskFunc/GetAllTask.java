@@ -4,6 +4,7 @@ import ezt.FileIO.*;
 
 public class GetAllTask {
 	
+	//retrieve all the today task
 	public Object[][] allTaskDay(String date){
 	
 		Task task = new Task();
@@ -12,6 +13,7 @@ public class GetAllTask {
 		
 	}
 
+	//retrieve all the this week task
 	public Object[][] allTaskWeek(String date){
 		
 		Task task = new Task();
@@ -20,6 +22,7 @@ public class GetAllTask {
 		
 	}
 	
+	//retrieve all the this month task
 	public Object[][] allTaskMonth(String date){
 		
 		Task task = new Task();
@@ -28,6 +31,7 @@ public class GetAllTask {
 		
 	}
 	
+	//retrieve all the today event
 	public Object[][] allEventToday(String date){
 		
 		Task task = new Task();
@@ -36,6 +40,7 @@ public class GetAllTask {
 		
 	}	
 
+	//to check whether the record is an event if its' time is nil
 	public boolean isEvent(String id){
 				
 		ReadFromText readTask = new ReadFromText();			

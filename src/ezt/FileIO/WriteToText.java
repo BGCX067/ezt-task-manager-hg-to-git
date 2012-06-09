@@ -28,6 +28,7 @@ public class WriteToText {
 		
 	}	
 
+	//save the new keyword from user for auto complete
 	public void writeWordList(String word){
 
 		try{

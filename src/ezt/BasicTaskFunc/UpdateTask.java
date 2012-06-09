@@ -8,12 +8,12 @@ public class UpdateTask {
 		
 		task.getTask(id);
 		
-		task.setDesc(desc);
-		task.setDate(date);
-		task.setTime(time);
-		task.setPriority(priority);
-		task.setOnAlert(onAlert);
-		task.setStatus(status);
+		task.setDesc(desc);//update with new task description
+		task.setDate(date);//update with new task start date and end date
+		task.setTime(time);//update with new task start time and end time
+		task.setPriority(priority);//update with new task priority
+		task.setOnAlert(onAlert);//update with new task to remind or not
+		task.setStatus(status);//update with new task status
 		
 		return task.updateTask();
 		

@@ -10,6 +10,7 @@ public class ReadFromText {
 	private static final String fileName = "Task.txt";	
 	private static final String fileName2 = "wordList.txt";
 	
+	//read the task/event with id
 	public static String read(String searhTaskID){
 		
 		String concateTask = "", taskDetails, strLine;
@@ -54,6 +55,7 @@ public class ReadFromText {
 		}
 	}	
 
+	//read the task/event with description
 	public static Object[][] readByDesc(String desc){
 		
 		String concateTask = "", taskDetails, strLine;
@@ -123,6 +125,7 @@ public class ReadFromText {
 	
 	}
 
+	//read the task/event with status
 	public static Object[][] readByStatus(String statuss){
 		
 		String concateTask = "", taskDetails, strLine;
@@ -178,6 +181,7 @@ public class ReadFromText {
 	
 	}
 
+	//read the task/event with priority
 	public static Object[][] readByPriority(String Prioritys){
 			
 			String concateTask = "", taskDetails, strLine;
@@ -233,33 +237,34 @@ public class ReadFromText {
 		
 		}
 	
+	//read the stored keywords into a list for auto complete
 	public static List<String> readWordList(){
 	
-	String strLine;
-	
-	List<String> list= new ArrayList<String>();
-	
-	try{
+		String strLine;
 		
-		FileInputStream fstream = new FileInputStream(fileName2);
-
-		// Get the object of DataInputStream
-		DataInputStream in = new DataInputStream(fstream);
-		BufferedReader br = new BufferedReader(new InputStreamReader(in));   		
-
-			//Read File Line By Line
-			while ((strLine = br.readLine()) != null)   {
-				
-				list.add(strLine);
-								
-			}
+		List<String> list= new ArrayList<String>();
+		
+		try{
 			
-	}catch (Exception e) {
-        System.out.println("Error: " + e.getMessage());
-    }   	
+			FileInputStream fstream = new FileInputStream(fileName2);
 	
-	return list;
-}
+			// Get the object of DataInputStream
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));   		
+	
+				//Read File Line By Line
+				while ((strLine = br.readLine()) != null)   {
+					
+					list.add(strLine);
+									
+				}
+				
+		}catch (Exception e) {
+	        System.out.println("Error: " + e.getMessage());
+	    }   	
+		
+		return list;
+	}
 
 }
 

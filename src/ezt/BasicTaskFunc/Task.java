@@ -5,7 +5,6 @@ import ezt.FileIO.*;
 import ezt.Reminder.SendReminderEmail;
 import ezt.Reminder.SendSMSmessage;
 import ezt.Reminder.runReminder;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
@@ -13,14 +12,15 @@ import java.text.*;
 
 public class Task {
 
-	private int id;
-	private String desc;
-	private String priority;
-	private String time;
-	private String date;
-	private String status;
-	private boolean onAlert;
+	private int id; //task id
+	private String desc; //task description
+	private String priority; //task priority, high/medium/low
+	private String time; //task start time & end time
+	private String date; //task start date & end date
+	private String status; //task status, active or non active	
+	private boolean onAlert; //make task to trigger reminder or not
 	
+	//empty task constructor
 	public Task(){
 		super();
 		this.id = 0;
@@ -32,6 +32,7 @@ public class Task {
 		this.status = "";
 	}
 	
+	//get task constructor with id
 	public Task(String idSelf){
 		
 		ReadFromText readTask = new ReadFromText();		
@@ -130,6 +131,7 @@ public class Task {
 		
 	}
 	
+	//concate all the task details
 	public String toString(){
 
 		return 	this.id +"/" + this.desc +"/" + this.date +"/" 
@@ -137,6 +139,7 @@ public class Task {
 		
 	}
 
+	//create task with details
 	public boolean addTask(int id, String desc, String date, String time, String priority, boolean onAlert, String status){
 		
 		boolean success = false;
@@ -149,8 +152,10 @@ public class Task {
 		this.time = time;
 		this.status = status;	
 		
+		//call the method to check whether the time of task is previously occupied
 		if(previousAdded(this.date,this.time) == false){
 			
+			//call the write to text IO to write to textfile
 			WriteToText writeTask = new WriteToText();
 			writeTask.write(this);
 			
@@ -162,6 +167,7 @@ public class Task {
 		
 	}
 	
+	//to check whether the time of task is previously occupied
 	public boolean previousAdded(String d, String t){
 		
 		int startTime = 0;
@@ -176,9 +182,11 @@ public class Task {
 		
 		StringTokenizer st;
 		
+		//get the last task id
 		GetLastID fileIO = new GetLastID();
 		lastID = fileIO.getLastID();
 				
+		//loop thru all the task
 		for(int i=1;i<=lastID;i++){			
 			
 			st = new StringTokenizer(readTask.read(Integer.toString(i)), ".");
@@ -200,8 +208,10 @@ public class Task {
 					
 				td = (Date)formatter.parse(d.substring(5,14));	
 					
+				//check the same date of the new task and previous task
 				if((td.after(startDate) && td.before(endDate)) || td.equals(startDate) || td.equals(endDate)){
 						
+					//if the time of the new task and previous task are same then true 
 					if(Integer.parseInt(times.substring(0,2))==Integer.parseInt(t.substring(0,2))){
 						previousAdded = true;
 					}
@@ -537,7 +547,7 @@ public class Task {
 			
 		}
 		
-		// create a new smaller array
+		// create a new smaller array to remove empty task object array
 	    newAllTask = new Object[g][8];
 		
 	    for (int i=0;i<g;i++) {	        
@@ -669,7 +679,7 @@ public class Task {
 			
 		}
 		
-		// create a new smaller array
+		// create a new smaller array to remove empty task object array
 	    newAllTask = new Object[g][8];
 		
 	    for (int i=0;i<g;i++) {	        
@@ -830,11 +840,13 @@ public class Task {
 				reminderTodayDate.set(Calendar.MILLISECOND, 0);
 				reminderTd = reminderTodayDate.getTime();
 								
+				//initiate reminder
 				runReminder reminder = new runReminder();
 			            
-				haveReminder = reminder.reminder(formatter.format(reminderTd));			
+				//check whether the date & time of the task is suppose to remind, true or false
+				haveReminder = reminder.reminder(formatter.format(reminderTd));							
 				
-				
+				//if suppose to remind
 				if(haveReminder==true){
 										
 					ReadHpNo receiverHpNo = new ReadHpNo();
@@ -847,6 +859,7 @@ public class Task {
 					
 			
 					try{
+						//for task reminder
 						if(!this.time.equalsIgnoreCase("nil") && ((td.getHours()==reminderTd.getHours()))){
 								
 							count ++;
@@ -862,13 +875,15 @@ public class Task {
 							}else{
 								til="PM";
 							}
-																				
+							
+							//store the task details for the label of reminder
 							Global.reminderDesc += count + ". " + this.desc + " from " + this.time.substring(0,2) + " " + frm + 
 									" till " + this.time.substring(3) + " "+ til+"<br><br>";
 							
 							//send sms alert, msg cannot be too long due to free sms server
 						 //  sendsms.sendMessage("65"+receiverHpNo.read(), "Rem: "+ this.desc + " | Time: "+ this.time, "", "", "", "");
 							
+							//store the task details for the email message
 							concateTask += "\n\n" + count + ". " + "Task/Event: " + this.desc + "\nDate: " + this.date+ 
 									"\nTime: " + " from " + this.time.substring(0,2) + " " + frm + 
 									" till " + this.time.substring(3) + " "+ til + "\nPriority: " + this.priority + "\n\n";
@@ -878,16 +893,18 @@ public class Task {
 							
 						}
 						
+						//for event reminder
 						if(this.time.equalsIgnoreCase("nil") && ((td.getMonth()+1>=startDate.getMonth()+1)) && ((td.getDate()+1==startDate.getDate()+1))){
 							
 							count++;
 							
+							//store the event details for the label of reminder
 							Global.reminderDesc += count + ". " + this.desc +"<br><br>";
 							
 							//send sms alert, msg cannot be too long due to free sms server
 							//sendsms.sendMessage("65"+receiverHpNo.read(), "Rem: "+ this.desc, "", "", "", "");
 							
-							//send reminder email
+							//store the event details for the email message
 							concateTask += "\n\n" + count + ". " + "Task/Event: " + this.desc + "\nDate: " + this.date+ 
 								"\nPriority: " + this.priority + "\n\n";
 																					
@@ -916,6 +933,7 @@ public class Task {
 			}
 		}catch(Exception e){System.out.println(e);}
 		
+		//store the task/event details for the label of reminder
 		Global.reminderDesc += "</html>";
 		
 		return raiseAlarm;

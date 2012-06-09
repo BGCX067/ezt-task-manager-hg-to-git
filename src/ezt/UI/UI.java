@@ -1,16 +1,12 @@
 package ezt.UI;
 
-import java.awt.*;
 import java.awt.event.*;
-import java.net.URL;
 import javax.swing.*;
-import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.Robot;
-
 import com.melloware.jintellitype.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -31,13 +27,10 @@ import java.awt.Event;
 import ezt.DetectInput.*;
 import ezt.Reminder.AePlayWave;
 import ezt.keyConfig.KeyConfig;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.*;
-import java.awt.event.*;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
@@ -104,7 +97,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		todayDate.set(Calendar.MILLISECOND, 0);
 		Date td = todayDate.getTime();
 		
-		
+		//set a scheduler to run the reminder check every hour
 		new java.util.Timer().schedule( 
 		        new java.util.TimerTask() {
 		            @Override
@@ -153,39 +146,39 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		});
 	}
 
-	   public void onHotKey(int aIdentifier) {
-		   		   
-		   if(Integer.toString(aIdentifier).equalsIgnoreCase("91")){
+	//assign what to do if a specific shorcut key entered
+	public void onHotKey(int aIdentifier) {
+		   		 
+		   if(Integer.toString(aIdentifier).equalsIgnoreCase("91")){//week panel shorcut key entered
 		    	  try{
 		    		  	tabbedPane.setSelectedIndex(1);
 						tableWeek.requestFocusInWindow();    		  
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
-		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("92")){
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("92")){//day panel shorcut key entered
 		    	  try{
 		    		  	tabbedPane.setSelectedIndex(0);
 		    		  	
-				        Global.lblNewLabel_2.setVisible(false);
-						tableDay.requestFocusInWindow();    		  
+				        tableDay.requestFocusInWindow();    		  
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
-		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("93")){
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("93")){//month panel shorcut key entered
 		    	  try{
 		    		  	tabbedPane.setSelectedIndex(2);
 						tableMonth.requestFocusInWindow();    		  
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
-		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("94")){
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("94")){//calendar date shorcut key entered
 		    	  try{
 		    			
 						tblCalendar.requestFocusInWindow();    		  
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
-		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("95")){
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("95")){//calendar previous month button shorcut key entered
 		    	  try{
 		    		  		btnPrev.requestFocusInWindow();
 		    		  		
@@ -197,7 +190,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
-		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("96")){
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("96")){//calendar next month button shorcut key entered
 		    	  try{
 		    			
 		    		  btnNext.requestFocusInWindow();    		  
@@ -210,45 +203,43 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		                
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
-		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("97")){
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("97")){//calendar year shorcut key entered
 		    	  try{
 		    			
 						cmbYear.requestFocusInWindow();    		  
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
-		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("98")){
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("98")){//event panel shorcut key entered
 		    	  try{
 		    		  
-		    		    Global.lblNewLabel_1.setVisible(false);
-				        
-						tableEvent.requestFocusInWindow();    		  
+		    		    tableEvent.requestFocusInWindow();    		  
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
-		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("99")){
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("99")){// command box shorcut key entered
 		    	  try{
 		    			
 						commandBox.requestFocusInWindow();    		  
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
-		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("101")){
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("101")){//help shorcut key entered
 		    	  try{
 		    			
 						//help   		  
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
-		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("0")){
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("0")){//close the action frame shorcut key entered
 		    	  try{
 		    			
 						internalFrame.setVisible(false);  	
-						//fc.setVisible(false); 
+						
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
-		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("100")){
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("100")){//search panel shorcut key entered
 		    	  try{
 		    			
 		    		  tableSearch.requestFocusInWindow();		  
@@ -257,16 +248,18 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		    	  
 		   }
 		   
-		      if(Integer.toString(aIdentifier).equalsIgnoreCase("90") && Global.shortCut == 1){
-		    	  try{
+		   //show / hide task manager shorcut key entered
+		   if(Integer.toString(aIdentifier).equalsIgnoreCase("90") && Global.shortCut == 1){
+		   
+			   try{
 		    	  
 		    		  frame.setVisible(true);//show the task UI if ctrl+d pressed
 		    		  
 		    		  Global.shortCut +=1;
 		    		  
-		    	  }catch(Exception ex){System.out.println(ex);}
+		    	}catch(Exception ex){System.out.println(ex);}
 		    	  
-		      }else if(Integer.toString(aIdentifier).equalsIgnoreCase("90") && Global.shortCut == 2){
+		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("90") && Global.shortCut == 2){
 		    	  try{
 		    	 
 		    		  frame.setVisible(false);//hide the task UI if ctrl+D pressed again
@@ -277,9 +270,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		      }
 		   }
 	   
-	   public void onIntellitype(int aCommand) {
-
-	      
+	   public void onIntellitype(int aCommand) {	      
 	   }
 
 	   public void initJIntellitype() {
@@ -1026,9 +1017,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
                 else if(currentMonth+1 == 10) month="Oct";
                 else if(currentMonth+1 == 11) month="Nov";
                 else if(currentMonth+1 == 12) month="Dec";
-                                
-                //the line below should be replaced
-                
+                                              
                 todayDate = value.toString() + "-" + month + "-" + (currentYear-2000);
                                
                 tabbedPane.remove(0);
@@ -1202,6 +1191,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		tableDay.getColumnModel().getColumn(3).setMaxWidth(50);
 		tableDay.getColumnModel().getColumn(4).setMaxWidth(0);		
 		
+		//if a space issued on a task record row, an action frame will prompt
 		tableDay.addKeyListener(new KeyAdapter() {
     		public void keyPressed(KeyEvent e) {
     		if(e.getKeyChar() == e.VK_SPACE) {
@@ -1216,6 +1206,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
             		
     	      }}}});
 		
+		//if left mouse click issued on a task record row, an action frame will prompt
 		tableDay.addMouseListener(new MouseAdapter() {
     		public void mouseClicked(MouseEvent arg0) {
     		    			
@@ -1229,6 +1220,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
             		
     	      }}});
 		
+		//if a space issued on a task record row, an action frame will prompt
 		tableWeek.addKeyListener(new KeyAdapter() {
     		public void keyPressed(KeyEvent e) {
     		if(e.getKeyChar() == e.VK_SPACE) {
@@ -1242,7 +1234,8 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
           		    ShowMessageDialog();
             		
     	      }}}});
-		
+
+		//if left mouse click issued on a task record row, an action frame will prompt
 		tableWeek.addMouseListener(new MouseAdapter() {
     		public void mouseClicked(MouseEvent arg0) {
     		    			
@@ -1256,6 +1249,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
             		
     	      }}});
 		
+		//if a space issued on a task record row, an action frame will prompt
 		tableMonth.addKeyListener(new KeyAdapter() {
     		public void keyPressed(KeyEvent e) {
     		if(e.getKeyChar() == e.VK_SPACE) {
@@ -1270,6 +1264,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
             		
     	      }}}});
 		
+		//if left mouse click issued on a task record row, an action frame will prompt
 		tableMonth.addMouseListener(new MouseAdapter() {
     		public void mouseClicked(MouseEvent arg0) {
     		    			
@@ -1320,24 +1315,15 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		TableRowSorter<TableModel> sorterMonth = new TableRowSorter<TableModel>(tableMonth.getModel());
 		
 		//assign the pre-defined priority comparator to each table's column priority, the rest of column will
-		//be using the default sort method
-		
+		//be using the default sort method		
 		sorterDay.setComparator(2, intComp);
 		sorterWeek.setComparator(2, intComp);
-		sorterMonth.setComparator(2, intComp);
-		
-		//assign sort model to each table
-		
+		sorterMonth.setComparator(2, intComp);		
 			
 		scrollPane = new JScrollPane(tableDay);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				Global.lblNewLabel_1.setVisible(false);
-			}
-			});	
+		
 		tabbedPane.addTab("Day", null, scrollPane, null);
 		
 		scrollPane_1 = new JScrollPane(tableWeek);
@@ -1364,7 +1350,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 
 			tableSearch.addKeyListener(new KeyAdapter() {
 	    		public void keyPressed(KeyEvent e) {
-	    		if(e.getKeyChar() == e.VK_SPACE) {
+	    		if(e.getKeyChar() == e.VK_SPACE) {//if a space issued on a task record row, an action frame will prompt
 	    			
 	    	      	if((tableSearch.getValueAt(tableSearch.getSelectedRows()[0], 1)!="  ")){
 	            			               
@@ -1376,6 +1362,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	            		
 	    	      }}}});
 			
+			//if left mouse click issued on a task record row, an action frame will prompt
 			tableSearch.addMouseListener(new MouseAdapter() {
 	    		public void mouseClicked(MouseEvent arg0) {
 	    		    			
@@ -1433,6 +1420,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		
 		tableEvent = new JTable(detectInput.allEventToday(todayDate),columnNamesEvent);
 		
+		//if a space issued on a task record row, an action frame will prompt
 		tableEvent.addKeyListener(new KeyAdapter() {
     		public void keyPressed(KeyEvent e) {
     		if(e.getKeyChar() == e.VK_SPACE) {
@@ -1447,6 +1435,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
             		
     	      }}}});
 		
+		//if left mouse click issued on a task record row, an action frame will prompt
 		tableEvent.addMouseListener(new MouseAdapter() {
     		public void mouseClicked(MouseEvent arg0) {
     		    			
@@ -1475,22 +1464,8 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		scrollPane_3 = new JScrollPane(tableEvent);
 		scrollPane_3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane_3.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane_3.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				Global.lblNewLabel_2.setVisible(false);
-			}
-			});	
+	
 		tabbedPane_1.addTab("Events Today", null, scrollPane_3, null);
-		
-		tabbedPane_1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				Global.lblNewLabel_1.setVisible(false);	
-				Global.lblNewLabel_2.setVisible(false);
-			}
-		});
-		
 		
 	}
 
@@ -1549,10 +1524,10 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
        
    }
    
+    //the frame which contains update, delete and update status button  
     public void ShowMessageDialog(){
     	
-    	internalFrame.setVisible(true);//the frame which contains update, delete and update status button
-    	
+    	internalFrame.setVisible(true);  	
     	
     	if(frame.getFocusOwner().getName()==null){btnNewButton_3.requestFocusInWindow();}
     	
@@ -1560,16 +1535,15 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
     }
     
     
-}
+}//end of frame UI class
 
-
+//reminder frame
 class  frameReminder extends JFrame {
-    /**
-	 * reminder frame
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	public frameReminder() {
+		
 		setTitle("EZ Task Manager Reminder");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(850, 500, 400, 200);
@@ -1602,6 +1576,6 @@ class  frameReminder extends JFrame {
 		
     } //-- ends constructor
     
-} //-- ends SecondFrame
+} //-- end of reminder Frame
 
 

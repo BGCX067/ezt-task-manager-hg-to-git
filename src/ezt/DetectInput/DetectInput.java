@@ -2,8 +2,6 @@ package ezt.DetectInput;
 
 import ezt.BasicTaskFunc.*;
 import ezt.FileIO.*;
-import ezt.Reminder.*;
-
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -14,8 +12,7 @@ public class DetectInput {
 	public boolean detect(String input){
 
 		String id = "", desc = "", date = "", time = "", priority = "", status = "Active", tempAlert="";
-		Boolean onAlert = false;
-		
+		Boolean onAlert = false;		
 		
 		//create task command
 		if(input.substring(0,3).equalsIgnoreCase("add")){
@@ -53,22 +50,22 @@ public class DetectInput {
 					st.nextToken();
 					id = st.nextToken();
 					desc = st.nextToken();
-					if(st.hasMoreTokens()==false){
+					if(st.hasMoreTokens()==false){//if date is empty then set default
 						date = Global.dateTemp;
 					}else{
 						date = st.nextToken();
 					}
-					if(st.hasMoreTokens()==false){
+					if(st.hasMoreTokens()==false){//if time is empty then set default
 						time= Global.timeTemp;
 					}else{
 						time = st.nextToken();
 					}
-					if(st.hasMoreTokens()==false){
+					if(st.hasMoreTokens()==false){//if priority is empty then set default
 						priority= Global.priorityTemp;
 					}else{
 						priority = st.nextToken();
 					}
-					if(st.hasMoreTokens()==false){
+					if(st.hasMoreTokens()==false){//if alert is empty then set default
 						tempAlert = Global.alertTemp;
 					}else{
 						tempAlert = st.nextToken();
@@ -84,7 +81,8 @@ public class DetectInput {
 					
 					break;
 					
-				}		  				
+				}		  	
+				
 				UpdateTask updateTask = new UpdateTask();
 				
 				return updateTask.update(id,desc, date, time, priority, onAlert, status);
@@ -127,6 +125,7 @@ public class DetectInput {
 		
 	}
 	
+	//to check whether the task is an event
 	public boolean isEvent(String id){
 		
 		GetAllTask getAllTask = new GetAllTask();
@@ -166,6 +165,7 @@ public class DetectInput {
 		
 	}
 	
+	//concate all the update details from the update command for the update purpose
 	public String concateUpdateString(String id) {
 		
 		String concateUpdateString = "", alert = "";
@@ -192,12 +192,13 @@ public class DetectInput {
 		
 		SearchTask read = new SearchTask();
 
-		if(desc.substring(0,2).equalsIgnoreCase("-p")) return read.searchByPriority(desc.substring(2));
-		else if (desc.substring(0,2).equalsIgnoreCase("-s")) return read.searchByStatus(desc.substring(2));
-		else return read.searchByDesc(desc);
+		if(desc.substring(0,2).equalsIgnoreCase("-p")) return read.searchByPriority(desc.substring(2));//search with priority
+		else if (desc.substring(0,2).equalsIgnoreCase("-s")) return read.searchByStatus(desc.substring(2));//search with status
+		else return read.searchByDesc(desc);//search with description
 		
 	}
 	
+	//read the previously keyword which keyed by user into a list for auto complete
 	public List<String> readWordList(){
 		
 		ReadFromText read = new ReadFromText();
@@ -206,6 +207,7 @@ public class DetectInput {
 		
 	}
 
+	//save the keyword which keyed by user into a list for auto complete
 	public void writeWordList(String word){
 		
 		WriteToText write = new WriteToText();
@@ -214,12 +216,14 @@ public class DetectInput {
 		
 	}
 	
+	//activate the reminder
 	public static boolean runReminder(){
 		
 		Task checkTodayTask = new Task();
 		return checkTodayTask.todayHaveReminder();
 	}
 	
+	//set the email address for reminder sending
 	public boolean setEmail(String email){
 		
 		WriteEmailAddr setEmail = new WriteEmailAddr();
@@ -227,6 +231,7 @@ public class DetectInput {
 		return setEmail.write(email);
 	}
 	
+	//set the hp no for reminder sending
 	public boolean setHpNo(String hpno){
 		
 		WriteHpNo setHpNo = new WriteHpNo();
