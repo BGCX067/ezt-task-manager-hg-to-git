@@ -1,0 +1,19 @@
+add
+update
+delete
+s
+s-p
+s-s
+Description:Clean House
+Description:jack's birthday
+Description:meeting
+Description:swimming
+Description:dinner
+Priority:low
+Priority:medium
+Priority:high
+Alert:yes
+Alert:no
+Status:Active
+Status:Non Active
+Description:birthday
