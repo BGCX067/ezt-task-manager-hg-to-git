@@ -1,5 +1,7 @@
 package ezt.DetectInput;
 
+
+
 //store the global variables
 public class Global {
 
@@ -12,6 +14,6 @@ public class Global {
 	public static char dayPanelKey, weekPanelKey,monthPanelKey,searchPanelKey,eventPanelKey,calendarDateKey,
 			 commandKey, activateKey;
 
-	
+
 	
 }

@@ -2,6 +2,7 @@ package ezt.BasicTaskFunc;
 
 import ezt.DetectInput.Global;
 import ezt.FileIO.*;
+import ezt.GoogleSync.EventFeed;
 import ezt.Reminder.SendReminderEmail;
 import ezt.Reminder.SendSMSmessage;
 import ezt.Reminder.runReminder;
@@ -9,6 +10,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
 import java.text.*;
+
+
 
 public class Task {
 
@@ -143,6 +146,7 @@ public class Task {
 	public boolean addTask(int id, String desc, String date, String time, String priority, boolean onAlert, String status){
 		
 		boolean success = false;
+		DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); 
 		
 		this.id = id;
 		this.desc = desc;
@@ -158,6 +162,11 @@ public class Task {
 			//call the write to text IO to write to textfile
 			WriteToText writeTask = new WriteToText();
 			writeTask.write(this);
+			
+			
+			//add the task/event to Google Calendar, One-Way-Sync
+			EventFeed googleSync = new EventFeed();
+			googleSync.GoogleCalSyn(this.desc,this.date,this.time);
 			
 			success = true;
 		

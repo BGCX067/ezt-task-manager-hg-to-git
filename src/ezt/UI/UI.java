@@ -320,6 +320,8 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		setContentPane(contentPane);
 		contentPane.setLayout(null);	
 		DetectInput searchWord = new DetectInput();
+		
+		
 		internalFrame = new JInternalFrame("Actions");
 		internalFrame.setClosable(true);
 		
@@ -791,7 +793,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 								isAdd = true;
 								
 								noOfInputAdd ++;
-								
+															
 								if(noOfInputAdd == 1){
 									
 									commandBox.setText("Description:");
@@ -852,8 +854,10 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 																	
 									isAdd = false;
 									
-									DetectInput detectInput = new DetectInput();	
-									success = detectInput.detect(concateAddInput);
+									DetectInput detectInput = new DetectInput();							
+									
+									success = detectInput.detect(concateAddInput);								
+									
 									concateAddInput="";
 								}
 								
@@ -1533,8 +1537,6 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
     	
     	noFocus = true;
     }
-    
-    
 }//end of frame UI class
 
 //reminder frame
