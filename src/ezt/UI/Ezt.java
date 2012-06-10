@@ -5,7 +5,6 @@ import java.awt.event.*;
 import java.net.URL;
 import javax.swing.*;
 import ezt.DetectInput.Global;
-import ezt.Help.Help;
 import java.awt.Robot;
 
 //this is the very first class to call to run the program, it will activate the program and create system tray
@@ -117,11 +116,16 @@ public class Ezt {
         helpItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	            	
-				try {				
+				try {	
+					//initiate the desktop object to open the user guide html
+					java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
 					
-					Help help = new Help();
-					help.setVisible(true);
-
+					//location of the user guide html
+			        java.net.URI uri = new java.net.URI("UserGuide.html");
+			        
+			        //open the user guide html
+			        desktop.browse( uri );
+			            
 				} catch (Exception e1) {
 					
 					e1.printStackTrace();

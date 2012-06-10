@@ -1,0 +1,1 @@
+The first class to run the project is the Ezt.java which inside the src/ezt/UI folder.
