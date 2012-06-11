@@ -9,7 +9,10 @@ import ezt.Reminder.runReminder;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
+import java.io.IOException;
 import java.text.*;
+
+import com.google.gdata.util.ServiceException;
 
 
 
@@ -238,9 +241,19 @@ public class Task {
 		
 		boolean success = false;
 		
+		//delete the task/event to Google Calendar, One-Way-Sync
+		EventFeed googleSync = new EventFeed();
+		try{
+					
+			getTask(String.valueOf(taskID));		
+			
+			googleSync.deleteGoogleCal(this.desc);
+				
+		}catch(Exception ex){System.out.println("deleteGoogle "+ex);}	
+				
 		DeleteFromText deleteTask = new DeleteFromText();		
 		deleteTask.delete(taskID);
-		
+						
 		success = true;
 		
 		return success;
@@ -258,6 +271,58 @@ public class Task {
 		this.id = getLast.getLastID() + 1;
 			
 		writeTask.write(this);
+		
+		 String changedTodayMonth="",changedTodayMonth2="";
+		  String taskStartDate="",taskEndDate="",taskStartTime="",taskEndTime="";
+			
+		  changedTodayMonth = this.date.substring(8,11);
+		  changedTodayMonth2 = this.date.substring(21,24);
+			
+		  if(changedTodayMonth.equalsIgnoreCase("Jan")) changedTodayMonth="01";
+	      else if(changedTodayMonth.equalsIgnoreCase("Feb")) changedTodayMonth="02";
+	      else if(changedTodayMonth.equalsIgnoreCase("Mar")) changedTodayMonth="03";
+	      else if(changedTodayMonth.equalsIgnoreCase("Apr")) changedTodayMonth="04";
+	      else if(changedTodayMonth.equalsIgnoreCase("May")) changedTodayMonth="05";
+	      else if(changedTodayMonth.equalsIgnoreCase("Jun")) changedTodayMonth="06";
+	      else if(changedTodayMonth.equalsIgnoreCase("Jul")) changedTodayMonth="07";
+	      else if(changedTodayMonth.equalsIgnoreCase("Aug")) changedTodayMonth="08";
+	      else if(changedTodayMonth.equalsIgnoreCase("Sep")) changedTodayMonth="09";
+	      else if(changedTodayMonth.equalsIgnoreCase("Oct")) changedTodayMonth="10";
+	      else if(changedTodayMonth.equalsIgnoreCase("Nov")) changedTodayMonth="11";
+	      else changedTodayMonth="12";
+			
+		  if(changedTodayMonth2.equalsIgnoreCase("Jan")) changedTodayMonth2="01";
+	      else if(changedTodayMonth2.equalsIgnoreCase("Feb")) changedTodayMonth2="02";
+	      else if(changedTodayMonth2.equalsIgnoreCase("Mar")) changedTodayMonth2="03";
+	      else if(changedTodayMonth2.equalsIgnoreCase("Apr")) changedTodayMonth2="04";
+	      else if(changedTodayMonth2.equalsIgnoreCase("May")) changedTodayMonth2="05";
+	      else if(changedTodayMonth2.equalsIgnoreCase("Jun")) changedTodayMonth2="06";
+	      else if(changedTodayMonth2.equalsIgnoreCase("Jul")) changedTodayMonth2="07";
+	      else if(changedTodayMonth2.equalsIgnoreCase("Aug")) changedTodayMonth2="08";
+	      else if(changedTodayMonth2.equalsIgnoreCase("Sep")) changedTodayMonth2="09";
+	      else if(changedTodayMonth2.equalsIgnoreCase("Oct")) changedTodayMonth2="10";
+	      else if(changedTodayMonth2.equalsIgnoreCase("Nov")) changedTodayMonth2="11";
+	      else changedTodayMonth2="12";
+			
+		  taskStartDate="20"+this.date.substring(12,14)+changedTodayMonth+this.date.substring(5,7);
+		  taskEndDate="20"+this.date.substring(25)+changedTodayMonth2+this.date.substring(18,20);
+			
+		  if(!this.time.equalsIgnoreCase("nil")){
+			  taskStartTime = this.time.substring(0,2)+"0000";
+			  taskEndTime = this.time.substring(3)+"0000";
+		  }else{
+			  taskStartTime = "000000";
+			  taskEndTime = "230000";
+		  }
+		  
+		//update the task/event to Google Calendar, One-Way-Sync
+		EventFeed googleSync = new EventFeed();
+		try{
+			
+		googleSync.updateGoogleCal(Global.tempOldDesc, this.desc, taskStartDate,taskEndDate,taskStartTime,taskEndTime);
+		}catch(Exception ex){System.out.println("updateGoogle "+ex);}	
+		
+		Global.tempOldDesc="";
 		
 		success = true;
 		

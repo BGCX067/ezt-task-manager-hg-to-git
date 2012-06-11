@@ -5,7 +5,7 @@ package ezt.DetectInput;
 //store the global variables
 public class Global {
 
-	public static String reminderDesc="", dateTemp="", timeTemp="", priorityTemp="", alertTemp="";
+	public static String reminderDesc="", dateTemp="", timeTemp="", priorityTemp="", alertTemp="", tempOldDesc="";
 	
 	public static int shortCut=1,calendarPrevMKey,calendarNextMKey,calendarYrKey;
 	

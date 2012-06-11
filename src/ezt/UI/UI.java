@@ -133,6 +133,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 					JIntellitype.getInstance().registerSwingHotKey(96,  0, Global.calendarNextMKey);
 					JIntellitype.getInstance().registerSwingHotKey(97,  0, Global.calendarYrKey);
 					JIntellitype.getInstance().registerSwingHotKey(0,  0, KeyEvent.VK_ESCAPE);
+					JIntellitype.getInstance().registerSwingHotKey(101,  0, KeyEvent.VK_F1);
 					
 					frame = new UI();//frame which hold the task UI
 					frame.setVisible(false);
@@ -227,7 +228,14 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		   }else if(Integer.toString(aIdentifier).equalsIgnoreCase("101")){//help shorcut key entered
 		    	  try{
 		    			
-						//help   		  
+		    		    //initiate the desktop object to open the user guide html
+						java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+						
+						//location of the user guide html
+				        java.net.URI uri = new java.net.URI("UserGuide.html");
+				        
+				        //open the user guide html
+				        desktop.browse( uri );		  
 		    		  
 		    	  }catch(Exception ex){System.out.println(ex);}
 		    	  
@@ -774,14 +782,14 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 							
 						}else{
 							
-							if(input.substring(0,1).equalsIgnoreCase("e")){//set email address to receive email alert
+							if(input.substring(0,2).equalsIgnoreCase("em")){//set email address to receive email alert
 				  				
 								DetectInput setEmails = new DetectInput();
 													
 								success =  setEmails.setEmail(input.substring(2));
 								
 								   
-							}else if(input.substring(0,1).equalsIgnoreCase("h")){//set hp no to receive sms alert
+							}else if(input.substring(0,2).equalsIgnoreCase("hp")){//set hp no to receive sms alert
 				  				
 								DetectInput setHpNo = new DetectInput();
 													

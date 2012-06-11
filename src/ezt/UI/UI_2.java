@@ -614,14 +614,14 @@ public class UI_2 extends JFrame{
 							
 						}else{
 							
-							if(input.substring(0,1).equalsIgnoreCase("e")){//set email address to receive email alert
+							if(input.substring(0,2).equalsIgnoreCase("em")){//set email address to receive email alert
 				  				
 								DetectInput setEmails = new DetectInput();
 													
 								success =  setEmails.setEmail(input.substring(2));
 								
 								   
-							}else if(input.substring(0,1).equalsIgnoreCase("h")){//set hp no to receive sms alert
+							}else if(input.substring(0,2).equalsIgnoreCase("hp")){//set hp no to receive sms alert
 				  				
 								DetectInput setHpNo = new DetectInput();
 													

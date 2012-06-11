@@ -172,6 +172,8 @@ public class DetectInput {
 		
 		Task task = new Task(id);
 		
+		Global.tempOldDesc = task.getDesc();
+		
 		if(task.isOnAlert()) alert = "alert true";
 		else alert = "alert false";
 			

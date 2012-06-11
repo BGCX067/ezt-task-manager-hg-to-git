@@ -2,12 +2,16 @@ package ezt.BasicTaskFunc;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+
 import org.junit.Test;
+
+import com.google.gdata.util.ServiceException;
 
 public class UpdateTaskTest {
 
 	@Test
-	public void testUpdate() {
+	public void testUpdate(){
 		UpdateTask update = new UpdateTask();
 		boolean result = false;
 		boolean expected = true;

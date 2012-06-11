@@ -38,7 +38,7 @@ public class KeyConfig {
   					Global.calendarPrevMKey = Integer.parseInt(st.nextToken());
   					Global.calendarNextMKey = Integer.parseInt(st.nextToken());
   					Global.calendarYrKey = Integer.parseInt(st.nextToken());  			
-
+  					
   					
   				}  				
   				  				

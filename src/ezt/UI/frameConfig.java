@@ -389,7 +389,7 @@ public class frameConfig extends JFrame {
 			}
 		});
 		
-		btnNewButton.setBounds(125, 392, 89, 23);
+		btnNewButton.setBounds(122, 386, 89, 23);
 		contentPaneReminder.add(btnNewButton);
 		
 		JLabel lblSelectSearchPanel = new JLabel("Select Search Panel:                      Ctrl +");

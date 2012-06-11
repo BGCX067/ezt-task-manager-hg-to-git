@@ -2,14 +2,18 @@ package ezt.DetectInput;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+
 import org.junit.Test;
+
+import com.google.gdata.util.ServiceException;
 
 import ezt.BasicTaskFunc.GetAllTask;
 
 public class DetectInputTest {
 
 	@Test
-	public void testDetect() {
+	public void testDetect() throws IOException, ServiceException {
 		DetectInput g = new DetectInput();
 		boolean result = false;
 		boolean expected = true;
