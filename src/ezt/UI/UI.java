@@ -25,6 +25,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.Event;
 import ezt.DetectInput.*;
+import ezt.Export.Export;
 import ezt.Reminder.AePlayWave;
 import ezt.keyConfig.KeyConfig;
 import java.awt.event.ActionEvent;
@@ -45,6 +46,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	private JLabel lblNewLabel;
 	private JLabel lblMediumhighPriority;
 	private JLabel lblLowPriority;
+	private JTextField exportFilename;
 	static JInternalFrame internalFrame;
 	private boolean success = true;
 	private boolean firstInitPane = true;
@@ -83,6 +85,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 	static JPanel pnlCalendar;
 	static JLabel hintlbl;
 	static int realYear, realMonth, realDay, currentYear, currentMonth;
+
 
 		
 	/**
@@ -429,6 +432,183 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		});
 		btnNewButton_5.setBounds(219, 83, 89, 23);
 		internalFrame.getContentPane().add(btnNewButton_5);
+		
+		Global.internalFrame_1 = new JInternalFrame("Export");
+		Global.internalFrame_1.setBounds(100, 300, 450, 200);
+		contentPane.add(Global.internalFrame_1);
+		Global.internalFrame_1.getContentPane().setLayout(null);		
+		
+		JLabel lblPleaseEnterThe = new JLabel("Please enter filename:");
+		lblPleaseEnterThe.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblPleaseEnterThe.setBounds(10, 11, 322, 14);
+		Global.internalFrame_1.getContentPane().add(lblPleaseEnterThe);
+		
+		exportFilename = new JTextField();
+		exportFilename.setBounds(10, 36, 200, 20);
+		Global.internalFrame_1.getContentPane().add(exportFilename);
+		exportFilename.setColumns(10);
+		
+		JLabel lblNewLabel_1 = new JLabel("Please select which to export:");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblNewLabel_1.setBounds(10, 11, 321, 150);
+		Global.internalFrame_1.getContentPane().add(lblNewLabel_1);
+		
+		JButton btnHtml = new JButton("HTML");
+		btnHtml.setBounds(20, 130, 89, 20);
+		btnHtml.addKeyListener(new KeyAdapter() {
+			@Override//if enter key pressed, UI will send command to the DetectInput class
+			public void keyPressed(KeyEvent e) {
+					
+				if(e.getKeyChar() == e.VK_ENTER) { 	
+        			
+					Export export = new Export();
+				
+					try{
+					
+						export.ExportHTML(exportFilename.getText());  
+											
+						Global.exportCheck = "";
+						
+					}
+				
+					catch (Exception exx) {System.out.println(exx);
+					}
+					Global.internalFrame_1.setVisible(false);
+				
+				}
+			}});
+		
+		btnHtml.addMouseListener(new MouseAdapter() {
+			
+			@Override//Print the update status command in the textbox if update status button clicked
+			public void mouseClicked(MouseEvent e) {
+				
+				
+    			
+				Export export = new Export();
+			
+				try{
+				
+					export.ExportHTML(exportFilename.getText());  
+										
+					Global.exportCheck = "";
+					
+				}
+			
+				catch (Exception exx) {System.out.println(exx);
+				}
+				Global.internalFrame_1.setVisible(false);
+			}
+		});
+		
+		Global.internalFrame_1.getContentPane().add(btnHtml);
+		
+		JButton btnText = new JButton("Text");
+		btnText.setBounds(136, 130, 89, 23);
+		btnText.addKeyListener(new KeyAdapter() {
+			@Override//if enter key pressed, UI will send command to the DetectInput class
+			public void keyPressed(KeyEvent e) {
+					
+				if(e.getKeyChar() == e.VK_ENTER) { 	
+					
+					
+        			
+					Export export = new Export();
+				
+					try{
+					
+						export.ExportTXT(exportFilename.getText()); 
+											
+						Global.exportCheck = "";
+						
+					}
+				
+					catch (Exception exx) {System.out.println(exx);
+					}
+					Global.internalFrame_1.setVisible(false);
+				
+				}
+			}});
+		
+		btnText.addMouseListener(new MouseAdapter() {
+			
+			@Override//Print the update status command in the textbox if update status button clicked
+			public void mouseClicked(MouseEvent e) {
+				
+				
+    			
+				Export export = new Export();
+			
+				try{
+				
+					export.ExportTXT(exportFilename.getText());  
+										
+					Global.exportCheck = "";
+					
+				}
+			
+				catch (Exception exx) {System.out.println(exx);
+				}
+				Global.internalFrame_1.setVisible(false);
+			}
+		});
+		
+		Global.internalFrame_1.getContentPane().add(btnText);
+		
+		JButton btnBoth = new JButton("Both");
+		btnBoth.setBounds(251, 130, 89, 23);
+		btnBoth.addKeyListener(new KeyAdapter() {
+			@Override//if enter key pressed, UI will send command to the DetectInput class
+			public void keyPressed(KeyEvent e) {
+					
+				if(e.getKeyChar() == e.VK_ENTER) { 	
+					
+					
+        			
+					Export export = new Export();
+				
+					try{
+					
+						export.ExportHTML(exportFilename.getText());  
+						export.ExportTXT(exportFilename.getText()); 
+											
+						Global.exportCheck = "";
+						
+					}
+				
+					catch (Exception exx) {System.out.println(exx);
+					}
+					Global.internalFrame_1.setVisible(false);
+				
+				}
+			}});
+		
+		btnBoth.addMouseListener(new MouseAdapter() {
+			
+			@Override//Print the update status command in the textbox if update status button clicked
+			public void mouseClicked(MouseEvent e) {
+				
+				
+    			
+				Export export = new Export();
+			
+				try{
+				
+					export.ExportHTML(exportFilename.getText());  
+					export.ExportTXT(exportFilename.getText());
+										
+					Global.exportCheck = "";
+					
+				}
+			
+				catch (Exception exx) {System.out.println(exx);
+				}
+				Global.internalFrame_1.setVisible(false);
+			}
+		});
+		
+		Global.internalFrame_1.getContentPane().add(btnBoth);
+		Global.internalFrame_1.setVisible(false);
 		
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/logo.png")));//program logo
@@ -887,7 +1067,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 								
 							}
 							
-							if(success == true && isAdd == false){
+							if(success == true && isAdd == false && !Global.exportCheck.equalsIgnoreCase("export")){
 								
 								JOptionPane.showMessageDialog(null, "Action performed successfully.", "Message", 1);
 								
@@ -915,7 +1095,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 									refreshEvent = false;
 								}
 									
-							}else if(success == false && isAdd == false){
+							}else if(success == false && isAdd == false && !Global.exportCheck.equalsIgnoreCase("export")){
 								
 								JOptionPane.showMessageDialog(null, "Action performed failed. Syntax error or time conflict with previous tasks.", "Message", 1);					
 								

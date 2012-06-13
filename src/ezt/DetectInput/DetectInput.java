@@ -122,20 +122,16 @@ public class DetectInput {
 				
 				return updateStatus.statusUpdate(id, status);
 			
-		//export to html command
+		//export command
 		}else if(input.substring(0,6).equalsIgnoreCase("export")){
 			
-			Export export = new Export();
+			Global.exportCheck = "export";
 			
-			try{
-				export.Generate();
-			}
+			Global.internalFrame_1.setVisible(true);
 			
-			catch (Exception e) {
-			}
-			return true;
 			
-	
+			return true;	
+				
 		}else{return false;}
 		
 	}

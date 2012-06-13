@@ -11,10 +11,7 @@ import java.util.Date;
 import java.util.StringTokenizer;
 import java.io.IOException;
 import java.text.*;
-
 import com.google.gdata.util.ServiceException;
-
-
 
 public class Task {
 

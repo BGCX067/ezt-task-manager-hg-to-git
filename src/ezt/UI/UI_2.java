@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.EventQueue;
+import java.awt.Robot;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -21,7 +22,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import java.awt.Event;
 import ezt.DetectInput.*;
+import ezt.Export.Export;
+import ezt.Reminder.AePlayWave;
 import ezt.keyConfig.KeyConfig;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,6 +45,7 @@ public class UI_2 extends JFrame{
 	private JLabel lblNewLabel;
 	private JLabel lblMediumhighPriority;
 	private JLabel lblLowPriority;
+	private JTextField exportFilename;
 	static JInternalFrame internalFrame;
 	private boolean success = true;
 	private boolean firstInitPane = true;
@@ -51,7 +56,7 @@ public class UI_2 extends JFrame{
 	private String[] columnNames = {"", "Description", "Priority", "Alert","ID"};
 	private String[] columnNamesEvent = {"ID",""};
 	private int countFocus=0;
-	private static final int CTRL_D = 90,CTRL_W = 91, CTRL_Q = 92,CTRL_E = 93,CTRL_R = 94,CTRL_T = 98,CTRL_A = 99,CTRL_Y = 100;
+
 	private static UI_2 frame;
 	JTable tableDay;
 	static JTable tableWeek;
@@ -80,6 +85,7 @@ public class UI_2 extends JFrame{
 	static JLabel hintlbl;
 	static int realYear, realMonth, realDay, currentYear, currentMonth;
 
+
 		
 	/**
 	 * Launch the application.
@@ -93,7 +99,7 @@ public class UI_2 extends JFrame{
 		todayDate.set(Calendar.MILLISECOND, 0);
 		Date td = todayDate.getTime();
 		
-		
+		//set a scheduler to run the reminder check every hour
 		new java.util.Timer().schedule( 
 		        new java.util.TimerTask() {
 		            @Override
@@ -115,9 +121,11 @@ public class UI_2 extends JFrame{
 					
 					KeyConfig keyConfig = new KeyConfig();
 					keyConfig.getKey();
-										
+					
+					
+					
 					frame = new UI_2();//frame which hold the task UI
-					frame.setVisible(true);
+					frame.setVisible(false);
 					
 										
 				} catch (Exception e) {
@@ -127,6 +135,8 @@ public class UI_2 extends JFrame{
 			}
 		});
 	}
+
+	  
 	
 	public void resetVar(){
 		
@@ -162,6 +172,8 @@ public class UI_2 extends JFrame{
 		setContentPane(contentPane);
 		contentPane.setLayout(null);	
 		DetectInput searchWord = new DetectInput();
+		
+		
 		internalFrame = new JInternalFrame("Actions");
 		internalFrame.setClosable(true);
 		
@@ -262,8 +274,185 @@ public class UI_2 extends JFrame{
 		btnNewButton_5.setBounds(219, 83, 89, 23);
 		internalFrame.getContentPane().add(btnNewButton_5);
 		
+		Global.internalFrame_1 = new JInternalFrame("Export");
+		Global.internalFrame_1.setBounds(100, 300, 450, 200);
+		contentPane.add(Global.internalFrame_1);
+		Global.internalFrame_1.getContentPane().setLayout(null);		
+		
+		JLabel lblPleaseEnterThe = new JLabel("Please enter filename:");
+		lblPleaseEnterThe.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblPleaseEnterThe.setBounds(10, 11, 322, 14);
+		Global.internalFrame_1.getContentPane().add(lblPleaseEnterThe);
+		
+		exportFilename = new JTextField();
+		exportFilename.setBounds(10, 36, 200, 20);
+		Global.internalFrame_1.getContentPane().add(exportFilename);
+		exportFilename.setColumns(10);
+		
+		JLabel lblNewLabel_1 = new JLabel("Please select which to export:");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblNewLabel_1.setBounds(10, 11, 321, 150);
+		Global.internalFrame_1.getContentPane().add(lblNewLabel_1);
+		
+		JButton btnHtml = new JButton("HTML");
+		btnHtml.setBounds(20, 130, 89, 20);
+		btnHtml.addKeyListener(new KeyAdapter() {
+			@Override//if enter key pressed, UI will send command to the DetectInput class
+			public void keyPressed(KeyEvent e) {
+					
+				if(e.getKeyChar() == e.VK_ENTER) { 	
+        			
+					Export export = new Export();
+				
+					try{
+					
+						export.ExportHTML(exportFilename.getText());  
+											
+						Global.exportCheck = "";
+						
+					}
+				
+					catch (Exception exx) {System.out.println(exx);
+					}
+					Global.internalFrame_1.setVisible(false);
+				
+				}
+			}});
+		
+		btnHtml.addMouseListener(new MouseAdapter() {
+			
+			@Override//Print the update status command in the textbox if update status button clicked
+			public void mouseClicked(MouseEvent e) {
+				
+				
+    			
+				Export export = new Export();
+			
+				try{
+				
+					export.ExportHTML(exportFilename.getText());  
+										
+					Global.exportCheck = "";
+					
+				}
+			
+				catch (Exception exx) {System.out.println(exx);
+				}
+				Global.internalFrame_1.setVisible(false);
+			}
+		});
+		
+		Global.internalFrame_1.getContentPane().add(btnHtml);
+		
+		JButton btnText = new JButton("Text");
+		btnText.setBounds(136, 130, 89, 23);
+		btnText.addKeyListener(new KeyAdapter() {
+			@Override//if enter key pressed, UI will send command to the DetectInput class
+			public void keyPressed(KeyEvent e) {
+					
+				if(e.getKeyChar() == e.VK_ENTER) { 	
+					
+					
+        			
+					Export export = new Export();
+				
+					try{
+					
+						export.ExportTXT(exportFilename.getText()); 
+											
+						Global.exportCheck = "";
+						
+					}
+				
+					catch (Exception exx) {System.out.println(exx);
+					}
+					Global.internalFrame_1.setVisible(false);
+				
+				}
+			}});
+		
+		btnText.addMouseListener(new MouseAdapter() {
+			
+			@Override//Print the update status command in the textbox if update status button clicked
+			public void mouseClicked(MouseEvent e) {
+				
+				
+    			
+				Export export = new Export();
+			
+				try{
+				
+					export.ExportTXT(exportFilename.getText());  
+										
+					Global.exportCheck = "";
+					
+				}
+			
+				catch (Exception exx) {System.out.println(exx);
+				}
+				Global.internalFrame_1.setVisible(false);
+			}
+		});
+		
+		Global.internalFrame_1.getContentPane().add(btnText);
+		
+		JButton btnBoth = new JButton("Both");
+		btnBoth.setBounds(251, 130, 89, 23);
+		btnBoth.addKeyListener(new KeyAdapter() {
+			@Override//if enter key pressed, UI will send command to the DetectInput class
+			public void keyPressed(KeyEvent e) {
+					
+				if(e.getKeyChar() == e.VK_ENTER) { 	
+					
+					
+        			
+					Export export = new Export();
+				
+					try{
+					
+						export.ExportHTML(exportFilename.getText());  
+						export.ExportTXT(exportFilename.getText()); 
+											
+						Global.exportCheck = "";
+						
+					}
+				
+					catch (Exception exx) {System.out.println(exx);
+					}
+					Global.internalFrame_1.setVisible(false);
+				
+				}
+			}});
+		
+		btnBoth.addMouseListener(new MouseAdapter() {
+			
+			@Override//Print the update status command in the textbox if update status button clicked
+			public void mouseClicked(MouseEvent e) {
+				
+				
+    			
+				Export export = new Export();
+			
+				try{
+				
+					export.ExportHTML(exportFilename.getText());  
+					export.ExportTXT(exportFilename.getText());
+										
+					Global.exportCheck = "";
+					
+				}
+			
+				catch (Exception exx) {System.out.println(exx);
+				}
+				Global.internalFrame_1.setVisible(false);
+			}
+		});
+		
+		Global.internalFrame_1.getContentPane().add(btnBoth);
+		Global.internalFrame_1.setVisible(false);
+		
 		JLabel label = new JLabel("");
-		label.setIcon(new ImageIcon(UI_2.class.getResource("/ezt/UI/logo.png")));//program logo
+		label.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/logo.png")));//program logo
 		label.setBounds(10, 11, 277, 50);
 		contentPane.add(label);
 		
@@ -286,7 +475,7 @@ public class UI_2 extends JFrame{
 				
 			}
 		});
-		lblNewLabel.setIcon(new ImageIcon(UI_2.class.getResource("/ezt/UI/red light.png")));
+		lblNewLabel.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/red light.png")));
 		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		lblNewLabel.setBounds(537, 380, 106, 20);
 		contentPane.add(lblNewLabel);
@@ -299,7 +488,7 @@ public class UI_2 extends JFrame{
 				searchClick("-pmedium");
 			}
 		});
-		lblMediumhighPriority.setIcon(new ImageIcon(UI_2.class.getResource("/ezt/UI/yellow light.png")));
+		lblMediumhighPriority.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/yellow light.png")));
 		lblMediumhighPriority.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		lblMediumhighPriority.setBounds(537, 399, 120, 20);
 		contentPane.add(lblMediumhighPriority);
@@ -312,7 +501,7 @@ public class UI_2 extends JFrame{
 				searchClick("-plow");
 			}
 		});
-		lblLowPriority.setIcon(new ImageIcon(UI_2.class.getResource("/ezt/UI/green light.png")));
+		lblLowPriority.setIcon(new ImageIcon(UI.class.getResource("/ezt/UI/green light.png")));
 		lblLowPriority.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		lblLowPriority.setBounds(537, 418, 120, 20);
 		contentPane.add(lblLowPriority);
@@ -633,7 +822,7 @@ public class UI_2 extends JFrame{
 								isAdd = true;
 								
 								noOfInputAdd ++;
-								
+															
 								if(noOfInputAdd == 1){
 									
 									commandBox.setText("Description:");
@@ -694,8 +883,10 @@ public class UI_2 extends JFrame{
 																	
 									isAdd = false;
 									
-									DetectInput detectInput = new DetectInput();	
-									success = detectInput.detect(concateAddInput);
+									DetectInput detectInput = new DetectInput();							
+									
+									success = detectInput.detect(concateAddInput);								
+									
 									concateAddInput="";
 								}
 								
@@ -717,7 +908,7 @@ public class UI_2 extends JFrame{
 								
 							}
 							
-							if(success == true && isAdd == false){
+							if(success == true && isAdd == false && !Global.exportCheck.equalsIgnoreCase("export")){
 								
 								JOptionPane.showMessageDialog(null, "Action performed successfully.", "Message", 1);
 								
@@ -745,7 +936,7 @@ public class UI_2 extends JFrame{
 									refreshEvent = false;
 								}
 									
-							}else if(success == false && isAdd == false){
+							}else if(success == false && isAdd == false && !Global.exportCheck.equalsIgnoreCase("export")){
 								
 								JOptionPane.showMessageDialog(null, "Action performed failed. Syntax error or time conflict with previous tasks.", "Message", 1);					
 								
@@ -859,9 +1050,7 @@ public class UI_2 extends JFrame{
                 else if(currentMonth+1 == 10) month="Oct";
                 else if(currentMonth+1 == 11) month="Nov";
                 else if(currentMonth+1 == 12) month="Dec";
-                                
-                //the line below should be replaced
-                
+                                              
                 todayDate = value.toString() + "-" + month + "-" + (currentYear-2000);
                                
                 tabbedPane.remove(0);
@@ -1035,6 +1224,7 @@ public class UI_2 extends JFrame{
 		tableDay.getColumnModel().getColumn(3).setMaxWidth(50);
 		tableDay.getColumnModel().getColumn(4).setMaxWidth(0);		
 		
+		//if a space issued on a task record row, an action frame will prompt
 		tableDay.addKeyListener(new KeyAdapter() {
     		public void keyPressed(KeyEvent e) {
     		if(e.getKeyChar() == e.VK_SPACE) {
@@ -1049,6 +1239,7 @@ public class UI_2 extends JFrame{
             		
     	      }}}});
 		
+		//if left mouse click issued on a task record row, an action frame will prompt
 		tableDay.addMouseListener(new MouseAdapter() {
     		public void mouseClicked(MouseEvent arg0) {
     		    			
@@ -1062,6 +1253,7 @@ public class UI_2 extends JFrame{
             		
     	      }}});
 		
+		//if a space issued on a task record row, an action frame will prompt
 		tableWeek.addKeyListener(new KeyAdapter() {
     		public void keyPressed(KeyEvent e) {
     		if(e.getKeyChar() == e.VK_SPACE) {
@@ -1075,7 +1267,8 @@ public class UI_2 extends JFrame{
           		    ShowMessageDialog();
             		
     	      }}}});
-		
+
+		//if left mouse click issued on a task record row, an action frame will prompt
 		tableWeek.addMouseListener(new MouseAdapter() {
     		public void mouseClicked(MouseEvent arg0) {
     		    			
@@ -1089,6 +1282,7 @@ public class UI_2 extends JFrame{
             		
     	      }}});
 		
+		//if a space issued on a task record row, an action frame will prompt
 		tableMonth.addKeyListener(new KeyAdapter() {
     		public void keyPressed(KeyEvent e) {
     		if(e.getKeyChar() == e.VK_SPACE) {
@@ -1103,6 +1297,7 @@ public class UI_2 extends JFrame{
             		
     	      }}}});
 		
+		//if left mouse click issued on a task record row, an action frame will prompt
 		tableMonth.addMouseListener(new MouseAdapter() {
     		public void mouseClicked(MouseEvent arg0) {
     		    			
@@ -1153,14 +1348,10 @@ public class UI_2 extends JFrame{
 		TableRowSorter<TableModel> sorterMonth = new TableRowSorter<TableModel>(tableMonth.getModel());
 		
 		//assign the pre-defined priority comparator to each table's column priority, the rest of column will
-		//be using the default sort method
-		
+		//be using the default sort method		
 		sorterDay.setComparator(2, intComp);
 		sorterWeek.setComparator(2, intComp);
-		sorterMonth.setComparator(2, intComp);
-		
-		//assign sort model to each table
-		
+		sorterMonth.setComparator(2, intComp);		
 			
 		scrollPane = new JScrollPane(tableDay);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -1192,7 +1383,7 @@ public class UI_2 extends JFrame{
 
 			tableSearch.addKeyListener(new KeyAdapter() {
 	    		public void keyPressed(KeyEvent e) {
-	    		if(e.getKeyChar() == e.VK_SPACE) {
+	    		if(e.getKeyChar() == e.VK_SPACE) {//if a space issued on a task record row, an action frame will prompt
 	    			
 	    	      	if((tableSearch.getValueAt(tableSearch.getSelectedRows()[0], 1)!="  ")){
 	            			               
@@ -1204,6 +1395,7 @@ public class UI_2 extends JFrame{
 	            		
 	    	      }}}});
 			
+			//if left mouse click issued on a task record row, an action frame will prompt
 			tableSearch.addMouseListener(new MouseAdapter() {
 	    		public void mouseClicked(MouseEvent arg0) {
 	    		    			
@@ -1261,6 +1453,7 @@ public class UI_2 extends JFrame{
 		
 		tableEvent = new JTable(detectInput.allEventToday(todayDate),columnNamesEvent);
 		
+		//if a space issued on a task record row, an action frame will prompt
 		tableEvent.addKeyListener(new KeyAdapter() {
     		public void keyPressed(KeyEvent e) {
     		if(e.getKeyChar() == e.VK_SPACE) {
@@ -1275,6 +1468,7 @@ public class UI_2 extends JFrame{
             		
     	      }}}});
 		
+		//if left mouse click issued on a task record row, an action frame will prompt
 		tableEvent.addMouseListener(new MouseAdapter() {
     		public void mouseClicked(MouseEvent arg0) {
     		    			
@@ -1363,15 +1557,17 @@ public class UI_2 extends JFrame{
        
    }
    
+    //the frame which contains update, delete and update status button  
     public void ShowMessageDialog(){
     	
-    	internalFrame.setVisible(true);//the frame which contains update, delete and update status button
-    	
+    	internalFrame.setVisible(true);  	
     	
     	if(frame.getFocusOwner().getName()==null){btnNewButton_3.requestFocusInWindow();}
     	
     	noFocus = true;
     }
-    
-    
-}
+}//end of frame UI class
+
+
+
+

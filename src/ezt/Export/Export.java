@@ -4,16 +4,22 @@ import ezt.DetectInput.*;
 
 import java.io.*;
 
+import javax.swing.JOptionPane;
+
 public class Export
 {
-	public void Generate() throws IOException
+	public void ExportHTML(String filename) throws IOException
 	{
 		DetectInput d = new DetectInput();
 		Object[][] List= d.allTasks(); //new function
 		
 		int length = List.length;
 		
-		FileWriter f = new FileWriter("HtmlExport.html");
+		String userHomeFolder = System.getProperty("user.home");
+		
+		filename = userHomeFolder + "\\Desktop\\" + filename + ".htm";
+		
+		FileWriter f = new FileWriter(filename);
 		PrintWriter Export = new PrintWriter(f);
 		
 		Export.print("<HTML>\n");
@@ -64,6 +70,47 @@ public class Export
 		Export.write("</Body>");
 		Export.write("</HTML>");
 		Export.close();
+	
+		JOptionPane.showMessageDialog(null, "Export to HTML successfully.", "Message", 1);
+		
+	}
+	
+	public void ExportTXT(String filename) throws IOException
+	{
+		DetectInput d = new DetectInput();
+		Object[][] List= d.allTasks(); //new function
+		
+		int length = List.length;
+		
+		String userHomeFolder = System.getProperty("user.home");
+		
+		filename = userHomeFolder + "\\Desktop\\" + filename + ".txt";
+		
+		FileWriter f = new FileWriter(filename);
+		PrintWriter Export = new PrintWriter(f);
+		
+		for(int i=0; i<length; i++)
+		{
+			Export.write(List[i][4].toString());
+			Export.write("/");
+			Export.write(List[i][1].toString());
+			Export.write("/");
+			Export.write(List[i][5].toString());
+			Export.write("/");
+			Export.write(List[i][7].toString());
+			Export.write("/");
+			Export.write(List[i][2].toString());
+			Export.write("/");
+			Export.write(List[i][3].toString());
+			Export.write("/");
+			Export.write(List[i][6].toString());
+			Export.write("/");
+			Export.write("\n");
+		}
+
+		Export.close();
+		
+		JOptionPane.showMessageDialog(null, "Export to text successfully.", "Message", 1);
 	
 	}
 }
