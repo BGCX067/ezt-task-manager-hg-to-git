@@ -4,6 +4,7 @@ import ezt.BasicTaskFunc.*;
 import ezt.FileIO.*;
 import java.util.List;
 import java.util.StringTokenizer;
+import ezt.Export.*;
 
 //this is the Facade class which act as a wall btn the UI and internal components
 public class DetectInput {
@@ -121,6 +122,20 @@ public class DetectInput {
 				
 				return updateStatus.statusUpdate(id, status);
 			
+		//export to html command
+		}else if(input.substring(0,6).equalsIgnoreCase("export")){
+			
+			Export export = new Export();
+			
+			try{
+				export.Generate();
+			}
+			
+			catch (Exception e) {
+			}
+			return true;
+			
+	
 		}else{return false;}
 		
 	}
@@ -154,6 +169,14 @@ public class DetectInput {
 		
 		GetAllTask getAllTask = new GetAllTask();
 		return getAllTask.allTaskMonth(todayDate);
+		
+	}
+	
+	//get all tasks object and send to UI
+	public Object[][] allTasks(){
+		
+		GetAllTask getAllTask = new GetAllTask();
+		return getAllTask.allTasks();
 		
 	}
 	

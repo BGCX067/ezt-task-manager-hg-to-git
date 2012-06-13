@@ -31,6 +31,15 @@ public class GetAllTask {
 		
 	}
 	
+	//retrieve all the this month task
+	public Object[][] allTasks(){
+		
+		Task task = new Task();
+		
+		return task.getAllTasks();
+		
+	}
+	
 	//retrieve all the today event
 	public Object[][] allEventToday(String date){
 		

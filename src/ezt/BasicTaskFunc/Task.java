@@ -767,6 +767,83 @@ public class Task {
 		return newAllTask;
 		
 	}	
+	
+	/////////Get all tasks and events
+	public Object[][] getAllTasks(){
+			
+		int lastID = 0, g=0;
+		Object[][] alltask;
+		Object[][] newAllTask;
+		DateFormat formatter;
+		Date startDate=null;
+
+		GetLastID fileIO = new GetLastID();
+		lastID = fileIO.getLastID();
+		
+		alltask = new Object[lastID][8];
+		
+		ReadFromText readTask = new ReadFromText();
+		
+		StringTokenizer st;
+		
+		for(int i=1;i<=lastID;i++){			
+			
+			st = new StringTokenizer(readTask.read(Integer.toString(i)), ".");
+			
+			while(st.hasMoreTokens()) {
+				this.id = Integer.parseInt(st.nextToken());
+				this.desc = st.nextToken();
+				this.date = st.nextToken();
+				this.time = st.nextToken();
+				this.priority = st.nextToken();
+				this.onAlert = Boolean.parseBoolean(st.nextToken());
+				this.status = st.nextToken();
+			}
+			
+			try{
+				
+				formatter = new SimpleDateFormat("dd-MMM-yy");
+				startDate = (Date)formatter.parse(this.date.substring(5,14)); 
+				
+			}catch(Exception ex){System.out.println(ex);}
+			
+			alltask [g][0]= startDate;
+			alltask [g][1]= this.desc;			
+			alltask [g][2]= this.priority;			
+			alltask [g][3]= this.onAlert;
+			alltask [g][4]= this.id;
+			alltask [g][5]= this.date;
+			alltask [g][6]= this.status;
+			alltask [g][7]= this.time;
+			
+			if(this.status.replace(" ", "").equalsIgnoreCase("nonactive")){
+				
+			alltask [g][2]=  " "+priority;			
+			
+			}	
+			
+			g++;
+		}
+		
+		/*
+		// create a new smaller array to remove empty task object array
+	    newAllTask = new Object[g][8];
+		
+	    for (int i=0;i<g;i++) {	        
+		
+	        	for(int c=0; c<8; c++){
+	        		newAllTask[i][c] = alltask[i][c];
+	        	}
+	        
+	    }
+	    */
+				
+		return alltask;
+			
+	}	
+	
+	//////End of getAllTasks()
+	
 	//get all today event
 	public Object[][] getAllEventDay(String todayDates){
 		
