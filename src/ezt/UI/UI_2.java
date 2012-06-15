@@ -37,6 +37,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
+//This is the UI class for others team members whose computer doesn't support shortcut key function
 public class UI_2 extends JFrame{
 
 	private static JPanel contentPane;

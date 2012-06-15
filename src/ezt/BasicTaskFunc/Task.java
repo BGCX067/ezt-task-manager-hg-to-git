@@ -1029,7 +1029,7 @@ public class Task {
 									" till " + this.time.substring(3) + " "+ til+"<br><br>";
 							
 							//send sms alert, msg cannot be too long due to free sms server
-						  //sendsms.sendMessage("65"+receiverHpNo.read(), "Rem: "+ this.desc + " | Time: "+ this.time, "", "", "", "");
+						    //sendsms.sendMessage("65"+receiverHpNo.read(), "Rem: "+ this.desc + " | Time: "+ this.time, "", "", "", "");
 							
 							//store the task details for the email message
 							concateTask += "\n\n" + count + ". " + "Task/Event: " + this.desc + "\nDate: " + this.date+ 

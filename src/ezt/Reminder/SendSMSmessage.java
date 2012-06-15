@@ -19,8 +19,8 @@ public class SendSMSmessage extends HttpServlet
     {
      String host = "www.smsxchange.com";
      int port = 80;
-     String user = "jake_j"; // smsxchange username
-     String passwd = "95981";  //smsxchange password
+     String user = "william_w"; // smsxchange username
+     String passwd = "90907";  //smsxchange password
      String query;
      String headers;
      int length_query;
