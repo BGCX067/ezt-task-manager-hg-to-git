@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose:to get the last added task ID
+*/
 package ezt.FileIO;
 
 import java.io.*;

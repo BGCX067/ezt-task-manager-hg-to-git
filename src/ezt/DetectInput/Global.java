@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose: to store global variables
+*/
 package ezt.DetectInput;
 
 import javax.swing.JInternalFrame;

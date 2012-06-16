@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose:shorcut key setting manager
+*/
 package ezt.keyConfig;
 
 import ezt.DetectInput.*;

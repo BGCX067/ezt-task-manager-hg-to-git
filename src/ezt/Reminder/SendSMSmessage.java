@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose:send reminder sms
+*/
 package ezt.Reminder;
 
 import javax.servlet.*;
@@ -19,7 +22,7 @@ public class SendSMSmessage extends HttpServlet
     {
      String host = "www.smsxchange.com";
      int port = 80;
-     String user = "william_w"; // smsxchange username
+     String user = "ezt_2"; // smsxchange username
      String passwd = "90907";  //smsxchange password
      String query;
      String headers;

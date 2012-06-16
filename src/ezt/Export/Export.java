@@ -1,3 +1,6 @@
+/*Author: William Lim
+ * Purpose: to export task/events into html and text
+*/
 package ezt.Export;
 
 import ezt.DetectInput.*;

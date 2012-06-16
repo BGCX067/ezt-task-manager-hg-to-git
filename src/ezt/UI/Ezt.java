@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose:this is the very first class to call to run the program, it will activate the program and create system tray
+*/
 package ezt.UI;
 
 import java.awt.*;

@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose:This is the UI class for others team members whose computer doesn't support shortcut key function
+*/
 package ezt.UI;
 
 import java.awt.event.*;

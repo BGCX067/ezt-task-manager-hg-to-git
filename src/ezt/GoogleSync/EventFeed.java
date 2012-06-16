@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose:to sych the task/event to Google Calendar
+*/
 package ezt.GoogleSync;
 
 import com.google.gdata.client.Query;

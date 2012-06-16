@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose:UI class
+*/
 package ezt.UI;
 
 import java.awt.event.*;
@@ -111,7 +114,7 @@ public class UI extends JFrame implements HotkeyListener, IntellitypeListener{
 		            	
 		            }
 		        }, 
-		       td, 5000 //refresh in every 10 secs for demonstration purpose, 10000 
+		       td, 3600000 //refresh in every 10 secs for demonstration purpose, 10000 
 		);
 		
 		//3600000-every hour will check the task today to remind or not remind again

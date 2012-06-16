@@ -1,10 +1,12 @@
+/*Author: Yueng Shu Sheng
+ * Purpose:This class is to copy the wanted contents from task.txt into tempTask.txt for temporary store
+  *After the unwanted contents in task.txt are cleared, it will copy back to the task.txt
+*/
 package ezt.FileIO;
 
 import java.io.*;
 
-/*This class is to copy the wanted contents from task.txt into tempTask.txt for temporary store
-*After the unwanted contents in task.txt are cleared, it will copy back to the task.txt
-*/
+
 public class CopyFile {
 
 	public void copy(File src, File dst) throws IOException {

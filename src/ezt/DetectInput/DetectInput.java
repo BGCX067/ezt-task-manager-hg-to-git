@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose: Facade class, to redirect the proper task function based on user input
+*/
 package ezt.DetectInput;
 
 import ezt.BasicTaskFunc.*;

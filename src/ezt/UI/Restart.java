@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose:to restart the program to apply new key setting
+*/
 package ezt.UI;
 import java.io.File;
 import java.io.IOException;

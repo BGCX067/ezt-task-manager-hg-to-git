@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose:Play the reminder wave audio file
+*/
 package ezt.Reminder;
 import java.io.File; 
 import java.io.IOException; 

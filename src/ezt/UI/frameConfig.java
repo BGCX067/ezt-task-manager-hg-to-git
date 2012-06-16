@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose:Key Configuration Manager frame
+*/
 package ezt.UI;
 
 import java.awt.Font;
@@ -376,7 +379,7 @@ public class frameConfig extends JFrame {
 					
 					setVisible(false);//hide the config frame
 					
-					JOptionPane.showMessageDialog(null, "Shortcut key setting updated. Program restarting to apply setting.", "Message", 1);
+					JOptionPane.showMessageDialog(null, "Shortcut key setting updated. Please resart the program to apply setting.", "Message", 1);
 					
 					Restart restartApp = new Restart();//restart the program to apply new key setting
 					

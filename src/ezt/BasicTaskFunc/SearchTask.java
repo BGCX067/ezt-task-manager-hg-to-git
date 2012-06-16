@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose: search task
+*/
 package ezt.BasicTaskFunc;
 
 import ezt.FileIO.*;

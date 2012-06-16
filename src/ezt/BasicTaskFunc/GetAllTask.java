@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose: get tasks/events by today, current week, current month and check whether the record is an event
+*/
 package ezt.BasicTaskFunc;
 
 import ezt.FileIO.*;

@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose:write the receiver email address of reminder
+*/
 package ezt.FileIO;
 
 import java.io.*;

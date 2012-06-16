@@ -14,5 +14,3 @@ Alert:no
 Status:Active
 Status:Non Active
 Description:dinner
-Description:dinners
-Description:miami party

@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose:activate the reminder
+*/
 package ezt.Reminder;
 
 import java.text.DateFormat;

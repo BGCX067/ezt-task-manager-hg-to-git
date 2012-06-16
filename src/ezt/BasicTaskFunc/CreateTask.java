@@ -1,3 +1,7 @@
+/*Author: Yueng Shu Sheng
+ * Purpose: get the last task id in text file
+*/
+
 package ezt.BasicTaskFunc;
 
 import ezt.FileIO.GetLastID;

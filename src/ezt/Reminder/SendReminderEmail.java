@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose:send reminder email
+*/
 package ezt.Reminder;
 
 import javax.mail.*;
@@ -31,7 +34,7 @@ public class SendReminderEmail {
 
         //set the recipient of the email reminder
         message.addRecipient(Message.RecipientType.TO,
-             new InternetAddress(receiverEmail));
+             new InternetAddress(receiverEmail.trim()));
 
         transport.connect
           (SMTP_HOST_NAME, SMTP_HOST_PORT, SMTP_AUTH_USER, SMTP_AUTH_PWD);

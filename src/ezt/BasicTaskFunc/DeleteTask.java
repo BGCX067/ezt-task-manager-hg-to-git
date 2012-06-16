@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose: delete task by id
+*/
 package ezt.BasicTaskFunc;
 
 public class DeleteTask {

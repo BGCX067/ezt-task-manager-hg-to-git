@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose:to write/append the task into task.txt
+*/
 package ezt.FileIO;
 
 import java.io.*;

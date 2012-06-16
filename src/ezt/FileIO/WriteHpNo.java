@@ -1,3 +1,6 @@
+/*Author: Yueng Shu Sheng
+ * Purpose:write the receiver hp no of reminder
+*/
 package ezt.FileIO;
 
 import java.io.*;
